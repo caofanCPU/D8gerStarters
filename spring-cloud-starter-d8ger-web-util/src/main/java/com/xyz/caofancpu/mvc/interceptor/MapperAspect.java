@@ -7,7 +7,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 /**
- * FileName: MapperAspect
+ * Mapper切面
+ *
+ * @author D8GER
  */
 @Aspect
 @Component

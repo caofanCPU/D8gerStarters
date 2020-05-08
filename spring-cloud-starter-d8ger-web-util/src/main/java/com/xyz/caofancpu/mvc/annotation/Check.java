@@ -6,6 +6,11 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * 校验注解
+ *
+ * @author D8GER
+ */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RUNTIME)
 public @interface Check {

@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author D8GER
  */
 @Slf4j
+@Deprecated
 public class StandardThreadPoolUtil {
     private static volatile ThreadPoolTaskExecutor threadPoolTaskExecutor;
 

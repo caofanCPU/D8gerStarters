@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
- * FileName: WebSocketConfig
- * Author:   caofanCPU
- * Date:     2018/11/21 16:33
+ * WebSocket配置
+ *
+ * @author D8GER
  */
 @Configuration
 public class WebSocketConfig {

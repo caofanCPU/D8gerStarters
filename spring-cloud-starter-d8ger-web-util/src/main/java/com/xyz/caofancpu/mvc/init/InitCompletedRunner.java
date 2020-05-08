@@ -14,7 +14,9 @@ import java.net.UnknownHostException;
 import java.util.Objects;
 
 /**
- * Created by caofanCPU on 2018/7/20.
+ * 初始化执行器, 打印项目环境信息
+ *
+ * @author D8GER
  */
 @Component
 @Order(value = 1)

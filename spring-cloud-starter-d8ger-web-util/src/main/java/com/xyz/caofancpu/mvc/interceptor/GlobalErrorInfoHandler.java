@@ -8,6 +8,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Controller全局异常处理拦截器
+ *
+ * @author D8GER
+ */
 @RestControllerAdvice
 public class GlobalErrorInfoHandler {
     /**

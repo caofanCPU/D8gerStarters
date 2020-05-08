@@ -10,9 +10,9 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * FileName: GlobalThreadPoolConfig
- * Author:   caofanCPU
- * Date:     2018/9/5 9:20
+ * 标准线程池统一配置
+ *
+ * @author D8GER
  */
 @Configuration
 @EnableAsync

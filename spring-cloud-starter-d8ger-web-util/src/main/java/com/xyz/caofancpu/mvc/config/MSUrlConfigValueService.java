@@ -5,10 +5,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 /**
- * FileName: CommonConfigService
- * Author:   caofanCPU
- * Date:     2018/11/24 10:01
- * 该类用于统一封装其他serviceIml所需要的注入变量或 公用配置
+ * 统一封装用到的[url]
  */
 @Service("msUrlConfigValueService")
 @DependsOn("initContextPropertyInitializer")

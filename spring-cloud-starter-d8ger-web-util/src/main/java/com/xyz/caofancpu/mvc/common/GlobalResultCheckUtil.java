@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 
 /**
- * FileName: ResultCheckUtil
- * Author:   caofanCPU
- * Date:     2018/11/14 12:21
+ * 全局结果检查处理工具
+ *
+ * @author D8GER
  */
 @Slf4j
 public class GlobalResultCheckUtil {

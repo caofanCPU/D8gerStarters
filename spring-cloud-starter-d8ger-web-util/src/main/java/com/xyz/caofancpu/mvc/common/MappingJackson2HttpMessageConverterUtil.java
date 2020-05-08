@@ -38,7 +38,7 @@ import java.util.TimeZone;
  * 也可考虑使用Instant
  * 4.jackson底层默认UTF8编码
  *
- * @author caofanCPU
+ * @author D8GER
  */
 public class MappingJackson2HttpMessageConverterUtil {
 

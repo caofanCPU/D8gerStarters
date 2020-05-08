@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.xyz.caofancpu.commonoperateutils.NormalUseUtil;
 import com.xyz.caofancpu.constant.HttpTypeEnum;
-import com.xyz.caofancpu.util.dataoperateutils.JSONUtil;
+import com.xyz.caofancpu.core.JSONUtil;
+import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -42,13 +42,13 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Created by caofanCPU on 2018/7/25.
- * <p>
  * 用来创建测试环境
  * 提供POST请求 @RequestBody 传对象
  * 提供POST请求 @RequestParam 传参数
  * 提供 Get请求 @RequestParam 传参数
  * 将接口结果JSON化打印
+ *
+ * @author D8GER
  */
 @Component
 @Slf4j
@@ -194,7 +194,7 @@ public class SpringBootJunitTestUtil {
         if (Objects.isNull(responseJSONObject)) {
             throw new RuntimeException("上传文件出错, 响应为NULL");
         }
-        NormalUseUtil.out(JSONUtil.formatStandardJSON(responseJSONObject.toJSONString()));
+        NormalUseForTestUtil.out(JSONUtil.formatStandardJSON(responseJSONObject.toJSONString()));
         // 返回文件key
         return JSONObject.parseObject(JSONObject.toJSONString(responseJSONObject.get("data"))).get("fileKey").toString();
     }
@@ -233,7 +233,7 @@ public class SpringBootJunitTestUtil {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        NormalUseUtil.out(JSONUtil.formatStandardJSON(responseJsonString));
+        NormalUseForTestUtil.out(JSONUtil.formatStandardJSON(responseJsonString));
         return responseJsonString;
     }
 

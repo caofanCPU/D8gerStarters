@@ -24,6 +24,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
 
+/**
+ * Swagger配置
+ *
+ * @author D8GER
+ */
 @Configuration
 @EnableSwagger2
 @EnableSwaggerBootstrapUi

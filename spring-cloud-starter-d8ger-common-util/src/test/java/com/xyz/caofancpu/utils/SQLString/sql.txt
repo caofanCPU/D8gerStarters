@@ -1,0 +1,267 @@
+1  2019-05-28 11:26:40.640 [http-nio-8115-exec-6] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, teacher_id, school_id, exam_no, task_id, type, task_subject, exam_name, exam_time, show_order, outer_and_inter, grade_id
+ FROM selected_exam
+ WHERE ( teacher_id = 10506755 and type = 1 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+2  2019-05-28 11:27:05.987 [http-nio-8115-exec-6] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'E15201518440832018030001105' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+3  2019-05-28 11:27:11.568 [http-nio-8115-exec-6] DEBUG c.h.d.entry.DwsGroupSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, group_name, group_sort, report_group_type, major
+ FROM dws_group_subject
+ WHERE exam_no = 'E15201518440832018030001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488;
+------------------------------------------------------------------------------------------------------------------------
+4  2019-05-28 11:27:16.951 [http-nio-8115-exec-6] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'E15201518440832018030001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+5  2019-05-28 11:27:22.786 [http-nio-8115-exec-6] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, alias
+ FROM stage_report_alias
+ WHERE ( school_id = 10506755 and exam_no in ( 'E15201518440832018030001105' , 'E15213601517252018030001105' , 'T15265468166582018050001105' , 'T15265533700722018050001105' , 'T15279259093952018060001103' , 'T15287674681272018060001102' ) );
+------------------------------------------------------------------------------------------------------------------------
+6  2019-05-28 11:27:22.836 [http-nio-8115-exec-6] DEBUG c.h.r.p.m.D.queryDwdSchoolTaskMos[49] - ==>
+select SCHOOL_ID,EXAM_NO,TASK_ID,SUBJECT_ORGAN,SUBJECT_MAJOR
+ FROM DWD_SCHOOL_TASK
+ WHERE SCHOOL_ID=10225488 and EXAM_NO in ( 'E15201518440832018030001105' , 'E15213601517252018030001105' , 'T15265468166582018050001105' , 'T15265533700722018050001105' , 'T15279259093952018060001103' , 'T15287674681272018060001102' );
+------------------------------------------------------------------------------------------------------------------------
+7  2019-05-28 11:59:17.750 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, teacher_id, school_id, exam_no, task_id, type, task_subject, exam_name, exam_time, show_order, outer_and_inter, grade_id
+ FROM selected_exam
+ WHERE ( teacher_id = 10506755 and type = 1 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+8  2019-05-28 11:59:17.778 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'E15201518440832018030001105' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+9  2019-05-28 11:59:23.033 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGroupSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, group_name, group_sort, report_group_type, major
+ FROM dws_group_subject
+ WHERE exam_no = 'E15201518440832018030001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488;
+------------------------------------------------------------------------------------------------------------------------
+10  2019-05-28 11:59:28.126 [http-nio-8115-exec-8] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'E15201518440832018030001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+11  2019-05-28 11:59:33.449 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, alias
+ FROM stage_report_alias
+ WHERE ( school_id = 10506755 and exam_no in ( 'E15201518440832018030001105' , 'E15213601517252018030001105' , 'T15265468166582018050001105' , 'T15265533700722018050001105' , 'T15279259093952018060001103' , 'T15287674681272018060001102' ) );
+------------------------------------------------------------------------------------------------------------------------
+12  2019-05-28 11:59:33.460 [http-nio-8115-exec-8] DEBUG c.h.r.p.m.D.queryDwdSchoolTaskMos[49] - ==>
+select SCHOOL_ID,EXAM_NO,TASK_ID,SUBJECT_ORGAN,SUBJECT_MAJOR
+ FROM DWD_SCHOOL_TASK
+ WHERE SCHOOL_ID=10225488 and EXAM_NO in ( 'E15201518440832018030001105' , 'E15213601517252018030001105' , 'T15265468166582018050001105' , 'T15265533700722018050001105' , 'T15279259093952018060001103' , 'T15287674681272018060001102' );
+------------------------------------------------------------------------------------------------------------------------
+13  2019-05-28 11:59:38.708 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, goal_type, critical_student_type, grade_id
+ FROM school_operate_trace
+ WHERE ( school_id = 10225488 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+14  2019-05-28 11:59:38.785 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.C.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, crtical_student, ctitical_student_type
+ FROM crtical_student
+ WHERE ( school_id = 10225488 and ctitical_student_type = 1 and exam_no = 'E15201518440832018030001105' );
+------------------------------------------------------------------------------------------------------------------------
+15  2019-05-28 11:59:38.883 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, score_segment, selected_type
+ FROM score_segment
+ WHERE ( school_id = 10225488 and exam_no = 'E15201518440832018030001105' );
+------------------------------------------------------------------------------------------------------------------------
+16  2019-05-28 11:59:38.908 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'E15213601517252018030001105' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+17  2019-05-28 11:59:44.024 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, goal_type, critical_student_type, grade_id
+ FROM school_operate_trace
+ WHERE ( school_id = 10225488 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+18  2019-05-28 11:59:44.032 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.C.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, crtical_student, ctitical_student_type
+ FROM crtical_student
+ WHERE ( school_id = 10225488 and ctitical_student_type = 1 and exam_no = 'E15213601517252018030001105' );
+------------------------------------------------------------------------------------------------------------------------
+19  2019-05-28 11:59:44.054 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, score_segment, selected_type
+ FROM score_segment
+ WHERE ( school_id = 10225488 and exam_no = 'E15213601517252018030001105' );
+------------------------------------------------------------------------------------------------------------------------
+20  2019-05-28 11:59:44.062 [http-nio-8115-exec-8] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'E15213601517252018030001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+21  2019-05-28 11:59:49.206 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'T15265468166582018050001105' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+22  2019-05-28 11:59:54.310 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, goal_type, critical_student_type, grade_id
+ FROM school_operate_trace
+ WHERE ( school_id = 10225488 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+23  2019-05-28 11:59:54.323 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.C.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, crtical_student, ctitical_student_type
+ FROM crtical_student
+ WHERE ( school_id = 10225488 and ctitical_student_type = 1 and exam_no = 'T15265468166582018050001105' );
+------------------------------------------------------------------------------------------------------------------------
+24  2019-05-28 11:59:54.348 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, score_segment, selected_type
+ FROM score_segment
+ WHERE ( school_id = 10225488 and exam_no = 'T15265468166582018050001105' );
+------------------------------------------------------------------------------------------------------------------------
+25  2019-05-28 11:59:54.357 [http-nio-8115-exec-8] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'T15265468166582018050001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+26  2019-05-28 11:59:59.538 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'T15265533700722018050001105' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+27  2019-05-28 12:00:04.705 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, goal_type, critical_student_type, grade_id
+ FROM school_operate_trace
+ WHERE ( school_id = 10225488 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+28  2019-05-28 12:00:04.718 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.C.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, crtical_student, ctitical_student_type
+ FROM crtical_student
+ WHERE ( school_id = 10225488 and ctitical_student_type = 1 and exam_no = 'T15265533700722018050001105' );
+------------------------------------------------------------------------------------------------------------------------
+29  2019-05-28 12:00:04.750 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, score_segment, selected_type
+ FROM score_segment
+ WHERE ( school_id = 10225488 and exam_no = 'T15265533700722018050001105' );
+------------------------------------------------------------------------------------------------------------------------
+30  2019-05-28 12:00:04.770 [http-nio-8115-exec-8] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'T15265533700722018050001105' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+31  2019-05-28 12:00:09.990 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'T15279259093952018060001103' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+32  2019-05-28 12:00:15.127 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, goal_type, critical_student_type, grade_id
+ FROM school_operate_trace
+ WHERE ( school_id = 10225488 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+33  2019-05-28 12:00:15.138 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.C.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, crtical_student, ctitical_student_type
+ FROM crtical_student
+ WHERE ( school_id = 10225488 and ctitical_student_type = 1 and exam_no = 'T15279259093952018060001103' );
+------------------------------------------------------------------------------------------------------------------------
+34  2019-05-28 12:00:16.223 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, score_segment, selected_type
+ FROM score_segment
+ WHERE ( school_id = 10225488 and exam_no = 'T15279259093952018060001103' );
+------------------------------------------------------------------------------------------------------------------------
+35  2019-05-28 12:00:16.271 [http-nio-8115-exec-8] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'T15279259093952018060001103' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+36  2019-05-28 12:00:21.633 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, major, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, is_exercise_complete
+ FROM dws_grade_subject
+ WHERE exam_no = 'T15287674681272018060001102' and school_id = 10225488 and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+37  2019-05-28 12:00:26.834 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, goal_type, critical_student_type, grade_id
+ FROM school_operate_trace
+ WHERE ( school_id = 10225488 and grade_id = 12 );
+------------------------------------------------------------------------------------------------------------------------
+38  2019-05-28 12:00:26.846 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.C.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, crtical_student, ctitical_student_type
+ FROM crtical_student
+ WHERE ( school_id = 10225488 and ctitical_student_type = 1 and exam_no = 'T15287674681272018060001102' );
+------------------------------------------------------------------------------------------------------------------------
+39  2019-05-28 12:00:26.901 [http-nio-8115-exec-8] DEBUG c.h.r.d.m.S.selectByExample[49] - ==>
+select id, school_id, exam_no, subject, score_segment, selected_type
+ FROM score_segment
+ WHERE ( school_id = 10225488 and exam_no = 'T15287674681272018060001102' );
+------------------------------------------------------------------------------------------------------------------------
+40  2019-05-28 12:00:26.918 [http-nio-8115-exec-8] DEBUG c.h.d.e.DwsStudentSubjectMo.fetch[49] - ==>
+select exam_no, task_id, subject_organ, school_id, group_id, student_id, sum_total_score, sum_judge_score, student_score, report_subject_type, exam_name, task_name, student_name, student_no, is_absent, report_group_type, major
+ FROM dws_student_subject
+ WHERE exam_no = 'T15287674681272018060001102' and task_id = 0 and subject_organ = 0 and school_id = 10225488 and is_absent = 0;
+------------------------------------------------------------------------------------------------------------------------
+41  2019-05-28 12:00:37.142 [http-nio-8115-exec-8] DEBUG c.h.d.entry.DwdTaskGroupMo.fetch[49] - ==>
+select exam_no, task_id, school_id, group_id, group_name, group_sort, major, teacher_id, teacher_name, student_ids
+ FROM dwd_task_group
+ WHERE exam_no = 'E15201518440832018030001105' and task_id = 0 and school_id = 10225488;
+------------------------------------------------------------------------------------------------------------------------
+43  2019-05-28 13:00:21.305 [http-nio-8115-exec-10] DEBUG c.h.d.entry.DwsGradeSubjectMo.fetch[49] - ==>
+
+    select
+        exam_no,
+        task_id,
+        subject_organ,
+        school_id,
+        major,
+        subject_total_score,
+        sum_total_score,
+        sum_judge_score,
+        max_score,
+        min_score,
+        avg_score,
+        mid_score,
+        student_score,
+        absent_student_score,
+        push_student_num,
+        report_subject_type,
+        exam_name,
+        task_name,
+        is_exercise_complete
+    FROM
+        dws_grade_subject
+    WHERE
+        exam_no = 'E15201518440832018030001105'
+        and school_id = 10225488
+        and major = 0;
+------------------------------------------------------------------------------------------------------------------------
+44  2019-05-28 13:00:26.445 [http-nio-8115-exec-10] DEBUG c.h.d.entry.DwsGroupSubjectMo.fetch[49] - ==>
+
+    select
+        exam_no,
+        task_id,
+        subject_organ,
+        school_id,
+        group_id,
+        subject_total_score,
+        sum_total_score,
+        sum_judge_score,
+        max_score,
+        min_score,
+        avg_score,
+        mid_score,
+        student_score,
+        absent_student_score,
+        push_student_num,
+        report_subject_type,
+        exam_name,
+        task_name,
+        group_name,
+        group_sort,
+        report_group_type,
+        major
+    FROM
+        dws_group_subject
+    WHERE
+        exam_no = 'E15201518440832018030001105'
+        and task_id = 0
+        and subject_organ = 0
+        and school_id = 10225488;
+------------------------------------------------------------------------------------------------------------------------

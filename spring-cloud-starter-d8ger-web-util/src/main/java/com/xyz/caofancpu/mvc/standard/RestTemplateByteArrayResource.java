@@ -7,7 +7,7 @@ import org.springframework.core.io.ByteArrayResource;
  * 针对RestTemplate方式, 在应用服务内封装文件流, 上传至其他应用
  * 参考文档: https://www.cnblogs.com/paxing/p/11485049.html
  *
- * @author caofanCPU
+ * @author D8GER
  */
 public class RestTemplateByteArrayResource extends ByteArrayResource {
     private final String originFileName;

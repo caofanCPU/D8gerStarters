@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * HTTP属性处理工具
  *
- * @author caofanCPU
+ * @author D8GER
  */
 public class HttpStaticHandleUtil {
 

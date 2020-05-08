@@ -28,9 +28,9 @@ import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 /**
- * FileName: RestTemplateConfig
- * Author:   caofanCPU
- * Date:     2018/11/17 16:54
+ * RestTemplate统一配置
+ *
+ * @author D8GER
  */
 @Configuration
 public class RestTemplateConfig {

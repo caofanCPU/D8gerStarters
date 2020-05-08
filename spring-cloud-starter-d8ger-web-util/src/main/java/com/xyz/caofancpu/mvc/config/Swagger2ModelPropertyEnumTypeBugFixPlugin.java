@@ -1,8 +1,8 @@
 package com.xyz.caofancpu.mvc.config;
 
-import com.xyz.caofancpu.commonoperateutils.enumtype.IEnum;
-import com.xyz.caofancpu.util.dataoperateutils.JSONUtil;
-import com.xyz.caofancpu.util.streamoperateutils.CollectionUtil;
+import com.xyz.caofancpu.constant.IEnum;
+import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.JSONUtil;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -22,11 +22,11 @@ import java.util.Optional;
 /**
  * Swagger2枚举类对象属性解析插件
  *
- * @author ht-caofan
+ * @author D8GER
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 98)
-public class Swagger2ModelPropertyPlugin implements ModelPropertyBuilderPlugin {
+public class Swagger2ModelPropertyEnumTypeBugFixPlugin implements ModelPropertyBuilderPlugin {
 
     @Override
     public void apply(ModelPropertyContext context) {

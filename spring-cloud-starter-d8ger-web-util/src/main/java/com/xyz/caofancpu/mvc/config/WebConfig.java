@@ -23,7 +23,7 @@ import java.util.List;
  * 也可使用复写extendMessageConverters()方法,
  * 但是注意: 不要使用configureMessageConverters, 该方法要么不起作用, 要么关闭了默认配置
  *
- * @author caofan
+ * @author D8GER
  */
 @Configuration
 @Slf4j

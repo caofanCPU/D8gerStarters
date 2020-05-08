@@ -1,10 +1,10 @@
 package com.xyz.caofancpu.mvc.interceptor;
 
-import com.xyz.caofancpu.commonoperateutils.SymbolConstantUtil;
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
+import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.logger.LogIpConfigUtil;
 import com.xyz.caofancpu.mvc.common.HttpStaticHandleUtil;
-import com.xyz.caofancpu.util.dataoperateutils.JSONUtil;
-import com.xyz.caofancpu.util.streamoperateutils.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,6 +23,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * Web接口日志拦截切面
+ */
 @Component
 @Aspect
 @Order(2)

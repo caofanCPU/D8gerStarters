@@ -1,13 +1,14 @@
 package com.xyz.caofancpu.mvc.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.JSONUtil;
+import com.xyz.caofancpu.extra.ReflectionUtil;
 import com.xyz.caofancpu.mvc.annotation.Check;
 import com.xyz.caofancpu.result.CustomerErrorInfo;
 import com.xyz.caofancpu.result.D8Response;
 import com.xyz.caofancpu.result.GlobalErrorInfoException;
-import com.xyz.caofancpu.util.dataoperateutils.JSONUtil;
-import com.xyz.caofancpu.util.dataoperateutils.ReflectionUtil;
-import com.xyz.caofancpu.util.streamoperateutils.CollectionUtil;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,9 +20,15 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
+/**
+ * 参数校验拦截器
+ *
+ * @author D8GER
+ */
 @Aspect
 @Component
 @Order(2)
@@ -30,40 +37,41 @@ public class CheckParamAspect {
     // -====================== 常量 =========================
 
     private static final String SEPARATOR = ":";
+    private static final Pattern moneyPattern = Pattern.compile("^\\d+(\\.\\d{1,2})?$");
+    private static final Pattern mailPattern = Pattern.compile("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$");
 
     /**
      * 是否不为空
      *
      * @param value       字段值
      * @param operatorNum 操作数，这里不需要，只是为了参数统一
-     * @return 是否不为空
+     * @return
      */
-    private static Boolean isNotNull(Object value, String operatorNum) {
-        Boolean isNotNull = Boolean.TRUE;
-        Boolean isStringNull = (value instanceof String) && StringUtils.isBlank((String) value);
-        Boolean isCollectionNull = (value instanceof Collection) && CollectionUtil.isEmpty((Collection) value);
-        if (value == null) {
-            isNotNull = Boolean.FALSE;
-        } else if (isStringNull || isCollectionNull) {
-            isNotNull = Boolean.FALSE;
+    @SuppressWarnings("unchecked")
+    private static <E> Boolean isNotNull(Object value, String operatorNum) {
+        if (value instanceof String) {
+            return StringUtils.isNotBlank((String) value);
         }
-        return isNotNull;
+        if (value instanceof Collection) {
+            return CollectionUtil.isNotEmpty((Collection<E>) value);
+        }
+        return Objects.nonNull(value);
     }
 
     /**
-     * 是否为整数
+     * 是否为数字
      *
      * @param value       字段值
      * @param operatorNum 操作数，这里不需要，只是为了参数统一
-     * @return 是否不为空
+     * @return
      */
     private static Boolean isNumber(Object value, String operatorNum) {
-        return value instanceof Integer || value instanceof Long;
+        return Objects.nonNull(value) && value instanceof Number;
     }
 
     @Deprecated
     private static Boolean isBoolStr(Object value, String operatorNum) {
-        return value instanceof Boolean;
+        return Objects.nonNull(value) && value instanceof Boolean;
     }
 
     /**
@@ -71,13 +79,10 @@ public class CheckParamAspect {
      *
      * @param value       字段值
      * @param operatorNum 操作数，这里不需要，只是为了参数统一
-     * @return 是否不为空
+     * @return
      */
     private static Boolean isMoney(Object value, String operatorNum) {
-        //表示金额的正则表达式
-        String moneyReg = "^\\d+(\\.\\d{1,2})?$";
-        Pattern moneyPattern = Pattern.compile(moneyReg);
-        return value != null && moneyPattern.matcher(value.toString()).matches();
+        return Objects.nonNull(value) && moneyPattern.matcher(value.toString()).matches();
     }
 
     // -=================== 对不同类型的值进行校验 起 =======================
@@ -87,13 +92,10 @@ public class CheckParamAspect {
      *
      * @param value       字段值
      * @param operatorNum 操作数，这里不需要，只是为了参数统一
-     * @return 是否不为空
+     * @return
      */
     private static Boolean isMail(Object value, String operatorNum) {
-        //表示邮箱的正则表达式
-        String mailReg = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$";
-        Pattern mailPattern = Pattern.compile(mailReg);
-        return value != null && mailPattern.matcher(value.toString()).matches();
+        return Objects.nonNull(value) && mailPattern.matcher(value.toString()).matches();
     }
 
     /**
@@ -103,23 +105,9 @@ public class CheckParamAspect {
      * @param operatorNum 操作数
      * @return 是否大于
      */
-    private static Boolean isGreaterThan(Object value, String operatorNum) {
-        Boolean isGreaterThan = Boolean.FALSE;
-        if (value == null) {
-            return Boolean.FALSE;
-        }
-        boolean isStringGreaterThen = (value instanceof String) && ((String) value).length() > Integer.valueOf(operatorNum);
-        boolean isLongGreaterThen = (value instanceof Long) && value > Long.valueOf(operatorNum);
-        boolean isIntegerGreaterThen = (value instanceof Integer) && value > Integer.valueOf(operatorNum);
-        boolean isShortGreaterThen = (value instanceof Short) && value > Short.valueOf(operatorNum);
-        boolean isFloatGreaterThen = (value instanceof Float) && value > Float.valueOf(operatorNum);
-        boolean isDoubleGreaterThen = (value instanceof Double) && value > Double.valueOf(operatorNum);
-        boolean isCollectionGreaterThen = (value instanceof Collection) && ((Collection) value).size() > Integer.valueOf(operatorNum);
-        if (isStringGreaterThen || isLongGreaterThen || isIntegerGreaterThen ||
-                isShortGreaterThen || isFloatGreaterThen || isDoubleGreaterThen || isCollectionGreaterThen) {
-            isGreaterThan = Boolean.TRUE;
-        }
-        return isGreaterThan;
+    @SuppressWarnings("unchecked")
+    private static <E> Boolean isGreaterThan(Object value, String operatorNum) {
+        return Objects.nonNull(value) && judge(value, operatorNum, Operator.GREATER_THAN);
     }
 
     /**
@@ -130,22 +118,7 @@ public class CheckParamAspect {
      * @return 是否大于等于
      */
     private static Boolean isGreaterThanEqual(Object value, String operatorNum) {
-        Boolean isGreaterThanEqual = Boolean.FALSE;
-        if (value == null) {
-            return Boolean.FALSE;
-        }
-        boolean isStringGreaterThenEqual = (value instanceof String) && ((String) value).length() >= Integer.valueOf(operatorNum);
-        boolean isLongGreaterThenEqual = (value instanceof Long) && value >= Long.valueOf(operatorNum);
-        boolean isIntegerGreaterThenEqual = (value instanceof Integer) && value >= Integer.valueOf(operatorNum);
-        boolean isShortGreaterThenEqual = (value instanceof Short) && value >= Short.valueOf(operatorNum);
-        boolean isFloatGreaterThenEqual = (value instanceof Float) && value >= Float.valueOf(operatorNum);
-        boolean isDoubleGreaterThenEqual = (value instanceof Double) && value >= Double.valueOf(operatorNum);
-        boolean isCollectionGreaterThenEqual = (value instanceof Collection) && ((Collection) value).size() >= Integer.valueOf(operatorNum);
-        if (isStringGreaterThenEqual || isLongGreaterThenEqual || isIntegerGreaterThenEqual ||
-                isShortGreaterThenEqual || isFloatGreaterThenEqual || isDoubleGreaterThenEqual || isCollectionGreaterThenEqual) {
-            isGreaterThanEqual = Boolean.TRUE;
-        }
-        return isGreaterThanEqual;
+        return Objects.nonNull(value) && judge(value, operatorNum, Operator.GREATER_THAN_EQUAL);
     }
 
     /**
@@ -156,22 +129,7 @@ public class CheckParamAspect {
      * @return 是否少于
      */
     private static Boolean isLessThan(Object value, String operatorNum) {
-        Boolean isLessThan = Boolean.FALSE;
-        if (value == null) {
-            return Boolean.FALSE;
-        }
-        boolean isStringLessThen = (value instanceof String) && ((String) value).length() < Integer.valueOf(operatorNum);
-        boolean isLongLessThen = (value instanceof Long) && value < Long.valueOf(operatorNum);
-        boolean isIntegerLessThen = (value instanceof Integer) && value < Integer.valueOf(operatorNum);
-        boolean isShortLessThen = (value instanceof Short) && value < Short.valueOf(operatorNum);
-        boolean isFloatLessThen = (value instanceof Float) && value < Float.valueOf(operatorNum);
-        boolean isDoubleLessThen = (value instanceof Double) && value < Double.valueOf(operatorNum);
-        boolean isCollectionLessThen = (value instanceof Collection) && ((Collection) value).size() < Integer.valueOf(operatorNum);
-        if (isStringLessThen || isLongLessThen || isIntegerLessThen ||
-                isShortLessThen || isFloatLessThen || isDoubleLessThen || isCollectionLessThen) {
-            isLessThan = Boolean.TRUE;
-        }
-        return isLessThan;
+        return Objects.nonNull(value) && judge(value, operatorNum, Operator.LESS_THAN);
     }
 
     /**
@@ -182,22 +140,45 @@ public class CheckParamAspect {
      * @return 是否少于等于
      */
     private static Boolean isLessThanEqual(Object value, String operatorNum) {
-        Boolean isLessThanEqual = Boolean.FALSE;
-        if (value == null) {
-            return Boolean.FALSE;
+        return Objects.nonNull(value) && judge(value, operatorNum, Operator.LESS_THAN_EQUAL);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E> boolean judge(@NonNull Object value, @NonNull String operatorNum, Operator operator) {
+        Double a = null;
+        Double b = null;
+        if (value instanceof String) {
+            a = (double) value.toString().length();
+            b = Double.parseDouble(operatorNum);
         }
-        boolean isStringLessThenEqual = (value instanceof String) && ((String) value).length() <= Integer.valueOf(operatorNum);
-        boolean isLongLessThenEqual = (value instanceof Long) && value <= Long.valueOf(operatorNum);
-        boolean isIntegerLessThenEqual = (value instanceof Integer) && value <= Integer.valueOf(operatorNum);
-        boolean isShortLessThenEqual = (value instanceof Short) && value <= Short.valueOf(operatorNum);
-        boolean isFloatLessThenEqual = (value instanceof Float) && value <= Float.valueOf(operatorNum);
-        boolean isDoubleLessThenEqual = (value instanceof Double) && value <= Double.valueOf(operatorNum);
-        boolean isCollectionLessThenEqual = (value instanceof Collection) && ((Collection) value).size() <= Integer.valueOf(operatorNum);
-        if (isStringLessThenEqual || isLongLessThenEqual || isIntegerLessThenEqual ||
-                isShortLessThenEqual || isFloatLessThenEqual || isDoubleLessThenEqual || isCollectionLessThenEqual) {
-            isLessThanEqual = Boolean.TRUE;
+
+        if (value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Float || value instanceof Double) {
+            a = Double.parseDouble(value.toString());
+            b = Double.parseDouble(operatorNum);
         }
-        return isLessThanEqual;
+
+        if (value instanceof Collection) {
+            a = (double) ((Collection<E>) value).size();
+        }
+
+        return Objects.nonNull(a) && Objects.nonNull(b) && compare(a, b, operator);
+    }
+
+    private static boolean compare(@NonNull Double a, @NonNull Double b, Operator operator) {
+        switch (operator) {
+            case GREATER_THAN:
+                return a > b;
+            case GREATER_THAN_EQUAL:
+                return a >= b;
+            case LESS_THAN:
+                return a < b;
+            case LESS_THAN_EQUAL:
+                return a <= b;
+            case NOT_EQUAL:
+                return !a.equals(b);
+            default:
+                throw new IllegalArgumentException("操作符参数异常");
+        }
     }
 
     /**
@@ -208,22 +189,7 @@ public class CheckParamAspect {
      * @return 是否不等于
      */
     private static Boolean isNotEqual(Object value, String operatorNum) {
-        Boolean isNotEqual = Boolean.FALSE;
-        if (value == null) {
-            return Boolean.FALSE;
-        }
-        boolean isStringNotEqual = (value instanceof String) && !value.equals(operatorNum);
-        boolean isLongNotEqual = (value instanceof Long) && !value.equals(Long.valueOf(operatorNum));
-        boolean isIntegerNotEqual = (value instanceof Integer) && !value.equals(Integer.valueOf(operatorNum));
-        boolean isShortNotEqual = (value instanceof Short) && !value.equals(Short.valueOf(operatorNum));
-        boolean isFloatNotEqual = (value instanceof Float) && !value.equals(Float.valueOf(operatorNum));
-        boolean isDoubleNotEqual = (value instanceof Double) && !value.equals(Double.valueOf(operatorNum));
-        boolean isCollectionNotEqual = (value instanceof Collection) && ((Collection) value).size() != Integer.valueOf(operatorNum);
-        if (isStringNotEqual || isLongNotEqual || isIntegerNotEqual ||
-                isShortNotEqual || isFloatNotEqual || isDoubleNotEqual || isCollectionNotEqual) {
-            isNotEqual = Boolean.TRUE;
-        }
-        return isNotEqual;
+        return Objects.nonNull(value) && judge(value, operatorNum, Operator.NOT_EQUAL);
     }
 
     @Around("execution(* com.xyz..*.service..*.*.*(..))")
@@ -294,8 +260,7 @@ public class CheckParamAspect {
                 method = joinPoint
                         .getTarget()
                         .getClass()
-                        .getDeclaredMethod(joinPoint.getSignature().getName(),
-                                method.getParameterTypes());
+                        .getDeclaredMethod(joinPoint.getSignature().getName(), method.getParameterTypes());
             } catch (SecurityException | NoSuchMethodException e) {
                 log.error("反射获取方法失败，{}" + e.getMessage());
             }
@@ -380,14 +345,7 @@ public class CheckParamAspect {
      * @return 是否符合
      */
     private Boolean isCheck(Method method, Object[] arguments) {
-        Boolean isCheck = Boolean.TRUE;
-        // 只允许有一个参数
-        if (!method.isAnnotationPresent(Check.class)
-                || arguments == null
-                || arguments.length != 1) {
-            isCheck = Boolean.FALSE;
-        }
-        return isCheck;
+        return method.isAnnotationPresent(Check.class) && Objects.nonNull(arguments) && arguments.length == 1;
     }
 
     /**

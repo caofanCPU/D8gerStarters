@@ -1,7 +1,7 @@
 package com.xyz.caofancpu.mvc.interceptor;
 
 
-import com.xyz.caofancpu.util.dataoperateutils.JSONUtil;
+import com.xyz.caofancpu.core.JSONUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
@@ -20,12 +20,13 @@ import java.sql.Connection;
 import java.util.Properties;
 
 /**
- * Created by caofanCPU on 2018/7/4.
+ * MybatisSQL拦截器切面
  * 首先通过注解定义该拦截器的切入点，
  * 对那个类的哪个方法进行拦截，
  * 防止方法重载需要声明参数类型以及个数
+ *
+ * @author D8GER
  */
-
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 @Component
 public class MybatisSQLInterceptor implements Interceptor {
