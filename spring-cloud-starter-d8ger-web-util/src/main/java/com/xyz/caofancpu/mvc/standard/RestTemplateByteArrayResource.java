@@ -1,7 +1,8 @@
 package com.xyz.caofancpu.mvc.standard;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.core.io.ByteArrayResource;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * 针对RestTemplate方式, 在应用服务内封装文件流, 上传至其他应用

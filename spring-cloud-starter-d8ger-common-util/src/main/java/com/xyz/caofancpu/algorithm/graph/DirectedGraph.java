@@ -16,8 +16,6 @@ import java.util.function.Function;
 
 /**
  * 有向图
- * <p>
- * 全局统一运行时枚举
  */
 @Data
 @NoArgsConstructor
@@ -54,7 +52,7 @@ public class DirectedGraph<T> {
      * @param pair
      * @param autoRefresh 是否自动刷新有向图数据
      */
-    public DirectedGraph addEdge(Pair<T, T> pair, boolean autoRefresh) {
+    public DirectedGraph<T> addEdge(Pair<T, T> pair, boolean autoRefresh) {
         this.originRelationshipList.add(pair);
         if (autoRefresh) {
             this.buildGraph();
@@ -67,7 +65,7 @@ public class DirectedGraph<T> {
      *
      * @param edgeList
      */
-    public DirectedGraph addEdgeList(List<Pair<T, T>> edgeList) {
+    public DirectedGraph<T> addEdgeList(List<Pair<T, T>> edgeList) {
         this.originRelationshipList.addAll(edgeList);
         this.buildGraph();
         return this;

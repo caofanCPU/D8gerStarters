@@ -1,5 +1,7 @@
 package com.xyz.caofancpu.mvc.config;
 
+import com.xyz.caofancpu.property.RestTemplateProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -11,6 +13,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -32,13 +37,17 @@ import java.util.concurrent.TimeUnit;
  *
  * @author D8GER
  */
-@Configuration
-public class RestTemplateConfig {
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@ConditionalOnProperty(name = "spring.cloud.d8ger.enabled", matchIfMissing = true)
+@EnableConfigurationProperties(RestTemplateProperties.class)
+@Slf4j
+public class RestTemplateAutoConfiguration {
 
     @Resource
     RestTemplateBuilder restTemplateBuilder;
     @Resource
-    private CommonConfigValueService commonConfigValueService;
+    private RestTemplateProperties restTemplateProperties;
 
     /**
      * 注意：@LoadBalanced注解，使用该注解，则调用其他服务时，必须使用服务名称[http://SERVICE-XXX]，而非IP:port
@@ -83,18 +92,18 @@ public class RestTemplateConfig {
                 .register("https", socketFactory)
                 .build();
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry);
-        connectionManager.setDefaultMaxPerRoute(commonConfigValueService.maxPerRoute);
-        connectionManager.setMaxTotal(commonConfigValueService.maxTotal);
-        connectionManager.setValidateAfterInactivity(commonConfigValueService.validateAfterInactivity);
+        connectionManager.setDefaultMaxPerRoute(restTemplateProperties.getMaxPerRoute());
+        connectionManager.setMaxTotal(restTemplateProperties.getMaxTotal());
+        connectionManager.setValidateAfterInactivity(restTemplateProperties.getValidateAfterInactivity());
         CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .setSSLSocketFactory(socketFactory)
                 .setDefaultRequestConfig(RequestConfig.custom()
-                        .setConnectionRequestTimeout(commonConfigValueService.connectionRequestTimeout)
-                        .setConnectTimeout(commonConfigValueService.connectTimeout)
-                        .setSocketTimeout(commonConfigValueService.socketTimeout)
+                        .setConnectionRequestTimeout(restTemplateProperties.getConnectionRequestTimeout())
+                        .setConnectTimeout(restTemplateProperties.getConnectTimeout())
+                        .setSocketTimeout(restTemplateProperties.getSocketTimeout())
                         .build()
                 )
-                .setConnectionManager(connectionManager).evictIdleConnections(commonConfigValueService.maxIdleTime, TimeUnit.SECONDS)
+                .setConnectionManager(connectionManager).evictIdleConnections(restTemplateProperties.getMaxIdleTime(), TimeUnit.SECONDS)
                 .setConnectionManagerShared(true)
                 .build();
         RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));

@@ -16,8 +16,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.core.DateUtil;
-import com.xyz.caofancpu.enumtype.EnumRequestJSONConverterUtil;
-import com.xyz.caofancpu.enumtype.EnumResponseJSONConverterUtil;
+import com.xyz.caofancpu.enumtype.AutoHttpEnumConvertUtil;
 import org.springframework.boot.jackson.JsonComponentModule;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -59,8 +58,8 @@ public class MappingJackson2HttpMessageConverterUtil {
                                         .addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DateUtil.DATE_FORMAT_SIMPLE)))
                                         .addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DateUtil.TIME_FORMAT_SIMPLE))),
                                 // 请求枚举类型的反序列化转换器 + 响应枚举类型的序列化转换器
-                                new SimpleModule().addDeserializer(Enum.class, EnumRequestJSONConverterUtil.build())
-                                        .addSerializer(Enum.class, EnumResponseJSONConverterUtil.build()),
+                                new SimpleModule().addDeserializer(Enum.class, AutoHttpEnumConvertUtil.buildRequestJSONConverter())
+                                        .addSerializer(Enum.class, AutoHttpEnumConvertUtil.buildResponseJSONConverter()),
                                 new JsonComponentModule()
                                 )
                         )

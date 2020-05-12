@@ -7,8 +7,8 @@ import java.util.Collections;
 
 /**
  * 常用符号
- * <p>
- * 全局统一运行时枚举
+ *
+ * @author D8GER
  */
 public class SymbolConstantUtil {
 

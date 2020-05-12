@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.xyz.caofancpu.mvc.config.RestTemplateAutoConfiguration

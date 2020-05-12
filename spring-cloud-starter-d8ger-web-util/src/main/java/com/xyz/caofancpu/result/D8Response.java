@@ -2,6 +2,8 @@ package com.xyz.caofancpu.result;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -10,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
  * @author D8GER
  */
 @ApiModel
+@Data
+@Accessors(chain = true)
 public class D8Response<T> {
 
     @ApiModelProperty(value = "状态码", example = "200", position = 1)
@@ -29,24 +33,15 @@ public class D8Response<T> {
      * @return
      */
     public static <T> D8Response<T> fail(String errorMsg) {
-        D8Response<T> d8Response = new D8Response<>();
-        d8Response.setCode(GlobalErrorInfoEnum.GLOBAL_MSG.getCode());
-        d8Response.setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.GLOBAL_MSG.getMsg() : errorMsg);
-        return d8Response;
+        return new D8Response<T>().setCode(GlobalErrorInfoEnum.GLOBAL_MSG.getCode()).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.GLOBAL_MSG.getMsg() : errorMsg);
     }
 
     public static <T> D8Response<T> fail(ErrorInfoInterface errorInfo) {
-        D8Response<T> d8Response = new D8Response<>();
-        d8Response.setCode(errorInfo.getCode());
-        d8Response.setMsg(errorInfo.getMsg());
-        return d8Response;
+        return new D8Response<T>().setCode(errorInfo.getCode()).setMsg(errorInfo.getMsg());
     }
 
     public static <T> D8Response<T> fail(String code, String errorMsg) {
-        D8Response<T> d8Response = new D8Response<>();
-        d8Response.setCode(StringUtils.isBlank(code) ? GlobalErrorInfoEnum.GLOBAL_MSG.getCode() : code);
-        d8Response.setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.GLOBAL_MSG.getMsg() : errorMsg);
-        return d8Response;
+        return new D8Response<T>().setCode(StringUtils.isBlank(code) ? GlobalErrorInfoEnum.GLOBAL_MSG.getCode() : code).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.GLOBAL_MSG.getMsg() : errorMsg);
     }
 
     /**
@@ -56,11 +51,7 @@ public class D8Response<T> {
      * @return
      */
     public static <T> D8Response<T> success(T data) {
-        D8Response<T> d8Response = new D8Response<>();
-        d8Response.setCode(GlobalErrorInfoEnum.SUCCESS.getCode());
-        d8Response.setMsg(GlobalErrorInfoEnum.SUCCESS.getMsg());
-        d8Response.setData(data);
-        return d8Response;
+        return new D8Response<T>().setCode(GlobalErrorInfoEnum.SUCCESS.getCode()).setMsg(GlobalErrorInfoEnum.SUCCESS.getMsg()).setData(data);
     }
 
     /**
@@ -71,35 +62,7 @@ public class D8Response<T> {
      * @return
      */
     public static <T> D8Response<T> success(T data, String successMsg) {
-        D8Response<T> d8Response = new D8Response<>();
-        d8Response.setCode(GlobalErrorInfoEnum.SUCCESS.getCode());
-        d8Response.setData(data);
-        d8Response.setMsg(successMsg);
-        return d8Response;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
+        return new D8Response<T>().setCode(GlobalErrorInfoEnum.SUCCESS.getCode()).setData(data).setMsg(successMsg);
     }
 
     public Boolean ifSuccess() {

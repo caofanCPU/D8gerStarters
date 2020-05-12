@@ -19,21 +19,20 @@ import java.util.Objects;
  *
  * @author D8GER
  */
-@SuppressWarnings("unchecked")
 @Slf4j
 public class AutoDispatchMyBatisEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E> {
 
-    private final BaseTypeHandler typeHandler;
+    private final BaseTypeHandler<E> typeHandler;
 
     public AutoDispatchMyBatisEnumTypeHandler(Class<E> enumType) {
         if (Objects.isNull(enumType)) {
             throw new GlobalErrorInfoRuntimeException("参数非法, 类型不能为空");
         }
         if (IEnum.class.isAssignableFrom(enumType)) {
-            typeHandler = new BaseMybatisEnumTypeHandler(enumType);
+            typeHandler = new BaseMybatisEnumTypeHandler<>(enumType);
             log.info("创建枚举类型: [{}]的自定义DB转换器: [{}]", enumType.getSimpleName(), typeHandler.getClass().getSimpleName());
         } else {
-            typeHandler = new EnumOrdinalTypeHandler(enumType);
+            typeHandler = new EnumOrdinalTypeHandler<>(enumType);
             log.info("创建枚举类型: [{}]的默认DB转换器: [{}]", enumType.getSimpleName(), typeHandler.getClass().getSimpleName());
         }
     }
@@ -47,18 +46,18 @@ public class AutoDispatchMyBatisEnumTypeHandler<E extends Enum<E>> extends BaseT
     @Override
     public E getNullableResult(ResultSet rs, String columnName)
             throws SQLException {
-        return (E) typeHandler.getNullableResult(rs, columnName);
+        return typeHandler.getNullableResult(rs, columnName);
     }
 
     @Override
     public E getNullableResult(ResultSet rs, int columnIndex)
             throws SQLException {
-        return (E) typeHandler.getNullableResult(rs, columnIndex);
+        return typeHandler.getNullableResult(rs, columnIndex);
     }
 
     @Override
     public E getNullableResult(CallableStatement cs, int columnIndex)
             throws SQLException {
-        return (E) typeHandler.getNullableResult(cs, columnIndex);
+        return typeHandler.getNullableResult(cs, columnIndex);
     }
 }

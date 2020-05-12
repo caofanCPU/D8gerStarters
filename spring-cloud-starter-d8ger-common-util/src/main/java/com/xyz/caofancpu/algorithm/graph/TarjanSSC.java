@@ -10,8 +10,6 @@ import java.util.Stack;
 
 /**
  * Robert•Tarjan强连通分量算法
- * <p>
- * 全局统一运行时枚举
  */
 public class TarjanSSC<T> {
     /**

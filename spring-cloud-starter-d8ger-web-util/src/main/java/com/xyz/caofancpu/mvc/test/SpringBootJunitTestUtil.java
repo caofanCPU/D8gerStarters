@@ -125,7 +125,7 @@ public class SpringBootJunitTestUtil {
             case POST_BODY:
                 // 模拟POST发送RequestBody请求
                 return MockMvcRequestBuilders.post(url)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .headers(httpHeaders)
                         .cookie(cookies)
                         .content(new ObjectMapper().writeValueAsString(requestData));
@@ -133,7 +133,7 @@ public class SpringBootJunitTestUtil {
                 // 模拟POST发送RequestParam请求
                 MultiValueMap<String, String> multiValueMap = convertRequestParam(JSONObject.parseObject(JSONObject.toJSONString(requestData)));
                 return MockMvcRequestBuilders.post(url)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .headers(httpHeaders)
                         .cookie(cookies)
                         .params(multiValueMap);
@@ -141,7 +141,7 @@ public class SpringBootJunitTestUtil {
                 // 模拟GET发送RequestParam请求
                 multiValueMap = convertRequestParam(JSONObject.parseObject(JSONObject.toJSONString(requestData)));
                 return MockMvcRequestBuilders.get(url)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .headers(httpHeaders)
                         .cookie(cookies)
                         .params(multiValueMap);
