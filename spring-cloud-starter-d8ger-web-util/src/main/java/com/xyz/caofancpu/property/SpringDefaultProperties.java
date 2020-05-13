@@ -16,34 +16,22 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.constant;
+package com.xyz.caofancpu.property;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
- * Http请求方式枚举
+ * Spring应用默认配置项
  *
  * @author D8GER
  */
-@AllArgsConstructor
-public enum HttpTypeEnum implements IEnum {
-    POST_BODY(0, "Post传对象"),
-    POST_PARAM(1, "Post传参数"),
-    GET_PARAM(2, "Get传参数"),
+@Component
+public class SpringDefaultProperties {
+    @Value("${server.servlet.context-path:}")
+    public String contentPath;
 
-    ;
+    @Value("${spring.application.name:}")
+    public String applicationName;
 
-    private final int value;
-
-    private final String name;
-
-    @Override
-    public Integer getValue() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
 }

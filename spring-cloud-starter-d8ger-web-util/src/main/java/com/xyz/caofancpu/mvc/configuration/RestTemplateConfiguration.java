@@ -1,5 +1,24 @@
-package com.xyz.caofancpu.mvc.config;
+/*
+ * Copyright 2016-2020 the original author
+ *
+ * @D8GER(https://github.com/caofanCPU).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+package com.xyz.caofancpu.mvc.configuration;
+
+import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.property.RestTemplateProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
@@ -16,8 +35,6 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -39,45 +56,24 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@ConditionalOnProperty(name = "spring.cloud.d8ger.enabled", matchIfMissing = true)
+@ConditionalOnProperty(name = D8gerConstants.D8_ENABLE, matchIfMissing = true)
 @EnableConfigurationProperties(RestTemplateProperties.class)
 @Slf4j
-public class RestTemplateAutoConfiguration {
+public class RestTemplateConfiguration {
 
-    @Resource
-    RestTemplateBuilder restTemplateBuilder;
     @Resource
     private RestTemplateProperties restTemplateProperties;
-
-    /**
-     * 注意：@LoadBalanced注解，使用该注解，则调用其他服务时，必须使用服务名称[http://SERVICE-XXX]，而非IP:port
-     *
-     * @return
-     */
-    @Bean(name = "restTemplate")
-    @LoadBalanced
-    RestTemplate restTemplate() {
-        return restTemplateBuilder.build();
-    }
-
-    /**
-     * 通过IP:port访问服务
-     *
-     * @return
-     */
-    @Bean(name = "zuulRestTemplate")
-    RestTemplate zuulRestTemplate() {
-        return restTemplateBuilder.build();
-    }
 
     /**
      * 测试环境忽略https请求证书的问题
      *
      * @return
      */
-    @Bean(name = "ignoreHttpsRestTemplate")
-    RestTemplate ignoreHttpsRestTemplate()
+    @Bean(name = "restTemplate")
+    @ConditionalOnProperty(name = D8gerConstants.D8_REST_TEMPLATE_ENABLE, matchIfMissing = true)
+    public RestTemplate restTemplate()
             throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+        log.info("D8GER....执行RestTemplate初始化");
         // https
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(
                 new SSLContextBuilder()
@@ -103,11 +99,12 @@ public class RestTemplateAutoConfiguration {
                         .setSocketTimeout(restTemplateProperties.getSocketTimeout())
                         .build()
                 )
-                .setConnectionManager(connectionManager).evictIdleConnections(restTemplateProperties.getMaxIdleTime(), TimeUnit.SECONDS)
+                .setConnectionManager(connectionManager).evictIdleConnections(restTemplateProperties.getMaxIdleTime(), TimeUnit.MILLISECONDS)
                 .setConnectionManagerShared(true)
                 .build();
         RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        log.info("D8GER....[restTemplate]初始化完成");
         return restTemplate;
     }
 }

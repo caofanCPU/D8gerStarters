@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.mvc.config;
+package com.xyz.caofancpu.mvc.configuration;
 
-import com.google.common.collect.Lists;
+import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.mvc.common.MappingJackson2HttpMessageConverterUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 /**
  * WEB配置
@@ -43,9 +44,11 @@ import java.util.List;
  *
  * @author D8GER
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@ConditionalOnProperty(name = D8gerConstants.D8_ENABLE, matchIfMissing = true)
 @Slf4j
-public class WebConfig implements WebMvcConfigurer {
+public class StandardHTTPMessageConfiguration implements WebMvcConfigurer {
 
     /**
      * 剔除响应对象中为NULL的字段
@@ -53,20 +56,12 @@ public class WebConfig implements WebMvcConfigurer {
      * 响应枚举类转换: viewName -> name
      */
     @Bean(name = "customerMappingJackson2HttpMessageConverter")
+    @ConditionalOnProperty(name = D8gerConstants.D8_HTTP_MESSAGE_CONVERT_ENABLE, matchIfMissing = true)
     public HttpMessageConverter customerMappingJackson2HttpMessageConverter() {
-        log.info("DebuggerKing....枚举请求&&响应转换器初始化完成!");
-        return MappingJackson2HttpMessageConverterUtil.build();
+        log.info("D8GER....执行枚举请求&&响应转换器初始化");
+        MappingJackson2HttpMessageConverter httpMessageConverter = MappingJackson2HttpMessageConverterUtil.build();
+        log.info("D8GER....[customerMappingJackson2HttpMessageConverter]枚举请求&&响应转换器初始化完成!");
+        return httpMessageConverter;
     }
 
-
-    /**
-     * 需要完全忽略登录|权限的请求, 请在此配置
-     *
-     * @return
-     */
-    private List<String> configAbsoluteFreeRequestUrl() {
-        // TODO
-        // 1.完全开放swaggerUI的访问路径
-        return Lists.newArrayList("/doc.html", "/swagger*/**", "/webjars/**", "/v2/api-docs-ext");
-    }
 }

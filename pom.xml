@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016-2020 the original author
+  ~
+  ~ @D8GER(https://github.com/caofanCPU).
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -23,7 +41,7 @@
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
 
         <java.version>1.8</java.version>
-        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring.version>5.2.4.RELEASE</spring.version>
         <springboot.version>2.2.5.RELEASE</springboot.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 
@@ -111,6 +129,10 @@
                     <exclusion>
                         <artifactId>slf4j-api</artifactId>
                         <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>spring-core</artifactId>
+                        <groupId>org.springframework</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>

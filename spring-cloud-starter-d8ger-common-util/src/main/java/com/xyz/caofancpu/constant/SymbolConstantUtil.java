@@ -1,3 +1,21 @@
+/*
+ * Copyright 2016-2020 the original author
+ *
+ * @D8GER(https://github.com/caofanCPU).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.xyz.caofancpu.constant;
 
 import com.xyz.caofancpu.core.CollectionUtil;
@@ -16,30 +34,42 @@ public class SymbolConstantUtil {
      * 中文顿号
      */
     public static final String CHINESE_STOP = "、";
+
     /**
      * 英文句号
      */
     public static final String ENGLISH_FULL_STOP = ".";
+
     /**
      * 中文逗号
      */
     public static final String CHINESE_COMMA = "，";
+
     /**
      * 英文逗号
      */
     public static final String ENGLISH_COMMA = ",";
+
     /**
      * 空串
      */
     public static final String EMPTY = StringUtils.EMPTY;
+
+    /**
+     * 标准分隔符 ', '
+     */
+    public static final String NORMAL_ENGLISH_COMMA_DELIMITER = ENGLISH_COMMA + EMPTY;
+
     /**
      * 单个空格符
      */
     public static final String SPACE = StringUtils.SPACE;
+
     /**
      * EXCEL中汉字的缩进间距，设置为4个空格
      */
     public static final String TAB = CollectionUtil.join(Collections.nCopies(4, SPACE), EMPTY);
+
     /**
      * 填空占位符: 两条短横线
      */
