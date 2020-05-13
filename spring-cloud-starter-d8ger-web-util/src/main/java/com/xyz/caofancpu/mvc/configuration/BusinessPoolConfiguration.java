@@ -54,11 +54,11 @@ public class BusinessPoolConfiguration {
     public ThreadPoolTaskExecutor standardThreadPool() {
         log.info("D8GER....执行服务线程池初始化");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(16);
-        executor.setMaxPoolSize(64);
-        executor.setQueueCapacity(16);
-        executor.setThreadNamePrefix("debugger_");
-        executor.setKeepAliveSeconds(60);
+        executor.setCorePoolSize(businessPoolProperties.getCorePoolSize());
+        executor.setMaxPoolSize(businessPoolProperties.getMaxPoolSize());
+        executor.setQueueCapacity(businessPoolProperties.getQueueCapacity());
+        executor.setThreadNamePrefix(businessPoolProperties.getThreadNamePrefix());
+        executor.setKeepAliveSeconds(businessPoolProperties.getKeepAliveSeconds());
         executor.setRejectedExecutionHandler(rejectedExecutionHandler());
         // 初始化
         executor.initialize();
