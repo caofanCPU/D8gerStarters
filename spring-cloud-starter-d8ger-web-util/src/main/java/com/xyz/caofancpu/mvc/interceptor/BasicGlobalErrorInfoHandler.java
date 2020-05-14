@@ -22,25 +22,25 @@ import com.xyz.caofancpu.result.D8Response;
 import com.xyz.caofancpu.result.GlobalErrorInfoEnum;
 import com.xyz.caofancpu.result.GlobalErrorInfoException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * Controller全局异常处理拦截器
  *
  * @author D8GER
  */
-@RestControllerAdvice
-public class GlobalErrorInfoHandler {
+public class BasicGlobalErrorInfoHandler<T> {
     /**
      * For params which is failed by verification, commonly used for param messaging
      *
      * @param ex
      * @return
      */
-    @ExceptionHandler(value = {HttpMessageNotReadableException.class, MethodArgumentNotValidException.class})
-    public D8Response<Object> handleParamTypeJSONParseException(HttpMessageNotReadableException ex) {
+    @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class, HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
+    public D8Response<T> handleParamTypeJSONParseException(HttpMessageNotReadableException ex) {
         return D8Response.fail(GlobalErrorInfoEnum.PARA_ERROR);
     }
 
@@ -51,7 +51,7 @@ public class GlobalErrorInfoHandler {
      * @return
      */
     @ExceptionHandler(value = GlobalErrorInfoException.class)
-    public D8Response<Object> handleCustomerException(GlobalErrorInfoException ex) {
+    public D8Response<T> handleCustomerException(GlobalErrorInfoException ex) {
         return D8Response.fail(ex.getCode(), ex.getMsg());
     }
 
@@ -62,7 +62,7 @@ public class GlobalErrorInfoHandler {
      * @return
      */
     @ExceptionHandler(value = RuntimeException.class)
-    public D8Response<Object> handleRuntimeException(RuntimeException ex) {
+    public D8Response<T> handleRuntimeException(RuntimeException ex) {
         return D8Response.fail(GlobalErrorInfoEnum.INTERNAL_ERROR);
     }
 }

@@ -51,7 +51,7 @@ public class D8Response<T> {
      * @return
      */
     public static <T> D8Response<T> fail(String errorMsg) {
-        return new D8Response<T>().setCode(GlobalErrorInfoEnum.GLOBAL_MSG.getCode()).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.GLOBAL_MSG.getMsg() : errorMsg);
+        return new D8Response<T>().setCode(GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode()).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg() : errorMsg);
     }
 
     public static <T> D8Response<T> fail(ErrorInfoInterface errorInfo) {
@@ -59,7 +59,7 @@ public class D8Response<T> {
     }
 
     public static <T> D8Response<T> fail(String code, String errorMsg) {
-        return new D8Response<T>().setCode(StringUtils.isBlank(code) ? GlobalErrorInfoEnum.GLOBAL_MSG.getCode() : code).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.GLOBAL_MSG.getMsg() : errorMsg);
+        return new D8Response<T>().setCode(StringUtils.isBlank(code) ? GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode() : code).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg() : errorMsg);
     }
 
     /**

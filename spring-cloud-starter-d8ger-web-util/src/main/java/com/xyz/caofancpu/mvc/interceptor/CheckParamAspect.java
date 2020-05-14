@@ -210,7 +210,7 @@ public class CheckParamAspect {
         return Objects.nonNull(value) && judge(value, operatorNum, Operator.NOT_EQUAL);
     }
 
-    @Around("execution(* com.xyz..*.service..*.*.*(..))")
+    @Around("@annotation(com.xyz.caofancpu.mvc.annotation.Check)")
     public Object check(ProceedingJoinPoint point)
             throws Throwable {
         // 参数校验
@@ -353,7 +353,7 @@ public class CheckParamAspect {
     }
 
 
-    // -=================== 对不同类型的值进行校验 =======================
+    // ==================== 对不同类型的值进行校验 =======================
 
     /**
      * 判断是否符合参数规则
@@ -363,7 +363,7 @@ public class CheckParamAspect {
      * @return 是否符合
      */
     private Boolean isCheck(Method method, Object[] arguments) {
-        return method.isAnnotationPresent(Check.class) && Objects.nonNull(arguments) && arguments.length == 1;
+        return method.isAnnotationPresent(Check.class) && CollectionUtil.isNotEmpty(arguments);
     }
 
     /**

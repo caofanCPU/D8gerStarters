@@ -19,8 +19,10 @@
 package com.xyz.caofancpu.mvc.common;
 
 import com.xyz.caofancpu.result.D8Response;
+import com.xyz.caofancpu.result.GlobalErrorInfoEnum;
 import com.xyz.caofancpu.result.GlobalErrorInfoException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -32,17 +34,23 @@ import java.util.Objects;
 @Slf4j
 public class GlobalResultCheckUtil {
     /**
-     * 微服务接口调用统一处理
+     * 远程调用接口调用统一处理
      * 响应成功, 不做任何处理
-     * 响应失败, 优先返回微服务的提示信息, 微服务没有提示信息时, 统一提示信息为"接口调用失败"
+     * 响应失败, 优先返回远程调用的提示信息, 远程调用没有提示信息时, 统一提示信息为"接口调用失败"
      *
      * @param d8Response
      * @throws GlobalErrorInfoException
      */
-    public static <T> void handleMSResultBody(D8Response<T> d8Response)
+    public static <T> void handleResult(D8Response<T> d8Response)
             throws GlobalErrorInfoException {
         if (Objects.isNull(d8Response) || d8Response.ifSuccess()) {
             return;
+        }
+        if (StringUtils.isEmpty(d8Response.getCode())) {
+            d8Response.setCode(GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode());
+        }
+        if (StringUtils.isEmpty(d8Response.getMsg())) {
+            d8Response.setMsg(GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg());
         }
         throw new GlobalErrorInfoException(d8Response.getCode(), d8Response.getMsg());
     }

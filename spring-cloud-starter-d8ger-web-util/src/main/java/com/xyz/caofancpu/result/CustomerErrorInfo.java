@@ -39,7 +39,7 @@ public class CustomerErrorInfo implements ErrorInfoInterface {
     }
 
     public CustomerErrorInfo(String msg) {
-        this.code = GlobalErrorInfoEnum.GLOBAL_MSG.getCode();
+        this.code = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode();
         this.msg = msg;
     }
 

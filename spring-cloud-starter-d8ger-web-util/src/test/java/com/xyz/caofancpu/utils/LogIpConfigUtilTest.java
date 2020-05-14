@@ -16,29 +16,34 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.mvc.interceptor;
+package com.xyz.caofancpu.utils;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
+import com.xyz.caofancpu.extra.NormalUseForTestUtil;
+import com.xyz.caofancpu.logger.LogIpConfigUtil;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * Service切面
+ * 获取真实IP测试
  *
  * @author D8GER
  */
-@Aspect
-@Component
-public class ServiceAspect {
+public class LogIpConfigUtilTest {
 
-    @Around(value = "execution(* com.xyz..*.service.imp..*ServiceImpl.*(..))")
-    public Object aroundMethod(ProceedingJoinPoint pjp)
-            throws Throwable {
-        Object result;
-        MethodSignature joinPointObject = (MethodSignature) pjp.getSignature();
-        result = pjp.proceed();
-        return result;
+    @Before
+    public void setUp()
+            throws Exception {
+    }
+
+    @After
+    public void tearDown()
+            throws Exception {
+    }
+
+    @Test
+    public void getIpAddress()
+            throws Exception {
+        NormalUseForTestUtil.out(LogIpConfigUtil.getIpAddress());
     }
 }
