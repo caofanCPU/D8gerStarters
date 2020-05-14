@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  *
  * @author D8GER
  */
-public class BasicGlobalErrorInfoHandler<T> {
+public class D8GlobalExceptionSupport<T> {
     /**
      * For params which is failed by verification, commonly used for param messaging
      *

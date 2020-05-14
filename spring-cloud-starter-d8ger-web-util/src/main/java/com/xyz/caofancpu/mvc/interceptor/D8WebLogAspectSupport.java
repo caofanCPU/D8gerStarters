@@ -26,10 +26,6 @@ import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.mvc.common.HttpStaticHandleUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,43 +36,20 @@ import java.util.Map;
 
 /**
  * Web接口日志拦截切面
+ *
+ * @author D8GER
  */
-public class BasicWebLogAspect {
+public class D8WebLogAspectSupport {
 
     private final Logger log;
 
     private final Logger errorLog;
 
-    public BasicWebLogAspect(Logger log, Logger errorLog) {
+    public D8WebLogAspectSupport(Logger log, Logger errorLog) {
         this.log = log;
         this.errorLog = errorLog;
     }
 
-    /**
-     * Http切面
-     */
-    public void webLog() {
-        // do something
-        /**
-         * try {
-         *     try {
-         *         // 对应@Before注解的方法切面逻辑
-         *         doBefore();
-         *         method.invoke();
-         *     } finally {
-         *       // 对应@After注解的方法切面逻辑
-         *         doAfter();
-         *     }
-         *     // 对应@AfterReturning注解的方法切面逻辑
-         *     doAfterReturning();
-         * } catch (Exception e) {
-         *     //对应@AfterThrowing注解的方法切面逻辑
-         *     doAfterThrowing();
-         * }
-         */
-    }
-
-    @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) {
         HttpServletRequest request = HttpStaticHandleUtil.loadRequest();
         String requestInterface = joinPoint.getSignature().getDeclaringTypeName()
@@ -107,7 +80,6 @@ public class BasicWebLogAspect {
         LoggerUtil.info(log, "请求数据", "HttpRequest", requestSb);
     }
 
-    @Around("webLog()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint)
             throws Throwable {
         String requestInterface = getInterfaceFullName(proceedingJoinPoint);
@@ -121,12 +93,10 @@ public class BasicWebLogAspect {
         return result;
     }
 
-    @AfterThrowing(value = "webLog()", throwing = "ex")
     public void doAfterThrowingAdvice(JoinPoint joinPoint, Throwable ex) {
         LoggerUtil.error(errorLog, "接口处理异常", getInterfaceFullName(joinPoint), ex.getMessage());
     }
 
-    @AfterReturning(value = "webLog()", returning = "returnValue")
     public void doAfterReturning(JoinPoint joinPoint, Object returnValue) {
         String requestInterface = getInterfaceFullName(joinPoint);
         String responseSb = "\n[后台响应结果]:" +
