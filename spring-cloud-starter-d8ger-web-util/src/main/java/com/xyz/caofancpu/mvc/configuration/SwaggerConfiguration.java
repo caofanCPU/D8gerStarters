@@ -64,7 +64,7 @@ public class SwaggerConfiguration {
 
     @Bean(name = "swaggerDocket")
     @ConditionalOnProperty(name = D8gerConstants.D8_SWAGGER_ENABLE, matchIfMissing = true)
-    public Docket createRestApi() {
+    public Docket swaggerDocket() {
         log.info("D8GER....执行SwaggerApi初始化");
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .enable(swaggerProperties.isShowApi())

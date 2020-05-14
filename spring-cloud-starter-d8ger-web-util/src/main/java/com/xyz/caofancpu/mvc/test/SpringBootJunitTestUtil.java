@@ -25,10 +25,10 @@ import com.google.common.collect.Lists;
 import com.xyz.caofancpu.constant.HttpTypeEnum;
 import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
+import com.xyz.caofancpu.property.SpringConfigProperties;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -65,6 +65,7 @@ import java.util.Objects;
  * 提供POST请求 @RequestParam 传参数
  * 提供 Get请求 @RequestParam 传参数
  * 将接口结果JSON化打印
+ * TODO: support custom
  *
  * @author D8GER
  */
@@ -72,29 +73,17 @@ import java.util.Objects;
 @Slf4j
 public class SpringBootJunitTestUtil {
 
-    /**
-     * 文件服务访问地址
-     */
-    @Value("${ms.file.url}")
-    public String fileAccessUrl;
     private MockMvc mvc;
+
     @Resource
     private WebApplicationContext context;
+
     @Resource
     private RestTemplate restTemplate;
 
-    /**
-     * SSO访问地址
-     */
-    @Value("${ms.sso.url}")
-    private String ssoAccessUrl;
+    @Resource
+    private SpringConfigProperties springConfigProperties;
 
-    /**
-     * LOCAL磁盘下载文件夹, 根据自身环境修改开发环境配置文件
-     */
-    @Deprecated
-    @Value("${local.oss.download}")
-    private String localOSSDownloadRoot;
 
     /**
      * 默认就执行
@@ -207,7 +196,7 @@ public class SpringBootJunitTestUtil {
         httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(paramMap, httpHeaders);
-        ResponseEntity<JSONObject> uploadFileResponseEntity = restTemplate.postForEntity(fileAccessUrl + "/api/upload/file", requestEntity, JSONObject.class);
+        ResponseEntity<JSONObject> uploadFileResponseEntity = restTemplate.postForEntity(springConfigProperties.fileAccessUrl + "/api/upload/file", requestEntity, JSONObject.class);
         JSONObject responseJSONObject = uploadFileResponseEntity.getBody();
         if (Objects.isNull(responseJSONObject)) {
             throw new RuntimeException("上传文件出错, 响应为NULL");
@@ -258,7 +247,7 @@ public class SpringBootJunitTestUtil {
     /**
      * 下载文件, 注意使用该方法的前提是当前系统本身具有下载文件的接口
      *
-     * @param fileName    要上传的文件
+     * @param fileName    要下载的文件
      * @param httpHeaders 请求头
      * @return
      * @throws Exception
@@ -284,15 +273,15 @@ public class SpringBootJunitTestUtil {
         if (fileContentByteArray.length == 0) {
             log.error("下载文件内容为空, 请检查!");
         } else {
-            IOUtils.write(fileContentByteArray, new FileOutputStream(localOSSDownloadRoot + File.separator + fileName));
-            log.info("文件下载已完成, 请查看文件路径: {}", localOSSDownloadRoot + File.separator + fileName);
+            IOUtils.write(fileContentByteArray, new FileOutputStream(springConfigProperties.localOSSDownloadRoot + File.separator + fileName));
+            log.info("文件下载已完成, 请查看文件路径: {}", springConfigProperties.localOSSDownloadRoot + File.separator + fileName);
         }
     }
 
     /**
      * 下载文件, 从其他系统下载文件
      *
-     * @param fileKey     要上传的文件
+     * @param fileKey     要下载的文件
      * @param httpHeaders 请求头
      * @return
      * @throws Exception
@@ -300,13 +289,13 @@ public class SpringBootJunitTestUtil {
     public void executeDownloadFileFromOtherSystem(String fileKey, HttpHeaders httpHeaders)
             throws Exception {
         HttpEntity<Map> requestEntity = new HttpEntity<>(httpHeaders);
-        String requestUrl = fileAccessUrl + "/api/download/file" + "?fileKey=" + fileKey;
+        String requestUrl = springConfigProperties.fileAccessUrl + "/api/download/file" + "?fileKey=" + fileKey;
         ResponseEntity<byte[]> downloadFileResponseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, requestEntity, byte[].class);
         byte[] fileContentByteArray = downloadFileResponseEntity.getBody();
         if (fileContentByteArray == null || fileContentByteArray.length == 0) {
             log.error("下载文件内容为空, 请检查!");
         } else {
-            String fileName = localOSSDownloadRoot + File.separator + fileKey;
+            String fileName = springConfigProperties.localOSSDownloadRoot + File.separator + fileKey;
             IOUtils.write(fileContentByteArray, new FileOutputStream(fileName));
             log.info("文件下载已完成, 请查看文件路径: {}", fileName);
         }

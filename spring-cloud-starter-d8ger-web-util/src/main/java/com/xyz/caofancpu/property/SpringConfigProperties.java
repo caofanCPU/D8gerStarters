@@ -27,11 +27,35 @@ import org.springframework.stereotype.Component;
  * @author D8GER
  */
 @Component
-public class SpringDefaultProperties {
+public class SpringConfigProperties {
+    /**
+     * URL访问路径前缀
+     */
     @Value("${server.servlet.context-path:}")
     public String contentPath;
 
+    /**
+     * 应用名称
+     */
     @Value("${spring.application.name:}")
     public String applicationName;
+
+    /**
+     * 文件服务访问地址
+     */
+    @Value("${ms.file.url}")
+    public String fileAccessUrl;
+
+    /**
+     * SSO访问地址
+     */
+    @Value("${ms.sso.url}")
+    public String ssoAccessUrl;
+
+    /**
+     * LOCAL磁盘下载文件夹, 根据自身环境修改开发环境配置文件
+     */
+    @Value("${local.oss.download}")
+    public String localOSSDownloadRoot;
 
 }

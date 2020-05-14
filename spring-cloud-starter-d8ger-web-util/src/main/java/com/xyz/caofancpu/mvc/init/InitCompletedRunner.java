@@ -21,7 +21,7 @@ package com.xyz.caofancpu.mvc.init;
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
-import com.xyz.caofancpu.property.SpringDefaultProperties;
+import com.xyz.caofancpu.property.SpringConfigProperties;
 import com.xyz.caofancpu.property.SwaggerProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -53,13 +53,13 @@ public class InitCompletedRunner implements CommandLineRunner, ApplicationListen
     private Optional<SwaggerProperties> swaggerProperties;
 
     @Resource
-    private SpringDefaultProperties springDefaultProperties;
+    private SpringConfigProperties springConfigProperties;
 
     @Override
     public void run(String... strings) {
         log.info("项目启动成功, IP=" + this.serverIp + ", Port=" + serverPort);
         if (swaggerProperties.isPresent() && swaggerProperties.get().isShowApi()) {
-            log.info("SwaggerApi文档参见: http://" + this.serverIp + ":" + serverPort + springDefaultProperties.contentPath + "/doc.html?plus=1&cache=1&filterApi=1&filterApiType=POST&lang=zh");
+            log.info("SwaggerApi文档参见: http://" + this.serverIp + ":" + serverPort + springConfigProperties.contentPath + "/doc.html?plus=1&cache=1&filterApi=1&filterApiType=POST&lang=zh");
             log.warn("请确保以下SwaggerApi访问路径未被登录|权限拦截: {}", CollectionUtil.join(Lists.newArrayList("/doc.html", "/swagger*/**", "/webjars/**", "/v2/api-docs-ext"), SymbolConstantUtil.NORMAL_ENGLISH_COMMA_DELIMITER));
         }
     }
