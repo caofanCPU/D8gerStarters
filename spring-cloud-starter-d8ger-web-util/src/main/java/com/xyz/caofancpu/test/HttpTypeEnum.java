@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.constant;
+package com.xyz.caofancpu.test;
 
+import com.xyz.caofancpu.constant.IEnum;
 import lombok.AllArgsConstructor;
 
 /**

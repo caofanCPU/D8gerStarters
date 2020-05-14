@@ -45,7 +45,7 @@
         <springboot.version>2.2.5.RELEASE</springboot.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 
-        <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
         <mybatis.version>3.5.2</mybatis.version>
         <mybatis-spring.version>2.0.2</mybatis-spring.version>
         <mybatis-typehandlers-jsr310.verson>1.0.2</mybatis-typehandlers-jsr310.verson>
@@ -134,6 +134,10 @@
                         <artifactId>spring-core</artifactId>
                         <groupId>org.springframework</groupId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -148,6 +152,12 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${springboot.version}</version>
             </dependency>
 
             <dependency>
@@ -261,6 +271,7 @@
             </dependency>
 
             <!--MD5等加密工具-->
+            <!--该包引入的spring组件包版本混乱, 会引入低版本5.2.2.RELEASE-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
@@ -316,11 +327,6 @@
                         <groupId>org.springframework</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-commons</artifactId>
-                <version>${springcloud.common.version}</version>
             </dependency>
 
             <!-- #***********************************************# -->

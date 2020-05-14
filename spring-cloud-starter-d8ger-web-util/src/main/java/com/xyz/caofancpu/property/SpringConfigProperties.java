@@ -58,4 +58,10 @@ public class SpringConfigProperties {
     @Value("${local.oss.download}")
     public String localOSSDownloadRoot;
 
+    /**
+     * LOCAL磁盘下载文件夹, 根据自身环境修改开发环境配置文件
+     */
+    @Value("${local.oss.upload}")
+    public String localOSSUploadRoot;
+
 }

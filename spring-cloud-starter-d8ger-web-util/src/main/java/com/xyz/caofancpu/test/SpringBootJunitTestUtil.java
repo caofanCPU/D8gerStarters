@@ -16,13 +16,12 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.mvc.test;
+package com.xyz.caofancpu.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.xyz.caofancpu.constant.HttpTypeEnum;
 import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import com.xyz.caofancpu.property.SpringConfigProperties;
