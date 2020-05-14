@@ -18,15 +18,22 @@
 
 package com.xyz.caofancpu.mvc.common;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.collect.Maps;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.result.GlobalErrorInfoRuntimeException;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Stack;
+import java.util.stream.Stream;
 
 /**
  * HTTP属性处理工具
@@ -62,5 +69,47 @@ public class HttpStaticHandleUtil {
             return attributes.getRequest();
         }
         throw new GlobalErrorInfoRuntimeException("无法解析请求信息: ServletRequestAttributes居然为空!");
+    }
+
+    /**
+     * 从req中提取请求参数
+     * 剔除null字段, 剔除文件类型字段
+     *
+     * @param req
+     * @return
+     */
+    public static <T> Map<String, Object> extractNonNullParam(T req) {
+        Stack<Class> classStack = new Stack<>();
+        Class clazz = req.getClass();
+        while (clazz != Object.class) {
+            classStack.push(clazz);
+            clazz = clazz.getSuperclass();
+        }
+
+        Map<String, Object> resultMap = Maps.newTreeMap();
+        classStack.forEach(clazzItem -> {
+            Field[] fields = clazzItem.getDeclaredFields();
+            Stream.of(fields).forEach(field -> {
+                Object value = null;
+                try {
+                    field.setAccessible(true);
+                    value = field.get(req);
+                } catch (IllegalAccessException e) {
+                    // just ignore
+                }
+                if (Objects.isNull(value)) {
+                    return;
+                }
+                try {
+                    JSONField annotation = field.getAnnotation(JSONField.class);
+                    String fieldKey = Objects.nonNull(annotation) ? annotation.name() : field.getName();
+                    resultMap.put(fieldKey, value);
+                } catch (Throwable t) {
+                    // just ignore
+                }
+            });
+        });
+        // 对于文件类型字段, 直接移除, 交由后续流程特殊处理
+        return CollectionUtil.removeSpecifiedElement(resultMap, new Class[]{File.class, InputStreamSource.class});
     }
 }

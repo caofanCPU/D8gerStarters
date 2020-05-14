@@ -125,5 +125,9 @@ public class SymbolConstantUtil {
      */
     public static final String NEXT_LINE = "\n";
 
+    /**
+     * 与符号
+     */
+    public static final String AND = "&";
 
 }

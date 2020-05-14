@@ -27,6 +27,7 @@ import lombok.Getter;
  */
 public enum GlobalErrorInfoEnum implements ErrorInfoInterface {
     SUCCESS("200", "成功"),
+    INVOKE_SUCCESS("0", "远程调用成功"),
     INTERNAL_ERROR("500", "服务器内部错误"),
     NOT_FOUND("404", "资源不存在"),
     PARA_ERROR("501", "请求参数错误"),

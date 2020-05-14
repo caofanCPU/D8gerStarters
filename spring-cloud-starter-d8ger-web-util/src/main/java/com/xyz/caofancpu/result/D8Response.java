@@ -24,6 +24,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
+
 /**
  * 响应基类
  *
@@ -32,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 @ApiModel
 @Data
 @Accessors(chain = true)
-public class D8Response<T> {
+public class D8Response<T> implements Serializable {
 
     @ApiModelProperty(value = "状态码", example = "200", position = 1)
     private String code;
@@ -84,7 +86,7 @@ public class D8Response<T> {
     }
 
     public Boolean ifSuccess() {
-        return GlobalErrorInfoEnum.SUCCESS.getCode().equals(this.code);
+        return GlobalErrorInfoEnum.SUCCESS.getCode().equals(this.code) || GlobalErrorInfoEnum.INVOKE_SUCCESS.getCode().equals(this.code);
     }
 
 }

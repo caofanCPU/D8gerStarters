@@ -23,6 +23,10 @@ import com.xyz.caofancpu.mvc.configuration.BusinessPoolConfiguration;
 import com.xyz.caofancpu.mvc.configuration.RestTemplateConfiguration;
 import com.xyz.caofancpu.mvc.configuration.StandardHTTPMessageConfiguration;
 import com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration;
+import com.xyz.caofancpu.remote.DemoHttpRemoteInvoker;
+import com.xyz.caofancpu.remote.DemoRemoteReq;
+import com.xyz.caofancpu.remote.DemoRemoteRespBody;
+import com.xyz.caofancpu.result.GlobalErrorInfoException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +39,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.annotation.Resource;
 
 /**
  * 启动测试类
@@ -50,6 +56,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 )
 public class D8gerWebApplicationTest {
 
+    @Resource
+    private DemoHttpRemoteInvoker demoHttpRemoteInvoker;
+
     @Before
     public void before() {
         NormalUseForTestUtil.out("---------测试前---------");
@@ -61,8 +70,11 @@ public class D8gerWebApplicationTest {
     }
 
     @Test
-    public void test() {
-        NormalUseForTestUtil.out("你瞅啥? 瞅你咋滴?!");
+    public void test()
+            throws GlobalErrorInfoException {
+        DemoRemoteReq remoteReq = new DemoRemoteReq().setVideoId(59002451L);
+        DemoRemoteRespBody body = demoHttpRemoteInvoker.execute(remoteReq);
+        NormalUseForTestUtil.out(body);
     }
 
     /**
@@ -78,7 +90,8 @@ public class D8gerWebApplicationTest {
             BusinessPoolConfiguration.class,
             RestTemplateConfiguration.class,
             StandardHTTPMessageConfiguration.class,
-            SwaggerConfiguration.class
+            SwaggerConfiguration.class,
+            DemoHttpRemoteInvoker.class
     })
     public static class TestConfig {
 
