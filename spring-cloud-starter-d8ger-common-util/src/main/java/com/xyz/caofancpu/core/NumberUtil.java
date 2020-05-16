@@ -21,7 +21,6 @@ package com.xyz.caofancpu.core;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
@@ -559,28 +558,6 @@ public class NumberUtil {
             }
         }
         return cnk;
-    }
-
-    public static void main(String[] args) {
-        List<String> list = Lists.newArrayList("A", "B", "C", "D", "E");
-        Map<Boolean, List<List<String>>> resultMap = calculateAndGroupCombNChooseK(list, 0, 5);
-        resultMap.forEach((key, valueList) -> {
-            if (CollectionUtil.isEmpty(valueList)) {
-                return;
-            }
-            if (key) {
-                NormalUseForTestUtil.out("可选择的组合如下: ");
-            } else {
-                NormalUseForTestUtil.out("不能选择的组合如下: ");
-            }
-            valueList.forEach(itemList -> {
-                if (CollectionUtil.isEmpty(itemList)) {
-                    NormalUseForTestUtil.out("[空]");
-                    return;
-                }
-                NormalUseForTestUtil.out(CollectionUtil.join(itemList, SymbolConstantUtil.ENGLISH_COMMA));
-            });
-        });
     }
 
 }

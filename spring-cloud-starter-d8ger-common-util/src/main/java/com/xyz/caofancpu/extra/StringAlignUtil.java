@@ -54,11 +54,6 @@ public class StringAlignUtil {
      */
     public static final Pattern ORIGIN_COMPATIBILITY_SEPARATOR = Pattern.compile("((?:\\n|(?:\\r\\n))|(?:,)|(?:，))+");
 
-    public static void main(String[] args) {
-        String sqlText = "，, c\r\n d\n\n   f,, g，,      a, b";
-        NormalUseForTestUtil.out(formatSQLColumn(sqlText, Alignment.LEFT, "D8ger(", ")", false, true));
-    }
-
     /**
      * Handling multi lines by conventional separator
      *

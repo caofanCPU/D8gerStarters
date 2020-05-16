@@ -18,9 +18,7 @@
 
 package com.xyz.caofancpu.core;
 
-import com.google.common.collect.Lists;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import ru.lanwen.verbalregex.VerbalExpression;
@@ -90,6 +88,21 @@ public class VerbalExpressionUtil {
      * Password validate regex, rule for C4_3 | C4_4
      */
     public static Pattern PWD_REGEX = Pattern.compile("^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\\W_]+$)(?![a-z0-9]+$)(?![a-z\\W_]+$)(?![0-9\\W_]+$)[a-zA-Z0-9\\W_]{8,30}$");
+
+    /**
+     * Common IPV4 find regex
+     */
+    public static final Pattern IP_PATTERN = Pattern.compile("((\\d){1,3}(\\.)){3}(\\d){1,3}");
+
+    /**
+     * Complete IPV4 find regex
+     */
+    public static final Pattern IPV4_PATTERN = Pattern.compile("^((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$");
+
+    /**
+     * Complete IPV6 find regex
+     */
+    public static final Pattern IPV6_PATTERN = Pattern.compile("^([\\da-fA-F]{1,4}:){7}[\\da-fA-F]{1,4}$");
 
     /**
      * Swagger field | interface position order regular replacement
@@ -220,23 +233,6 @@ public class VerbalExpressionUtil {
                 .build();
         String second = executePatternRex(regex2, first, SymbolConstantUtil.EMPTY);
         return second.replaceAll(File.separator, SymbolConstantUtil.ENGLISH_FULL_STOP);
-    }
-
-    public static void main(String[] args)
-            throws Exception {
-        List<String> textList = Lists.newArrayList("a{}", "{}b", "{}", "{ }", "{a,    b}");
-        textList.forEach(text -> NormalUseForTestUtil.out(VerbalExpressionUtil.JSON_STRING_JUDGE_REGEX.matcher(text).matches()));
-//        VerbalExpression regex = VerbalExpression.regex()
-//                .startOfLine()
-//                .then(",").oneOrMore()
-//                .build();
-//        NormalUseUtil.out(regex.toString());
-//        NormalUseUtil.out(convertPathToPackage("//src//mainjava//com/xyz/caofancpu/d8ger/test"));
-//        NormalUseUtil.out("cao_fan");
-//        NormalUseUtil.out(camelUnderLineNameConverter("cao_fan"));
-//        NormalUseUtil.out(camelUnderLineNameConverter(camelUnderLineNameConverter("cao_fan")));
-//        NormalUseUtil.out(camelUnderLineNameConverter(camelUnderLineNameConverter(camelUnderLineNameConverter("cao_fan"))));
-//        NormalUseUtil.out(camelUnderLineNameConverter(camelUnderLineNameConverter(camelUnderLineNameConverter(camelUnderLineNameConverter("cao_fan")))));
     }
 
     public static String executePatternRex(VerbalExpression regexExpression, String originText, String replacer) {
