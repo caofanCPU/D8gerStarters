@@ -24,7 +24,7 @@
 
     <groupId>com.xyz.caofanCPU</groupId>
     <artifactId>spring-cloud-d8ger-starters</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -651,4 +651,15 @@
         </plugins>
     </build>
 
+    <!--发布到帝八哥私有仓库-->
+    <distributionManagement>
+        <repository>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/130650-release-LLgOVG/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/130650-snapshot-xdHOzb/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
