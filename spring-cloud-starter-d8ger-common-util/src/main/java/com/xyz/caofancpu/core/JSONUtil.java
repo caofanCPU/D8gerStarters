@@ -18,7 +18,6 @@
 
 package com.xyz.caofancpu.core;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.xyz.caofancpu.constant.IEnum;
@@ -31,7 +30,6 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * JSON工具类
@@ -201,84 +199,12 @@ public class JSONUtil {
     /**
      * Object转List, 用Bean接收
      *
-     * @param jsonArray
-     * @return
-     */
-    public static <T> List<T> convertToList(Object jsonArray, Class<T> clazz) {
-        JSONArray array = parseJSONArray(jsonArray);
-        return CollectionUtil.transToList(array, item -> JSONObject.parseObject(JSONObject.toJSONString(item), clazz));
-    }
-
-    /**
-     * JSONArray转List, 用Map<String, Object>接收
-     *
-     * @param jsonArray
-     * @return
-     * @throws RuntimeException
-     */
-    public static List<Map<String, Object>> convertToList(Object jsonArray) {
-        if (Objects.isNull(jsonArray)) {
-            log.error("JSONArray转List<Map>, 源数据不能为空!");
-            throw new IllegalArgumentException("源数据不能为空!");
-        }
-        JSONArray array = parseJSONArray(jsonArray);
-        return CollectionUtil.transToList(array, item -> JSONObject.parseObject(JSONObject.toJSONString(item)));
-    }
-
-    /**
-     * List转JSONArray
-     *
-     * @param sourceList
-     * @return
-     * @throws RuntimeException
-     */
-    public static JSONArray convertToJSONArray(List<?> sourceList) {
-        if (CollectionUtil.isEmpty(sourceList)) {
-            log.error("List转JSONArray, 源数据不能为空!");
-            throw new IllegalArgumentException("源数据不能为空!");
-        }
-        JSONArray resultArray = new JSONArray();
-        sourceList.forEach(item -> {
-            if (Objects.nonNull(item)) {
-                resultArray.add(item);
-            }
-        });
-        return resultArray;
-    }
-
-    /**
-     * 复制源对象属性到目标类
-     * 根据属性名称匹配, 支持map转bean, bean之间互转, bean中嵌套集合转化
-     *
-     * @param sourceObject
+     * @param jsonArrayText
      * @param clazz
-     * @param <T>
-     * @return
-     * @throws RuntimeException
-     */
-    public static <T> T copyProperties(Object sourceObject, Class<T> clazz) {
-        if (Objects.isNull(sourceObject)) {
-            log.error("属性复制, 源数据不能为空!");
-            throw new IllegalArgumentException("源数据不能为空!");
-        }
-        if (Objects.isNull(clazz)) {
-            log.error("属性复制, 目标类对象不能为空!");
-            throw new IllegalArgumentException("目标类对象不能为空!");
-        }
-        return JSONObject.parseObject(JSONObject.toJSONString(sourceObject), clazz);
-    }
-
-    /**
-     * 对象解析为JSONArray
-     * 可能出现:  com.alibaba.fastjson.JSONException: autoType is not support ...
-     * 解决办法: 配置JVM启动参数: -Dfastjson.parser.autoTypeAccept=序列化对象包根目录1. , 序列化对象包根目录2. 等
-     * 说明: Spring Boot / Spring + Tomcat 启动默认支持 自动类型解析的
      *
-     * @param jsonArray
      * @return
      */
-    private static JSONArray parseJSONArray(Object jsonArray) {
-        String jsonString = serializeJSON(jsonArray);
-        return JSONObject.parseArray(jsonString);
+    public static <T> List<T> convertToList(String jsonArrayText, Class<T> clazz) {
+        return JSONObject.parseArray(jsonArrayText, clazz);
     }
 }

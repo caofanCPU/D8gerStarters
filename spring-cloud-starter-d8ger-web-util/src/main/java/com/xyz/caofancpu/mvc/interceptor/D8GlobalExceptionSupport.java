@@ -27,6 +27,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * Controller全局异常处理拦截器
  *
@@ -37,10 +39,11 @@ public class D8GlobalExceptionSupport<T> {
      * For params which is failed by verification, commonly used for param messaging
      *
      * @param ex
+     *
      * @return
      */
-    @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class, HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MissingServletRequestParameterException.class})
-    public D8Response<T> handleParamTypeJSONParseException(HttpMessageNotReadableException ex) {
+    @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class, HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MissingServletRequestParameterException.class, ConstraintViolationException.class})
+    public D8Response<T> handleParamTypeJSONParseException(Exception ex) {
         return D8Response.fail(GlobalErrorInfoEnum.PARA_ERROR);
     }
 
