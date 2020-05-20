@@ -23,6 +23,7 @@ import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.logger.LogIpConfigUtil;
 import com.xyz.caofancpu.logger.LoggerUtil;
+import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import com.xyz.caofancpu.mvc.common.HttpStaticHandleUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -69,6 +70,8 @@ public class D8WebLogAspectSupport {
             LoggerUtil.info(log, "入参为文件(InputStreamSource)或HttpRequest等类型, 打印对象地址信息");
             requestBody = Arrays.toString(joinPoint.getArgs());
         }
+        // 开始线程追踪
+        ThreadTraceUtil.beginTrace();
         String requestSb = "\n[前端页面请求]" +
                 "\n请求IP=" + LogIpConfigUtil.getIpAddress() +
                 "\n请求方式=" + request.getMethod() +
@@ -77,7 +80,7 @@ public class D8WebLogAspectSupport {
                 "\n请求Param参数=" + requestParam +
                 "\n请求Body对象=" + requestBody +
                 "\n";
-        LoggerUtil.info(log, "请求数据", "HttpRequest", requestSb);
+        LoggerUtil.info(log, "请求数据", "TraceId", ThreadTraceUtil.getTraceId(), "HttpRequest", requestSb);
     }
 
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint)
@@ -94,7 +97,9 @@ public class D8WebLogAspectSupport {
     }
 
     public void doAfterThrowingAdvice(JoinPoint joinPoint, Throwable ex) {
-        LoggerUtil.error(errorLog, "接口处理异常", getInterfaceFullName(joinPoint), ex.getMessage());
+        LoggerUtil.error(errorLog, "接口处理异常", "TraceId", ThreadTraceUtil.getTraceId(), getInterfaceFullName(joinPoint), ex.getMessage());
+        // 结束线程追踪
+        ThreadTraceUtil.endTrace();
     }
 
     public void doAfterReturning(JoinPoint joinPoint, Object returnValue) {
@@ -102,7 +107,9 @@ public class D8WebLogAspectSupport {
         String responseSb = "\n[后台响应结果]:" +
                 "\n后台接口=" + requestInterface +
                 "\n响应数据结果:" + JSONUtil.formatStandardJSON(JSONUtil.toJSONStringWithDateFormat(returnValue));
-        LoggerUtil.info(log, "请求数据", "HttpResponse", responseSb);
+        LoggerUtil.info(log, "响应数据", "TraceId", ThreadTraceUtil.getTraceId(), "HttpResponse", responseSb);
+        // 结束线程追踪
+        ThreadTraceUtil.endTrace();
     }
 
     /**
