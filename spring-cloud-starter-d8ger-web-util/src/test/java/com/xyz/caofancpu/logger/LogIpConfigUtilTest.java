@@ -31,12 +31,12 @@ public class LogIpConfigUtilTest {
     @Test
     public void getIpAddress()
             throws Exception {
-        NormalUseForTestUtil.out(LogIpConfigUtil.getIpAddress());
+        NormalUseForTestUtil.out(LogIpConfigUtil.getRequestSourceIp());
     }
 
     @Test
     public void getPublicIp()
             throws Exception {
-        NormalUseForTestUtil.out(LogIpConfigUtil.getPublicIp());
+        NormalUseForTestUtil.out(LogIpConfigUtil.getSelfPublicIp());
     }
 }

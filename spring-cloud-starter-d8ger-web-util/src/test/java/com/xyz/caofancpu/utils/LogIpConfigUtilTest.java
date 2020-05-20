@@ -44,6 +44,6 @@ public class LogIpConfigUtilTest {
     @Test
     public void getIpAddress()
             throws Exception {
-        NormalUseForTestUtil.out(LogIpConfigUtil.getIpAddress());
+        NormalUseForTestUtil.out(LogIpConfigUtil.getRequestSourceIp());
     }
 }

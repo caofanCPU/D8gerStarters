@@ -21,6 +21,7 @@ package com.xyz.caofancpu.mvc.init;
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.logger.LogIpConfigUtil;
 import com.xyz.caofancpu.property.SpringConfigProperties;
 import com.xyz.caofancpu.property.SwaggerProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -47,7 +45,8 @@ import java.util.Optional;
 public class InitCompletedRunner implements CommandLineRunner, ApplicationListener<WebServerInitializedEvent> {
 
     private int serverPort;
-    private String serverIp;
+    private String localIP;
+    private String publicIP;
 
     @Resource
     private Optional<SwaggerProperties> swaggerProperties;
@@ -57,9 +56,9 @@ public class InitCompletedRunner implements CommandLineRunner, ApplicationListen
 
     @Override
     public void run(String... strings) {
-        log.info("项目启动成功, IP=" + this.serverIp + ", Port=" + serverPort);
+        log.info("项目启动成功, 本机外网IP=" + this.publicIP + ", 本机内网IP=" + this.localIP + ", Port=" + serverPort);
         if (swaggerProperties.isPresent() && swaggerProperties.get().isShowApi()) {
-            log.info("SwaggerApi文档参见: http://" + this.serverIp + ":" + serverPort + springConfigProperties.contentPath + "/doc.html?plus=1&cache=1&filterApi=1&filterApiType=POST&lang=zh");
+            log.info("SwaggerApi文档参见: http://" + this.localIP + ":" + serverPort + springConfigProperties.contentPath + "/doc.html?plus=1&cache=1&filterApi=1&filterApiType=POST&lang=zh");
             log.warn("请确保以下SwaggerApi访问路径未被登录|权限拦截: {}", CollectionUtil.join(Lists.newArrayList("/doc.html", "/swagger*/**", "/webjars/**", "/v2/api-docs-ext"), SymbolConstantUtil.NORMAL_ENGLISH_COMMA_DELIMITER));
         }
     }
@@ -67,14 +66,7 @@ public class InitCompletedRunner implements CommandLineRunner, ApplicationListen
     @Override
     public void onApplicationEvent(WebServerInitializedEvent webServerInitializedEvent) {
         this.serverPort = webServerInitializedEvent.getWebServer().getPort();
-        try {
-            this.serverIp = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } finally {
-            if (Objects.isNull(this.serverIp)) {
-                this.serverIp = "UnknownHost";
-            }
-        }
+        this.localIP = LogIpConfigUtil.getRequestSourceIp();
+        this.publicIP = LogIpConfigUtil.getSelfPublicIp();
     }
 }

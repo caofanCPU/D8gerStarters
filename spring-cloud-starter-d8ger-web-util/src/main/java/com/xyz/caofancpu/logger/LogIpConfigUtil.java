@@ -52,35 +52,44 @@ public class LogIpConfigUtil extends ClassicConverter {
     private static final Pattern WWW_PUBLIC_IP_REGEX = Pattern.compile("您的本地上网IP是");
 
     /**
-     * 获取本机真实ip
+     * 获取请求来源IP, 当来源为自己时获取本机真实ip
      */
-    public static String getIpAddress() {
+    public static String getRequestSourceIp() {
+        String ipAddress = null;
+        HttpServletRequest request;
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (Objects.isNull(attributes)) {
-            return LOCALHOST;
-        }
-        HttpServletRequest request = attributes.getRequest();
-        String ipAddress = request.getHeader("x-forwarded-for");
-        if (Objects.isNull(ipAddress) || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-            ipAddress = request.getHeader("Proxy-Client-IP");
-        }
-        if (Objects.isNull(ipAddress) || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-            ipAddress = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (Objects.isNull(ipAddress) || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-            ipAddress = request.getRemoteAddr();
-            if (LOCALHOST.equals(ipAddress) || "0:0:0:0:0:0:0:1".equals(ipAddress)) {
-                // 根据网卡取本机配置的IP
-                InetAddress inet = null;
-                try {
-                    inet = InetAddress.getLocalHost();
-                } catch (UnknownHostException e) {
-                    log.error("获取IP异常: " + e);
-                }
-                if (Objects.nonNull(inet)) {
-                    ipAddress = inet.getHostAddress();
-                }
+        if (Objects.nonNull(attributes)) {
+            request = attributes.getRequest();
+            ipAddress = request.getHeader("x-forwarded-for");
+            if (Objects.isNull(ipAddress) || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("Proxy-Client-IP");
             }
+            if (Objects.isNull(ipAddress) || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (Objects.isNull(ipAddress) || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getRemoteAddr();
+            }
+        }
+        if (Objects.isNull(ipAddress)
+                || ipAddress.length() == 0
+                || "unknown".equalsIgnoreCase(ipAddress)
+                || LOCALHOST.equals(ipAddress)
+                || "0:0:0:0:0:0:0:1".equals(ipAddress)) {
+            // 根据网卡取本机配置的IP
+            InetAddress inet = null;
+            try {
+                inet = InetAddress.getLocalHost();
+            } catch (UnknownHostException e) {
+                log.error("获取IP异常: " + e);
+            }
+            if (Objects.nonNull(inet)) {
+                ipAddress = inet.getHostAddress();
+            }
+        }
+        if (Objects.isNull(ipAddress)) {
+            ipAddress = LOCALHOST;
+            log.warn("获取(本机)IP地址失败, 使用LocalHost代替");
         }
         // 多个代理时, 第一个IP为客户端真实IP
         String[] ipAddressArr = ipAddress.split(SymbolConstantUtil.ENGLISH_COMMA);
@@ -93,7 +102,7 @@ public class LogIpConfigUtil extends ClassicConverter {
      *
      * @return
      */
-    public static String getPublicIp() {
+    public static String getSelfPublicIp() {
         RestTemplate restTemplate = new RestTemplate();
         String wwwUrl = "http://www.net.cn/static/customercare/yourip.asp";
 

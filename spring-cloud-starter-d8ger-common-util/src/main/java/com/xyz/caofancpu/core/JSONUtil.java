@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * JSON工具类
@@ -206,5 +207,27 @@ public class JSONUtil {
      */
     public static <T> List<T> convertToList(String jsonArrayText, Class<T> clazz) {
         return JSONObject.parseArray(jsonArrayText, clazz);
+    }
+
+    /**
+     * 复制源对象属性到目标类
+     * 根据属性名称匹配, 支持map转bean, bean之间互转, bean中嵌套集合转化
+     *
+     * @param sourceObject
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws RuntimeException
+     */
+    public static <T> T copyProperties(Object sourceObject, Class<T> clazz) {
+        if (Objects.isNull(sourceObject)) {
+            log.error("属性复制, 源数据不能为空!");
+            throw new IllegalArgumentException("源数据不能为空!");
+        }
+        if (Objects.isNull(clazz)) {
+            log.error("属性复制, 目标类对象不能为空!");
+            throw new IllegalArgumentException("目标类对象不能为空!");
+        }
+        return JSONObject.parseObject(JSONObject.toJSONString(sourceObject), clazz);
     }
 }
