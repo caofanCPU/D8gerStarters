@@ -21,6 +21,7 @@ package com.xyz.caofancpu.utils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -60,7 +61,13 @@ import java.util.stream.IntStream;
 public class CollectionUtilTest {
 
     public static void main(String[] args) {
-        testgroupIndexToMapWithReferKey();
+        testFilterAndTransArray();
+    }
+
+    public static void testFilterAndTransArray() {
+        List<TestExamData> sourceList = loadTestExamDatas();
+        String[] resultArray = CollectionUtil.filterAndTransArray(sourceList, item -> item.getId() > 2001, TestExamData::getExamName, String[]::new);
+        NormalUseForTestUtil.out(Arrays.toString(resultArray));
     }
 
     public static void testSumTopK() {
