@@ -202,7 +202,6 @@ public class JSONUtil {
      *
      * @param jsonArrayText
      * @param clazz
-     *
      * @return
      */
     public static <T> List<T> convertToList(String jsonArrayText, Class<T> clazz) {

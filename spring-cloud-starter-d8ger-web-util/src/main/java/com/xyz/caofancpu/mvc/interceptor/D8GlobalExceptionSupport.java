@@ -39,7 +39,6 @@ public class D8GlobalExceptionSupport<T> {
      * For params which is failed by verification, commonly used for param messaging
      *
      * @param ex
-     *
      * @return
      */
     @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class, HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MissingServletRequestParameterException.class, ConstraintViolationException.class})

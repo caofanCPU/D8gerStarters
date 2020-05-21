@@ -43,6 +43,7 @@ import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -436,6 +437,39 @@ public class CollectionUtil extends CollectionUtils {
         return source.stream().filter(Objects::nonNull).filter(item -> !removePredicate.test(item)).map(mapper).collect(Collectors.toCollection(resultColl));
     }
 
+    /**
+     * 踢除满足条件removePredicate的元素字段 并转换为Array
+     * 本方法与{@link #filterAndTransArray}筛选逻辑是相反的, 结果是互补的
+     *
+     * @param coll            原始数据源
+     * @param predicate       筛选条件
+     * @param mapper          对筛选出元素进行计算的函数
+     * @param resultGenerator 数组收集容器
+     * @return Array
+     */
+    public static <F, T> F[] removeAndTransArray(Collection<T> coll, Predicate<? super T> predicate, Function<? super T, ? extends F> mapper, IntFunction<F[]> resultGenerator) {
+        if (isEmpty(coll)) {
+            return null;
+        }
+        return coll.stream().filter(Objects::nonNull).filter(predicate).map(mapper).toArray(resultGenerator);
+    }
+
+    /**
+     * 根据元素字段满足一定条件执行过滤, 并转换为Array
+     *
+     * @param coll            原始数据源
+     * @param predicate       筛选条件
+     * @param mapper          对筛选出元素进行计算的函数
+     * @param resultGenerator 数组收集容器
+     * @return Array
+     */
+    public static <F, T> F[] filterAndTransArray(Collection<T> coll, Predicate<? super T> predicate, Function<? super T, ? extends F> mapper, IntFunction<F[]> resultGenerator) {
+        if (isEmpty(coll)) {
+            // 对于数组而言, null跟空数组 resultGenerator.apply(0)效果一样, 更简洁
+            return null;
+        }
+        return coll.stream().filter(Objects::nonNull).filter(predicate).map(mapper).toArray(resultGenerator);
+    }
 
     /**
      * 获取元素的某个字段集合, 并去重

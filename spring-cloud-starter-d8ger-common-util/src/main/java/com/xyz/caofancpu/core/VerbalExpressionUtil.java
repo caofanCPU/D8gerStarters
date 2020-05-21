@@ -77,6 +77,18 @@ public class VerbalExpressionUtil {
      */
     public static final Pattern JSON_STRING_JUDGE_REGEX = Pattern.compile("^(?:\\{).*(?:})$");
     /**
+     * Common IPV4 find regex
+     */
+    public static final Pattern IP_PATTERN = Pattern.compile("((\\d){1,3}(\\.)){3}(\\d){1,3}");
+    /**
+     * Complete IPV4 find regex
+     */
+    public static final Pattern IPV4_PATTERN = Pattern.compile("^((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$");
+    /**
+     * Complete IPV6 find regex
+     */
+    public static final Pattern IPV6_PATTERN = Pattern.compile("^([\\da-fA-F]{1,4}:){7}[\\da-fA-F]{1,4}$");
+    /**
      * Phone regex
      */
     public static Pattern PHONE_REGEX = Pattern.compile("^1[0-9]{10}$");
@@ -88,21 +100,6 @@ public class VerbalExpressionUtil {
      * Password validate regex, rule for C4_3 | C4_4
      */
     public static Pattern PWD_REGEX = Pattern.compile("^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\\W_]+$)(?![a-z0-9]+$)(?![a-z\\W_]+$)(?![0-9\\W_]+$)[a-zA-Z0-9\\W_]{8,30}$");
-
-    /**
-     * Common IPV4 find regex
-     */
-    public static final Pattern IP_PATTERN = Pattern.compile("((\\d){1,3}(\\.)){3}(\\d){1,3}");
-
-    /**
-     * Complete IPV4 find regex
-     */
-    public static final Pattern IPV4_PATTERN = Pattern.compile("^((25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)$");
-
-    /**
-     * Complete IPV6 find regex
-     */
-    public static final Pattern IPV6_PATTERN = Pattern.compile("^([\\da-fA-F]{1,4}:){7}[\\da-fA-F]{1,4}$");
 
     /**
      * Swagger field | interface position order regular replacement
