@@ -53,7 +53,7 @@ public class D8Response<T> implements Serializable {
      * @return
      */
     public static <T> D8Response<T> fail(String errorMsg) {
-        return new D8Response<T>().setCode(GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode()).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg() : errorMsg);
+        return new D8Response<T>().setCode(GlobalErrorInfoEnum.OPERATE_FAILED.getCode()).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.OPERATE_FAILED.getMsg() : errorMsg);
     }
 
     public static <T> D8Response<T> fail(ErrorInfoInterface errorInfo) {
@@ -61,7 +61,7 @@ public class D8Response<T> implements Serializable {
     }
 
     public static <T> D8Response<T> fail(String code, String errorMsg) {
-        return new D8Response<T>().setCode(StringUtils.isBlank(code) ? GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode() : code).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg() : errorMsg);
+        return new D8Response<T>().setCode(StringUtils.isBlank(code) ? GlobalErrorInfoEnum.OPERATE_FAILED.getCode() : code).setMsg(StringUtils.isBlank(errorMsg) ? GlobalErrorInfoEnum.OPERATE_FAILED.getMsg() : errorMsg);
     }
 
     /**
@@ -86,7 +86,7 @@ public class D8Response<T> implements Serializable {
     }
 
     public Boolean ifSuccess() {
-        return GlobalErrorInfoEnum.SUCCESS.getCode().equals(this.code) || GlobalErrorInfoEnum.INVOKE_SUCCESS.getCode().equals(this.code);
+        return GlobalErrorInfoEnum.SUCCESS.getCode().equals(this.code) || GlobalErrorInfoEnum.REMOTE_INVOKE_SUCCESS.getCode().equals(this.code);
     }
 
 }

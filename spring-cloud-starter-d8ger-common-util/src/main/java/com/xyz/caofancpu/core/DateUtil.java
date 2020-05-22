@@ -83,6 +83,32 @@ public class DateUtil {
     private final static int MIN_HOUR_MINUTE_SECOND = 0;
 
     /**
+     * 获取当天剩余秒数
+     * 翌日00:00:00减去当前时间
+     *
+     * @return
+     */
+    public static int getRemainingSecondOfCurrentDay() {
+        return getRemainingMilliSecondOfCurrentDay() / 1000;
+    }
+
+    /**
+     * 获取当天剩余毫秒数
+     * 翌日00:00:00减去当前时间
+     *
+     * @return
+     */
+    public static int getRemainingMilliSecondOfCurrentDay() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tomorrowZero = now.withDayOfYear(now.getDayOfYear() + 1)
+                .withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0);
+        return (int) (tomorrowZero.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli() - now.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli());
+    }
+
+    /**
      * java.util.date转LocalDateTime
      *
      * @param date

@@ -139,7 +139,7 @@ public abstract class AbstractHttpRemoteInvoker implements IRestTemplateSupport 
      * @param req
      * @return
      */
-    private String loadCompleteAccessUrl(AbstractD8BasicRemoteRequest req) {
+    private String loadCompleteAccessUrl(AbstractD8BasicRemoteRequest<?> req) {
         return IRestTemplateSupport.super.loadCompleteAccessUrl(loadDomain(), req);
     }
 

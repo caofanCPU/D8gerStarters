@@ -47,10 +47,10 @@ public class GlobalResultCheckUtil {
             return;
         }
         if (StringUtils.isEmpty(d8Response.getCode())) {
-            d8Response.setCode(GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode());
+            d8Response.setCode(GlobalErrorInfoEnum.OPERATE_FAILED.getCode());
         }
         if (StringUtils.isEmpty(d8Response.getMsg())) {
-            d8Response.setMsg(GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg());
+            d8Response.setMsg(GlobalErrorInfoEnum.OPERATE_FAILED.getMsg());
         }
         throw new GlobalErrorInfoException(d8Response.getCode(), d8Response.getMsg());
     }

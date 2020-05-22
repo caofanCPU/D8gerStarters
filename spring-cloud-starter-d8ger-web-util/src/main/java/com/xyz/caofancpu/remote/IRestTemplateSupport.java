@@ -41,13 +41,13 @@ import java.util.Map;
  */
 public interface IRestTemplateSupport {
 
-    default HttpEntity<String> loadUrlEncodeHttpEntity(@NonNull AbstractD8BasicRemoteRequest req) {
+    default HttpEntity<String> loadUrlEncodeHttpEntity(@NonNull AbstractD8BasicRemoteRequest<?> req) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         return new HttpEntity<>(loadUrlEncodeRequestParam(req), httpHeaders);
     }
 
-    default String loadUrlEncodeRequestParam(@NonNull AbstractD8BasicRemoteRequest req) {
+    default String loadUrlEncodeRequestParam(@NonNull AbstractD8BasicRemoteRequest<?> req) {
         Map<String, Object> nonNullParamMap = HttpStaticHandleUtil.extractNonNullParam(req);
         String originParamStr = CollectionUtil.join(CollectionUtil.transToList(nonNullParamMap.entrySet(), entry -> entry.getKey() + SymbolConstantUtil.EQUAL + entry.getValue()), SymbolConstantUtil.AND);
         try {
@@ -58,18 +58,18 @@ public interface IRestTemplateSupport {
         }
     }
 
-    default HttpEntity<Map<String, Object>> loadHttpEntity(@NonNull AbstractD8BasicRemoteRequest req) {
+    default HttpEntity<Map<String, Object>> loadHttpEntity(@NonNull AbstractD8BasicRemoteRequest<?> req) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         return new HttpEntity<>(HttpStaticHandleUtil.extractNonNullParam(req), httpHeaders);
     }
 
-    default String loadCompleteAccessUrl(@NotBlank final String domain, @NonNull AbstractD8BasicRemoteRequest req) {
+    default String loadCompleteAccessUrl(@NotBlank final String domain, @NonNull AbstractD8BasicRemoteRequest<?> req) {
         return domain + File.separator + req.getAccessUri();
     }
 
     default boolean isSuccess(@NonNull String code) {
-        return code.equals(GlobalErrorInfoEnum.SUCCESS.getCode()) || code.equals(GlobalErrorInfoEnum.REMOTE_INVOKE_FAILED_MSG.getCode());
+        return code.equals(GlobalErrorInfoEnum.SUCCESS.getCode()) || code.equals(GlobalErrorInfoEnum.REMOTE_INVOKE_SUCCESS.getCode());
     }
 
 }

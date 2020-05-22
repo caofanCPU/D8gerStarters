@@ -39,12 +39,12 @@ public class GlobalErrorInfoRuntimeException extends RuntimeException implements
     private String msg;
 
     public GlobalErrorInfoRuntimeException() {
-        this.code = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode();
-        this.msg = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg();
+        this.code = GlobalErrorInfoEnum.OPERATE_FAILED.getCode();
+        this.msg = GlobalErrorInfoEnum.OPERATE_FAILED.getMsg();
     }
 
     public GlobalErrorInfoRuntimeException(String msg) {
-        this.code = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode();
+        this.code = GlobalErrorInfoEnum.OPERATE_FAILED.getCode();
         this.msg = msg;
     }
 

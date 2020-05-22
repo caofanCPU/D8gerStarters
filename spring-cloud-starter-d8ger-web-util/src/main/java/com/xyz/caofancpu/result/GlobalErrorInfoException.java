@@ -44,13 +44,13 @@ public class GlobalErrorInfoException extends Exception implements ErrorInfoInte
     }
 
     public GlobalErrorInfoException(String msg) {
-        this.code = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode();
+        this.code = GlobalErrorInfoEnum.OPERATE_FAILED.getCode();
         this.msg = msg;
     }
 
     public GlobalErrorInfoException() {
-        this.code = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getCode();
-        this.msg = GlobalErrorInfoEnum.OPERATE_FAILED_MSG.getMsg();
+        this.code = GlobalErrorInfoEnum.OPERATE_FAILED.getCode();
+        this.msg = GlobalErrorInfoEnum.OPERATE_FAILED.getMsg();
     }
 
     @Override
