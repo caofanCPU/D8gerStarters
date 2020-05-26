@@ -79,14 +79,17 @@ public class CollectionUtilTest {
 
     public static void testSortMap() {
         Map<Integer, Integer> kvMap = new HashMap<>(8, 0.75f);
-        kvMap.put(1, 9);
+        kvMap.put(11, 9);
         kvMap.put(4, 6);
-        kvMap.put(3, 7);
+        kvMap.put(31, 7);
         kvMap.put(2, 8);
-        HashMap<Integer, Integer> kAscOrderResultMap = CollectionUtil.sortByKey(HashMap::new, kvMap);
-        HashMap<Integer, Integer> kDAscOrderResultMap = CollectionUtil.sortByKey(LinkedHashMap::new, kvMap, true);
-        LinkedHashMap<Integer, Integer> vAscOrderResultMap = CollectionUtil.sortByValue(LinkedHashMap::new, kvMap);
-        LinkedHashMap<Integer, Integer> vDAscOrderResultMap = CollectionUtil.sortByValue(LinkedHashMap::new, kvMap, true);
+        LinkedHashMap<Integer, Integer> kAscOrderResultMap = CollectionUtil.sortByKey(kvMap);
+        LinkedHashMap<Integer, Integer> kDAscOrderResultMap = CollectionUtil.sortByKey(kvMap, true);
+        LinkedHashMap<Integer, Integer> vAscOrderResultMap = CollectionUtil.sortByValue(kvMap);
+        LinkedHashMap<Integer, Integer> vDAscOrderResultMap = CollectionUtil.sortByValue(kvMap, true);
+        LinkedHashMap<Integer, Integer> keySubtractValueAscOrderResultMap = CollectionUtil.sortByKeyMapper(kvMap, key -> key - kvMap.get(key));
+        LinkedHashMap<Integer, Integer> keySubtractValueDescOrderResultMap = CollectionUtil.sortByKeyMapper(kvMap, key -> key - kvMap.get(key), true);
+
         kAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
         NormalUseForTestUtil.outNextLine();
         kDAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
@@ -95,6 +98,9 @@ public class CollectionUtilTest {
         NormalUseForTestUtil.outNextLine();
         vDAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
         NormalUseForTestUtil.outNextLine();
+        keySubtractValueAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
+        NormalUseForTestUtil.outNextLine();
+        keySubtractValueDescOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
     }
 
     public static void testFilterAndTransArray() {

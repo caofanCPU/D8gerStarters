@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -865,49 +866,60 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
+     * 根据Key函数对Map排序
+     *
+     * @param sourceMap Map数据源
+     * @param keyMapper key执行函数, 根据key进行运算后的结果进行排序
+     * @param reverse   可选参数, 是否根据Key逆序排列, 默认增序排列
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, T extends Comparable<? super T>, V> LinkedHashMap<K, V> sortByKeyMapper(Map<K, V> sourceMap, Function<? super K, ? extends T> keyMapper, boolean... reverse) {
+        Map<T, K> kMap = transToMap(sourceMap.keySet(), keyMapper);
+        LinkedHashMap<T, K> sortedMap = sortByKey(kMap, reverse);
+        return sortedMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getValue, entry -> sourceMap.get(entry.getValue()), (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    }
+
+    /**
      * 根据Key对Map排序
      *
-     * @param mapColl   排序结果容器
      * @param sourceMap Map数据源
      * @param reverse   可选参数, 是否根据Key逆序排列, 默认增序排列
      * @param <K>
      * @param <V>
      * @return
      */
-    public static <K extends Comparable<? super K>, V, M extends Map<K, V>> M sortByKey(Supplier<M> mapColl, Map<K, V> sourceMap, boolean... reverse) {
+    public static <K extends Comparable<? super K>, V> LinkedHashMap<K, V> sortByKey(Map<K, V> sourceMap, boolean... reverse) {
         if (isEmpty(sourceMap)) {
-            return mapColl.get();
+            return new LinkedHashMap<>(2, 0.5f, Boolean.FALSE);
         }
         Comparator<Entry<K, V>> comparingByKey = Map.Entry.comparingByKey();
         if (isNotEmpty(reverse) && reverse[0]) {
             comparingByKey = comparingByKey.reversed();
         }
-        return sourceMap.entrySet().stream()
-                .sorted(comparingByKey)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, mapColl));
+        return sortMap(sourceMap, comparingByKey);
     }
 
     /**
      * 根据Value对Map排序
      *
-     * @param mapColl   排序结果容器, 注意: TreeMap自身会根据Key排序, 因而本方法不支持TreeMap容器
      * @param sourceMap Map数据源
      * @param reverse   可选参数, 是否根据Value逆序排列, 默认增序排列
      * @param <K>
      * @param <V>
      * @return
      */
-    public static <K, V extends Comparable<? super V>, M extends Map<K, V>> M sortByValue(Supplier<M> mapColl, Map<K, V> sourceMap, boolean... reverse) {
+    public static <K, V extends Comparable<? super V>> LinkedHashMap<K, V> sortByValue(Map<K, V> sourceMap, boolean... reverse) {
         if (isEmpty(sourceMap)) {
-            return mapColl.get();
+            return new LinkedHashMap<>(2, 0.5f, Boolean.FALSE);
         }
-        Comparator<Entry<K, V>> comparingByKey = Map.Entry.comparingByValue();
+        Comparator<Entry<K, V>> comparingByValue = Map.Entry.comparingByValue();
         if (isNotEmpty(reverse) && reverse[0]) {
-            comparingByKey = comparingByKey.reversed();
+            comparingByValue = comparingByValue.reversed();
         }
-        return sourceMap.entrySet().stream()
-                .sorted(comparingByKey)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, mapColl));
+        return sortMap(sourceMap, comparingByValue);
     }
 
     /**
@@ -1324,6 +1336,21 @@ public class CollectionUtil extends CollectionUtils {
 
     private static <T> BinaryOperator<T> enableNewOnDuplicateKey() {
         return (oldValue, newValue) -> newValue;
+    }
+
+    /**
+     * 根据比较器对Map排序
+     *
+     * @param sourceMap
+     * @param comparator
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    private static <K, V> LinkedHashMap<K, V> sortMap(Map<K, V> sourceMap, Comparator<Entry<K, V>> comparator) {
+        return sourceMap.entrySet().stream()
+                .sorted(comparator)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
     /**
