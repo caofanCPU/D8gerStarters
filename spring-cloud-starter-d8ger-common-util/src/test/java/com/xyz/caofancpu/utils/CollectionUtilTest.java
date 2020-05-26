@@ -62,7 +62,7 @@ import java.util.stream.IntStream;
 public class CollectionUtilTest {
 
     public static void main(String[] args) {
-        testTopK();
+        testSortMap();
     }
 
     public static void testTopK() {
@@ -83,10 +83,10 @@ public class CollectionUtilTest {
         kvMap.put(4, 6);
         kvMap.put(3, 7);
         kvMap.put(2, 8);
-        LinkedHashMap<Integer, Integer> kAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getKey));
-        LinkedHashMap<Integer, Integer> kDAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getKey).reversed());
-        LinkedHashMap<Integer, Integer> vAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getValue));
-        LinkedHashMap<Integer, Integer> vDAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getValue).reversed());
+        HashMap<Integer, Integer> kAscOrderResultMap = CollectionUtil.sortByKey(HashMap::new, kvMap);
+        HashMap<Integer, Integer> kDAscOrderResultMap = CollectionUtil.sortByKey(LinkedHashMap::new, kvMap, true);
+        LinkedHashMap<Integer, Integer> vAscOrderResultMap = CollectionUtil.sortByValue(LinkedHashMap::new, kvMap);
+        LinkedHashMap<Integer, Integer> vDAscOrderResultMap = CollectionUtil.sortByValue(LinkedHashMap::new, kvMap, true);
         kAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
         NormalUseForTestUtil.outNextLine();
         kDAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));

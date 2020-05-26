@@ -33,7 +33,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -866,20 +865,49 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 对Map排序, 按照Key或者Value进行排序
+     * 根据Key对Map排序
      *
-     * @param sourceMap  源数据Map
-     * @param comparator 排序比较器, 指定按照Key或者Value进行排序
+     * @param mapColl   排序结果容器
+     * @param sourceMap Map数据源
+     * @param reverse   可选参数, 是否根据Key逆序排列, 默认增序排列
      * @param <K>
      * @param <V>
      * @return
      */
-    public static <K, V extends Comparable<V>> LinkedHashMap<K, V> sortMap(Map<K, V> sourceMap, Comparator<? super Entry<K, V>> comparator) {
+    public static <K extends Comparable<? super K>, V, M extends Map<K, V>> M sortByKey(Supplier<M> mapColl, Map<K, V> sourceMap, boolean... reverse) {
         if (isEmpty(sourceMap)) {
-            return new LinkedHashMap<>(2, 0.5F, Boolean.FALSE);
+            return mapColl.get();
         }
-        List<Entry<K, V>> entryList = sourceMap.entrySet().stream().sorted(comparator).collect(Collectors.toList());
-        return transToMap(LinkedHashMap::new, entryList, Entry::getKey, Entry::getValue);
+        Comparator<Entry<K, V>> comparingByKey = Map.Entry.comparingByKey();
+        if (isNotEmpty(reverse) && reverse[0]) {
+            comparingByKey = comparingByKey.reversed();
+        }
+        return sourceMap.entrySet().stream()
+                .sorted(comparingByKey)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, mapColl));
+    }
+
+    /**
+     * 根据Value对Map排序
+     *
+     * @param mapColl   排序结果容器, 注意: TreeMap自身会根据Key排序, 因而本方法不支持TreeMap容器
+     * @param sourceMap Map数据源
+     * @param reverse   可选参数, 是否根据Value逆序排列, 默认增序排列
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V extends Comparable<? super V>, M extends Map<K, V>> M sortByValue(Supplier<M> mapColl, Map<K, V> sourceMap, boolean... reverse) {
+        if (isEmpty(sourceMap)) {
+            return mapColl.get();
+        }
+        Comparator<Entry<K, V>> comparingByKey = Map.Entry.comparingByValue();
+        if (isNotEmpty(reverse) && reverse[0]) {
+            comparingByKey = comparingByKey.reversed();
+        }
+        return sourceMap.entrySet().stream()
+                .sorted(comparingByKey)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, mapColl));
     }
 
     /**

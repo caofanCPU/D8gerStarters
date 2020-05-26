@@ -27,9 +27,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -338,7 +336,7 @@ public class NumberUtil {
         Map<Integer, BigDecimal> deltaPercentageMap = Maps.newHashMap();
         percentageMap.forEach((index, percentage) -> deltaPercentageMap.put(index, percentage.subtract(downPercentageMap.get(index))));
         // 按照偏差由大到小排序
-        LinkedHashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionUtil.sortMap(deltaPercentageMap, Comparator.comparing(Map.Entry<Integer, BigDecimal>::getValue).reversed());
+        HashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionUtil.sortByValue(HashMap::new, deltaPercentageMap, true);
         for (Integer index : deltaPercentageSortedByValueMap.keySet()) {
             if (deltaPercentageSum > 0) {
                 downPercentageMap.put(index, downPercentageMap.get(index).add(BigDecimal.ONE));
