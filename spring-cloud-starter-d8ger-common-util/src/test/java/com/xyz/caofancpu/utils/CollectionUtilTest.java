@@ -24,6 +24,7 @@ import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -61,7 +62,39 @@ import java.util.stream.IntStream;
 public class CollectionUtilTest {
 
     public static void main(String[] args) {
-        testFilterAndTransArray();
+        testTopK();
+    }
+
+    public static void testTopK() {
+        Integer[] nums = IntStream.rangeClosed(1, 9).boxed().toArray(Integer[]::new);
+        ArrayUtils.shuffle(nums);
+
+        List<Integer> source = Arrays.asList(nums);
+        NormalUseForTestUtil.out("原始数据: " + Arrays.toString(source.toArray()));
+        List<Integer> top5 = CollectionUtil.filterTopK(source, Function.identity(), Comparator.comparing(Integer::intValue), 5);
+        List<Integer> removeTop5 = CollectionUtil.removeTopK(source, Function.identity(), Comparator.comparing(Integer::intValue), 5);
+        NormalUseForTestUtil.out("前5个元素: " + Arrays.toString(top5.toArray()));
+        NormalUseForTestUtil.out("剔除前5个元素后剩余元素: " + Arrays.toString(removeTop5.toArray()));
+    }
+
+    public static void testSortMap() {
+        Map<Integer, Integer> kvMap = new HashMap<>(8, 0.75f);
+        kvMap.put(1, 9);
+        kvMap.put(4, 6);
+        kvMap.put(3, 7);
+        kvMap.put(2, 8);
+        LinkedHashMap<Integer, Integer> kAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getKey));
+        LinkedHashMap<Integer, Integer> kDAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getKey).reversed());
+        LinkedHashMap<Integer, Integer> vAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getValue));
+        LinkedHashMap<Integer, Integer> vDAscOrderResultMap = CollectionUtil.sortMap(kvMap, Comparator.comparing(Map.Entry<Integer, Integer>::getValue).reversed());
+        kAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
+        NormalUseForTestUtil.outNextLine();
+        kDAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
+        NormalUseForTestUtil.outNextLine();
+        vAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
+        NormalUseForTestUtil.outNextLine();
+        vDAscOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
+        NormalUseForTestUtil.outNextLine();
     }
 
     public static void testFilterAndTransArray() {

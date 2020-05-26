@@ -58,6 +58,53 @@ import java.util.stream.StreamSupport;
 public class CollectionUtil extends CollectionUtils {
 
     /**
+     * 对列表元素字段执行指定函数后, 按照comparator排列, 取前k个子列表
+     *
+     * @param coll
+     * @param mapper
+     * @param comparator 排序比较器
+     * @param k          取前k个元素
+     * @param <T>
+     * @param <E>
+     * @return
+     */
+    public static <T, E> List<T> filterTopK(@NonNull Collection<E> coll, Function<? super E, ? extends T> mapper, Comparator<T> comparator, int k) {
+        if (k <= 0) {
+            return new ArrayList<>();
+        }
+        List<T> tList = transToList(coll, mapper);
+        if (k > coll.size()) {
+            tList.sort(comparator);
+            return tList;
+        }
+
+        return tList.stream().sorted(comparator).limit(k).collect(Collectors.toList());
+    }
+
+    /**
+     * 对列表元素字段执行指定函数后, 按照comparator排列, 排除前k个元素后的子列表
+     *
+     * @param coll
+     * @param mapper
+     * @param comparator 排序比较器
+     * @param k          取前k个元素
+     * @param <T>
+     * @param <E>
+     * @return
+     */
+    public static <T, E> List<T> removeTopK(@NonNull Collection<E> coll, Function<? super E, ? extends T> mapper, Comparator<T> comparator, int k) {
+        if (k > coll.size()) {
+            return new ArrayList<>();
+        }
+        List<T> tList = transToList(coll, mapper);
+        if (k <= 0) {
+            tList.sort(comparator);
+            return tList;
+        }
+        return tList.stream().sorted(comparator).skip(k).collect(Collectors.toList());
+    }
+
+    /**
      * 求元素类型相同的两个集合的并集(a ∪ b), 可指定结果容器类型
      *
      * @param resultColl
@@ -819,15 +866,15 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 对Map排序
+     * 对Map排序, 按照Key或者Value进行排序
      *
-     * @param sourceMap
-     * @param comparator
+     * @param sourceMap  源数据Map
+     * @param comparator 排序比较器, 指定按照Key或者Value进行排序
      * @param <K>
      * @param <V>
      * @return
      */
-    public static <K, V extends Comparable<V>> LinkedHashMap<K, V> sortedMapByValue(Map<K, V> sourceMap, Comparator<? super Entry<K, V>> comparator) {
+    public static <K, V extends Comparable<V>> LinkedHashMap<K, V> sortMap(Map<K, V> sourceMap, Comparator<? super Entry<K, V>> comparator) {
         if (isEmpty(sourceMap)) {
             return new LinkedHashMap<>(2, 0.5F, Boolean.FALSE);
         }

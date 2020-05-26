@@ -338,7 +338,7 @@ public class NumberUtil {
         Map<Integer, BigDecimal> deltaPercentageMap = Maps.newHashMap();
         percentageMap.forEach((index, percentage) -> deltaPercentageMap.put(index, percentage.subtract(downPercentageMap.get(index))));
         // 按照偏差由大到小排序
-        LinkedHashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionUtil.sortedMapByValue(deltaPercentageMap, Comparator.comparing(Map.Entry<Integer, BigDecimal>::getValue).reversed());
+        LinkedHashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionUtil.sortMap(deltaPercentageMap, Comparator.comparing(Map.Entry<Integer, BigDecimal>::getValue).reversed());
         for (Integer index : deltaPercentageSortedByValueMap.keySet()) {
             if (deltaPercentageSum > 0) {
                 downPercentageMap.put(index, downPercentageMap.get(index).add(BigDecimal.ONE));
