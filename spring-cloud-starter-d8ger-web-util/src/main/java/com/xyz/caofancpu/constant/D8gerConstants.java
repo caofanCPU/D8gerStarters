@@ -48,11 +48,18 @@ public final class D8gerConstants {
      */
     public static final String D8_BUSINESS_POOL_ENABLE = "spring.cloud.d8ger.business-pool.enable";
 
+    /**
+     * Redis开关, 默认true打开
+     */
+    public static final String D8_REDIS_ENABLE = "spring.cloud.d8ger.redis.enable";
+
     public static final String REST_TEMPLATE_PROPERTY_PREFIX = "spring.cloud.d8ger.rest-template";
 
     public static final String SWAGGER_PROPERTY_PREFIX = "spring.cloud.d8ger.swagger";
 
     public static final String BUSINESS_POOL_PROPERTY_PREFIX = "spring.cloud.d8ger.business-pool";
+
+    public static final String REDIS_PROPERTY_PREFIX = "spring.cloud.d8ger.redis";
 
     private D8gerConstants() {
         throw new AssertionError("Must not instantiate constant utility class");

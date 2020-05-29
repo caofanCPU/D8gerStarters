@@ -19,6 +19,7 @@
 package com.xyz.caofancpu.core;
 
 
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.NonNull;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.collections.CollectionUtils;
@@ -314,6 +315,34 @@ public class CollectionUtil extends CollectionUtils {
 
     public static boolean isNotEmpty(Map sourceMap) {
         return !isEmpty(sourceMap);
+    }
+
+    /**
+     * 展示Map内容
+     *
+     * @param kvMap
+     * @return
+     */
+    public static <K, V> String showMap(Map<K, V> kvMap) {
+        if (isEmpty(kvMap)) {
+            return SymbolConstantUtil.EMPTY;
+        }
+        List<String> entryShowList = CollectionUtil.transToList(
+                kvMap.entrySet(),
+                entry -> SymbolConstantUtil.LESS_THEN
+                        + entry.getKey().toString()
+                        + SymbolConstantUtil.NORMAL_ENGLISH_COMMA_DELIMITER
+                        + (Objects.isNull(entry.getValue()) ? SymbolConstantUtil.NULL_SHOW : entry.getValue().toString())
+                        + SymbolConstantUtil.GREATER
+        );
+        return show(entryShowList);
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(1, "A");
+        map.put(2, null);
+        System.out.println(showMap(map));
     }
 
     /**
@@ -866,6 +895,16 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
+     * 展示集合
+     *
+     * @param coll
+     * @return
+     */
+    public static <T> String show(Collection<T> coll) {
+        return join(coll, SymbolConstantUtil.NORMAL_ENGLISH_COMMA_DELIMITER);
+    }
+
+    /**
      * 根据Key函数对Map排序
      *
      * @param sourceMap Map数据源
@@ -1315,6 +1354,42 @@ public class CollectionUtil extends CollectionUtils {
 
     public static boolean isNotEmpty(boolean[] array) {
         return !isEmpty(array);
+    }
+
+    public static <T> String showArray(T[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(long[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(int[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(short[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(char[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(byte[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(double[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(float[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String showArray(boolean[] array) {
+        return Arrays.toString(array);
     }
 
     // =====================数组判空===================== //

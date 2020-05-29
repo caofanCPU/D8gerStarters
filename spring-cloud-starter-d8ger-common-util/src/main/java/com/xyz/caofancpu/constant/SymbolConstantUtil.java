@@ -56,14 +56,14 @@ public class SymbolConstantUtil {
     public static final String EMPTY = StringUtils.EMPTY;
 
     /**
-     * 标准分隔符 ', '
-     */
-    public static final String NORMAL_ENGLISH_COMMA_DELIMITER = ENGLISH_COMMA + EMPTY;
-
-    /**
      * 单个空格符
      */
     public static final String SPACE = StringUtils.SPACE;
+
+    /**
+     * 标准分隔符 ', '
+     */
+    public static final String NORMAL_ENGLISH_COMMA_DELIMITER = ENGLISH_COMMA + SPACE;
 
     /**
      * EXCEL中汉字的缩进间距，设置为4个空格
@@ -129,5 +129,25 @@ public class SymbolConstantUtil {
      * 与符号
      */
     public static final String AND = "&";
+
+    /**
+     * 大于号
+     */
+    public static final String GREATER = ">";
+
+    /**
+     * 小于号
+     */
+    public static final String LESS_THEN = "<";
+
+    /**
+     * 展示null
+     */
+    public static final String NULL_SHOW = "null";
+
+    /**
+     * 展示错误✖代替空串
+     */
+    public static final String ERROR_SHOW = "✖";
 
 }
