@@ -68,12 +68,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!--logger-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
         <!--base64-->
         <dependency>
             <groupId>commons-codec</groupId>
