@@ -338,13 +338,6 @@ public class CollectionUtil extends CollectionUtils {
         return show(entryShowList);
     }
 
-    public static void main(String[] args) {
-        Map<Integer, String> map = new HashMap<>();
-        map.put(1, "A");
-        map.put(2, null);
-        System.out.println(showMap(map));
-    }
-
     /**
      * 转换为Set, 底层默认使用HashSet
      *
@@ -1282,7 +1275,7 @@ public class CollectionUtil extends CollectionUtils {
         return resultList.toArray();
     }
 
-    // =====================数组判空===================== //
+    // =====================数组判空、展示、判同==================== //
 
     public static <T> boolean isEmpty(T[] array) {
         return ArrayUtils.isEmpty(array);
@@ -1390,6 +1383,78 @@ public class CollectionUtil extends CollectionUtils {
 
     public static String showArray(boolean[] array) {
         return Arrays.toString(array);
+    }
+
+    public static <T> boolean isEqualsArray(T[] a, T[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(long[] a, long[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(int[] a, int[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(short[] a, short[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(char[] a, char[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(byte[] a, byte[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(double[] a, double[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(float[] a, float[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static boolean isEqualsArray(boolean[] a, boolean[] a2) {
+        return Arrays.equals(a, a2);
+    }
+
+    public static <T> boolean nonEqualsArray(T[] a, T[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(long[] a, long[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(int[] a, int[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(short[] a, short[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(char[] a, char[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(byte[] a, byte[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(double[] a, double[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(float[] a, float[] a2) {
+        return !isEqualsArray(a, a2);
+    }
+
+    public static boolean nonEqualsArray(boolean[] a, boolean[] a2) {
+        return !isEqualsArray(a, a2);
     }
 
     // =====================数组判空===================== //

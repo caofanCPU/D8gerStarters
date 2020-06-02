@@ -20,6 +20,7 @@ package com.xyz.caofancpu.property;
 
 import com.xyz.caofancpu.constant.D8gerConstants;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -31,6 +32,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = D8gerConstants.REST_TEMPLATE_PROPERTY_PREFIX)
 @Validated
 @Data
+@Accessors(chain = true)
 public class RestTemplateProperties {
     /**
      * 总的最大连接数, 默认200

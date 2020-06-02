@@ -18,9 +18,11 @@
 
 package com.xyz.caofancpu.property;
 
+import com.xyz.caofancpu.annotation.WarnDoc;
 import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -32,6 +34,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = D8gerConstants.REDIS_PROPERTY_PREFIX)
 @Validated
 @Data
+@Accessors(chain = true)
 public class RedisProperties {
     /**
      * IP
@@ -47,6 +50,17 @@ public class RedisProperties {
      * 密码
      */
     private String pwd = SymbolConstantUtil.EMPTY;
+
+    /**
+     * 数据库索引, 默认0号库
+     */
+    private int rDbIndex = 0;
+
+    /**
+     * 单次PipeLine最大命令数, 默认10w条
+     */
+    @WarnDoc("生产环境, 请确认合理值")
+    private int maxSinglePipelineCmdNum = 100000;
 
     /**
      * 最大初始化启动时间

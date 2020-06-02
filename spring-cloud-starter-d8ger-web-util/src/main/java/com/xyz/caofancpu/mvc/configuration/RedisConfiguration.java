@@ -48,6 +48,9 @@ public class RedisConfiguration {
     @Resource
     private RedisProperties redisProperties;
 
+    @Resource
+    private JedisPool jedisPool;
+
     /**
      * jedis连接池
      *
@@ -56,6 +59,7 @@ public class RedisConfiguration {
     @Bean(name = "jedisPool")
     @ConditionalOnProperty(name = D8gerConstants.D8_REDIS_ENABLE, matchIfMissing = true)
     public JedisPool jedisPool() {
+        log.info("D8GER....执行Redis连接池初始化");
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(redisProperties.getMaxTotal());
         config.setMaxIdle(redisProperties.getMaxIdle());
@@ -66,13 +70,17 @@ public class RedisConfiguration {
         config.setTimeBetweenEvictionRunsMillis(redisProperties.getTimeBetweenEvictionRunsMillis());
         config.setMinEvictableIdleTimeMillis(redisProperties.getMinEvictableIdleTimeMillis());
         config.setSoftMinEvictableIdleTimeMillis(redisProperties.getSoftMinEvictableIdleTimeMillis());
-        return new JedisPool(config, redisProperties.getIp(), redisProperties.getPort(), redisProperties.getMaxInitStartMillis(), redisProperties.getPwd());
+        JedisPool jedisPool = new JedisPool(config, redisProperties.getIp(), redisProperties.getPort(), redisProperties.getMaxInitStartMillis(), redisProperties.getPwd());
+        log.info("D8GER....[jedisPool]连接池初始化完成!");
+        return jedisPool;
     }
 
     @Bean(name = "redisClient")
     @ConditionalOnProperty(name = D8gerConstants.D8_REDIS_ENABLE, matchIfMissing = true)
     @ConditionalOnBean(name = "jedisPool")
     public JedisService jedisService() {
-        return new JedisService();
+        JedisService redisClient = new JedisService(jedisPool, redisProperties.getRDbIndex(), redisProperties.getMaxSinglePipelineCmdNum());
+        log.info("D8GER....[redisClient]连接池初始化完成!");
+        return redisClient;
     }
 }

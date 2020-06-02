@@ -21,6 +21,7 @@ package com.xyz.caofancpu.property;
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.constant.D8gerConstants;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -34,6 +35,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = D8gerConstants.SWAGGER_PROPERTY_PREFIX)
 @Validated
 @Data
+@Accessors(chain = true)
 public class SwaggerProperties {
     /**
      * API文档展示开关

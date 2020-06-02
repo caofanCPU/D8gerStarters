@@ -22,6 +22,7 @@ import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.constant.IEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -33,6 +34,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = D8gerConstants.BUSINESS_POOL_PROPERTY_PREFIX)
 @Validated
 @Data
+@Accessors(chain = true)
 public class BusinessPoolProperties {
     /**
      * 核心线程数目

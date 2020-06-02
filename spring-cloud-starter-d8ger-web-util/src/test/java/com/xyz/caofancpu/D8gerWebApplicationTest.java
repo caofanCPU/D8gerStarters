@@ -20,9 +20,11 @@ package com.xyz.caofancpu;
 
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import com.xyz.caofancpu.mvc.configuration.BusinessPoolConfiguration;
+import com.xyz.caofancpu.mvc.configuration.RedisConfiguration;
 import com.xyz.caofancpu.mvc.configuration.RestTemplateConfiguration;
 import com.xyz.caofancpu.mvc.configuration.StandardHTTPMessageConfiguration;
 import com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration;
+import com.xyz.caofancpu.mvc.standard.JedisService;
 import com.xyz.caofancpu.remote.DemoHttpRemoteInvoker;
 import com.xyz.caofancpu.remote.DemoRemoteReq;
 import com.xyz.caofancpu.remote.DemoRemoteRespBody;
@@ -50,7 +52,9 @@ import javax.annotation.Resource;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {D8gerWebApplicationTest.TestConfig.class},
         properties = {
-
+                "spring.cloud.d8ger.redis.ip=172.16.10.41",
+                "spring.cloud.d8ger.redis.port=6381",
+                "spring.cloud.d8ger.redis.pwd=redishtjy1",
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
@@ -58,6 +62,9 @@ public class D8gerWebApplicationTest {
 
     @Resource
     private DemoHttpRemoteInvoker demoHttpRemoteInvoker;
+
+    @Resource
+    private JedisService jedisService;
 
     @Before
     public void before() {
@@ -70,11 +77,16 @@ public class D8gerWebApplicationTest {
     }
 
     @Test
-    public void test()
+    public void testRemoteInvoke()
             throws GlobalErrorInfoException {
         DemoRemoteReq remoteReq = new DemoRemoteReq().setVideoId(59002451L);
         DemoRemoteRespBody body = demoHttpRemoteInvoker.execute(remoteReq);
         NormalUseForTestUtil.out(body);
+    }
+
+    @Test
+    public void testRedis() {
+        NormalUseForTestUtil.out(jedisService.info());
     }
 
     /**
@@ -91,7 +103,8 @@ public class D8gerWebApplicationTest {
             RestTemplateConfiguration.class,
             StandardHTTPMessageConfiguration.class,
             SwaggerConfiguration.class,
-            DemoHttpRemoteInvoker.class
+            DemoHttpRemoteInvoker.class,
+            RedisConfiguration.class
     })
     public static class TestConfig {
 
