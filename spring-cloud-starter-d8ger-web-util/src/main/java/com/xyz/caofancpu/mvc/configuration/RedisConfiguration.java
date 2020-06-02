@@ -23,6 +23,7 @@ import com.xyz.caofancpu.mvc.standard.JedisService;
 import com.xyz.caofancpu.property.RedisProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,12 +53,13 @@ public class RedisConfiguration {
     private JedisPool jedisPool;
 
     /**
-     * jedis连接池
+     * jedis连接池, 不存在JedisPool实例时才进行初始化
      *
      * @return
      */
     @Bean(name = "jedisPool")
     @ConditionalOnProperty(name = D8gerConstants.D8_REDIS_ENABLE, matchIfMissing = true)
+    @ConditionalOnMissingBean(value = JedisPool.class)
     public JedisPool jedisPool() {
         log.info("D8GER....执行Redis连接池初始化");
         JedisPoolConfig config = new JedisPoolConfig();
@@ -65,6 +67,7 @@ public class RedisConfiguration {
         config.setMaxIdle(redisProperties.getMaxIdle());
         config.setMinIdle(redisProperties.getMinIdle());
         config.setMaxWaitMillis(redisProperties.getMaxWaitMillis());
+        config.setTestOnBorrow(redisProperties.isTestOnBorrow());
         config.setTestWhileIdle(redisProperties.isTestWhiledIdle());
         config.setNumTestsPerEvictionRun(redisProperties.getNumTestsPerEvictionRun());
         config.setTimeBetweenEvictionRunsMillis(redisProperties.getTimeBetweenEvictionRunsMillis());
@@ -80,7 +83,7 @@ public class RedisConfiguration {
     @ConditionalOnBean(name = "jedisPool")
     public JedisService jedisService() {
         JedisService redisClient = new JedisService(jedisPool, redisProperties.getRDbIndex(), redisProperties.getMaxSinglePipelineCmdNum());
-        log.info("D8GER....[redisClient]连接池初始化完成!");
+        log.info("D8GER....[redisClient]客户端初始化完成!");
         return redisClient;
     }
 }

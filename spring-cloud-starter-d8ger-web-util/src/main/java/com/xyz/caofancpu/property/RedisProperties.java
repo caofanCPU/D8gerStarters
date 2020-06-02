@@ -73,28 +73,48 @@ public class RedisProperties {
     private int maxTotal = 256;
 
     /**
-     * 最大空闲连接
+     * 最大空闲连接数
      */
     private int maxIdle = 256;
 
     /**
-     * 最小空闲连接
+     * 最小空闲连接数
      */
     private int minIdle = 15;
 
     /**
-     * 最大等待时间
+     * 获取连接时最大等待时间, 默认1秒
      */
     private long maxWaitMillis = 1000;
 
+    /**
+     * 保证获取的是有效连接
+     */
+    private boolean testOnBorrow = true;
+
+    /**
+     * 开启一个空闲连接检测线程
+     */
     private boolean testWhiledIdle = true;
 
+    /**
+     * 空闲连接检测线程每次扫描最多检查空闲连接数, 默认5个
+     */
     private int numTestsPerEvictionRun = 5;
 
+    /**
+     * 空闲连接检测线程扫描间隔, 默认3秒
+     */
     private long timeBetweenEvictionRunsMillis = 3000;
 
+    /**
+     * 连接空闲时间大于该阈值时被干掉, 默认3秒
+     */
     private long minEvictableIdleTimeMillis = 3000;
 
+    /**
+     * 连接空闲时间大于该阈值且空闲连接大于{@link #minIdle}时被干掉, 默认1秒
+     */
     private long softMinEvictableIdleTimeMillis = 1000;
 
 }

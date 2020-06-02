@@ -18,6 +18,7 @@
 
 package com.xyz.caofancpu.middleware;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.annotation.WarnDoc;
@@ -25,6 +26,7 @@ import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import com.xyz.caofancpu.mvc.standard.JedisService;
 import com.xyz.caofancpu.property.RedisProperties;
+import org.junit.Before;
 import org.junit.Test;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -60,6 +62,40 @@ public class RedisTest {
     private static final String TEST_EXPIRE_KEY = TEST_KEY_PREFIX + "expireTime";
 
     /**
+     * 本测试ZSet相关的KEY
+     */
+    private static final String TEST_Z_SET_KEY = TEST_KEY_PREFIX + "zset";
+
+    /**
+     * 本测试HSet相关的KEY
+     */
+    private static final String TEST_H_SET_KEY = TEST_KEY_PREFIX + "hset";
+
+    /**
+     * 本测试Set相关的KEY
+     */
+    private static final String TEST_SET_KEY = TEST_KEY_PREFIX + "set";
+
+    /**
+     * 本测试List相关的KEY
+     */
+    private static final String TEST_LIST_KEY = TEST_KEY_PREFIX + "list";
+
+    /**
+     * Redis客户端
+     */
+    private static JedisService redisClient = null;
+
+    /**
+     * 初始化Redis客户端
+     */
+    @Before
+    public void before() {
+        redisClient = initRedisClient();
+        NormalUseForTestUtil.out("初始化Redis客户端完成");
+    }
+
+    /**
      * 获取REDIS服务信息
      *
      * @throws Exception
@@ -67,8 +103,7 @@ public class RedisTest {
     @Test
     public void testInfo()
             throws Exception {
-        JedisService jedisService = initRedisClient();
-        String info = jedisService.info();
+        String info = redisClient.info();
         NormalUseForTestUtil.out(info);
     }
 
@@ -80,8 +115,7 @@ public class RedisTest {
     @Test
     public void testSetKV()
             throws Exception {
-        JedisService jedisService = initRedisClient();
-        boolean success = jedisService.setEx(TEST_EXPIRE_KEY, "帝八哥", null);
+        boolean success = redisClient.setEx(TEST_EXPIRE_KEY, "帝八哥", null);
         NormalUseForTestUtil.out(success);
     }
 
@@ -93,8 +127,7 @@ public class RedisTest {
     @Test
     public void testExpireTime()
             throws Exception {
-        JedisService jedisService = initRedisClient();
-        boolean success = jedisService.batchSetExpireTime(Sets.newHashSet(TEST_EXPIRE_KEY), 60);
+        boolean success = redisClient.batchSetExpireTime(Sets.newHashSet(TEST_EXPIRE_KEY), 60);
         NormalUseForTestUtil.out(success);
     }
 
@@ -106,8 +139,7 @@ public class RedisTest {
     @Test
     public void testPersistKey()
             throws Exception {
-        JedisService jedisService = initRedisClient();
-        boolean success = jedisService.batchPersist(Sets.newHashSet(TEST_EXPIRE_KEY));
+        boolean success = redisClient.batchPersist(Sets.newHashSet(TEST_EXPIRE_KEY));
         NormalUseForTestUtil.out(success);
     }
 
@@ -119,8 +151,7 @@ public class RedisTest {
     @Test
     public void testSearchByKey()
             throws Exception {
-        JedisService jedisService = initRedisClient();
-        Set<String> results = jedisService.searchByKeyRegex(REDIS_KEY_SEARCH_REGEX.pattern());
+        Set<String> results = redisClient.searchByKeyRegex(REDIS_KEY_SEARCH_REGEX.pattern());
         if (CollectionUtil.isNotEmpty(results)) {
             NormalUseForTestUtil.out(CollectionUtil.show(results));
         }
@@ -134,9 +165,33 @@ public class RedisTest {
     @Test
     public void testGetProbableExpireTime()
             throws Exception {
-        JedisService jedisService = initRedisClient();
-        Map<String, Long> resultMap = jedisService.getProbableExpireTime(Sets.newHashSet(TEST_EXPIRE_KEY, "account:phone:13100522418"));
+        Map<String, Long> resultMap = redisClient.getProbableExpireTime(Sets.newHashSet(TEST_EXPIRE_KEY, "account:phone:13100522418"));
         NormalUseForTestUtil.out(CollectionUtil.showMap(resultMap));
+    }
+
+    /**
+     * ZSet测试
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testZSet()
+            throws Exception {
+        Map<String, Double> zSetMap = Maps.newHashMap();
+        zSetMap.put("A", 15d);
+        zSetMap.put("B", 18d);
+        zSetMap.put("C", 15d);
+        zSetMap.put("D", 14d);
+        zSetMap.put("E", 22d);
+        zSetMap.put("F", 11d);
+        redisClient.zBatchAdd(TEST_Z_SET_KEY, zSetMap);
+        NormalUseForTestUtil.out(redisClient.zCard(TEST_Z_SET_KEY));
+        NormalUseForTestUtil.out(redisClient.zScore(TEST_Z_SET_KEY, "C"));
+        NormalUseForTestUtil.out(redisClient.zRank(TEST_Z_SET_KEY, "C"));
+        NormalUseForTestUtil.out(redisClient.zReverseRank(TEST_Z_SET_KEY, "B"));
+        NormalUseForTestUtil.out(CollectionUtil.show(redisClient.zRange(TEST_Z_SET_KEY, 2, 4)));
+        NormalUseForTestUtil.out(CollectionUtil.show(redisClient.zReverseRange(TEST_Z_SET_KEY, 2, 4)));
+        NormalUseForTestUtil.out(CollectionUtil.show(redisClient.zRangeByScore(TEST_Z_SET_KEY, 16d, 14d)));
     }
 
     /**
@@ -148,19 +203,21 @@ public class RedisTest {
         RedisProperties redisProperties = new RedisProperties()
                 .setIp("172.16.10.41")
                 .setPort(6381)
-                .setPwd("redishtjy1");
+                .setPwd("redishtjy1")
+                .setMaxSinglePipelineCmdNum(10000);
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(redisProperties.getMaxTotal());
         config.setMaxIdle(redisProperties.getMaxIdle());
         config.setMinIdle(redisProperties.getMinIdle());
         config.setMaxWaitMillis(redisProperties.getMaxWaitMillis());
+        config.setTestOnBorrow(redisProperties.isTestOnBorrow());
         config.setTestWhileIdle(redisProperties.isTestWhiledIdle());
         config.setNumTestsPerEvictionRun(redisProperties.getNumTestsPerEvictionRun());
         config.setTimeBetweenEvictionRunsMillis(redisProperties.getTimeBetweenEvictionRunsMillis());
         config.setMinEvictableIdleTimeMillis(redisProperties.getMinEvictableIdleTimeMillis());
         config.setSoftMinEvictableIdleTimeMillis(redisProperties.getSoftMinEvictableIdleTimeMillis());
         JedisPool jedisPool = new JedisPool(config, redisProperties.getIp(), redisProperties.getPort(), redisProperties.getMaxInitStartMillis(), redisProperties.getPwd());
-        return new JedisService(jedisPool, redisProperties.getRDbIndex());
+        return new JedisService(jedisPool, redisProperties.getRDbIndex(), redisProperties.getMaxSinglePipelineCmdNum());
     }
 
 }

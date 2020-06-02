@@ -1071,6 +1071,40 @@ public class JedisService {
     }
 
     /**
+     * 根据增序分数范围批量删除移除有序集合成员
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public Long zDeleteRangeByScore(String key, Double min, Double max) {
+        try (Jedis jedis = getAndSelectRDB()) {
+            return jedis.zremrangeByScore(key, Math.min(min, max), Math.max(min, max));
+        } catch (Exception e) {
+            log.error("根据增序分数范围批量删除移除有序集合成员失败, key=[{}], min=[{}], max=[{}], 原因: {}", key, min, max, e);
+            throw e;
+        }
+    }
+
+    /**
+     * 根据增序排名范围批量删除移除有序集合成员
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public Long zDeleteRangeByRank(String key, int min, int max) {
+        try (Jedis jedis = getAndSelectRDB()) {
+            return jedis.zremrangeByScore(key, Math.min(min, max), Math.max(min, max));
+        } catch (Exception e) {
+            log.error("根据增序排名范围批量删除移除有序集合成员失败, key=[{}], min=[{}], max=[{}], 原因: {}", key, min, max, e);
+            throw e;
+        }
+    }
+
+    /**
      * 检查过期时间, 为null代表永久, 然后是正整数
      *
      * @param expireTime
