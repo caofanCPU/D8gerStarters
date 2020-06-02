@@ -53,13 +53,35 @@ public final class D8gerConstants {
      */
     public static final String D8_REDIS_ENABLE = "spring.cloud.d8ger.redis.enable";
 
+    /**
+     * Mail开关, 默认true打开
+     */
+    public static final String D8_MAIL_ENABLE = "spring.cloud.d8ger.mail.enable";
+
+    /**
+     * RestTemplate属性配置前缀
+     */
     public static final String REST_TEMPLATE_PROPERTY_PREFIX = "spring.cloud.d8ger.rest-template";
 
+    /**
+     * Swagger属性配置前缀
+     */
     public static final String SWAGGER_PROPERTY_PREFIX = "spring.cloud.d8ger.swagger";
 
+    /**
+     * 业务线程池属性配置前缀
+     */
     public static final String BUSINESS_POOL_PROPERTY_PREFIX = "spring.cloud.d8ger.business-pool";
 
+    /**
+     * Redis属性配置前缀
+     */
     public static final String REDIS_PROPERTY_PREFIX = "spring.cloud.d8ger.redis";
+
+    /**
+     * Mail属性配置前缀
+     */
+    public static final String MAIL_PROPERTY_PREFIX = "spring.cloud.d8ger.mail";
 
     private D8gerConstants() {
         throw new AssertionError("Must not instantiate constant utility class");

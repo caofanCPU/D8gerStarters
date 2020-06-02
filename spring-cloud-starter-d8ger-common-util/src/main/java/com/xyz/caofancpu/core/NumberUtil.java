@@ -89,7 +89,7 @@ public class NumberUtil {
      * @param digit
      * @return
      */
-    public static Integer getInteger(int digit) {
+    public static Integer getRandomInteger(int digit) {
         if (digit >= 32) {
             digit = 31;
         }

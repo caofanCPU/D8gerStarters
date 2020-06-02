@@ -66,7 +66,6 @@ public class BusinessPoolProperties {
      */
     private RejectTaskPolicyEnum rejectTaskPolicy = RejectTaskPolicyEnum.CALLER_RUNS_POLICY;
 
-
     @AllArgsConstructor
     public enum RejectTaskPolicyEnum implements IEnum {
         CALLER_RUNS_POLICY(0, "使用调用者线程"),

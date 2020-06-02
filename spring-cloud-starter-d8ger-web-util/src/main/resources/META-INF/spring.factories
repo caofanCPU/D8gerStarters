@@ -2,4 +2,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.xyz.caofancpu.mvc.configuration.BusinessPoolConfiguration,\
 com.xyz.caofancpu.mvc.configuration.RestTemplateConfiguration,\
 com.xyz.caofancpu.mvc.configuration.StandardHTTPMessageConfiguration,\
-com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration
+com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration,\
+com.xyz.caofancpu.mvc.configuration.RedisConfiguration,\
+com.xyz.caofancpu.mvc.configuration.MailConfiguration
