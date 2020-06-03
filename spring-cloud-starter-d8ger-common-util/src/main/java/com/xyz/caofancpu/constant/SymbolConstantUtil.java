@@ -150,4 +150,10 @@ public class SymbolConstantUtil {
      */
     public static final String ERROR_SHOW = "✖";
 
+    /**
+     * 省略号
+     */
+    public static final String ELLIPSES = "...";
+
+
 }

@@ -18,8 +18,10 @@
 
 package com.xyz.caofancpu.logger;
 
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 /**
@@ -29,6 +31,21 @@ import org.slf4j.Logger;
  */
 public class LoggerUtil {
     private static final String LOGGER_FORMAT = "[{}]#[{}]#{}";
+
+    /**
+     * 字符串内容摘要长度阈值
+     */
+    public static final int SHORT_CONTENT_THRESHOLD_LENGTH = 500;
+
+    /**
+     * 字符串内容摘要
+     *
+     * @param content
+     * @return
+     */
+    public static String shortenLogContent(String content) {
+        return StringUtils.isNotBlank(content) || content.length() <= SHORT_CONTENT_THRESHOLD_LENGTH ? content.substring(0, SHORT_CONTENT_THRESHOLD_LENGTH) + SymbolConstantUtil.ELLIPSES : content;
+    }
 
     /**
      * ERROR日志记录

@@ -21,6 +21,7 @@ package com.xyz.caofancpu.mvc.standard;
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.annotation.WarnDoc;
 import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.property.MailProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -66,7 +67,7 @@ public class MailService {
     }
 
     /**
-     * 发送消息
+     * 发送邮件
      *
      * @param multiToEmailAddress 接收者邮箱地址
      * @param title               邮件主题
@@ -82,8 +83,9 @@ public class MailService {
             MimeMessage message = buildMessage(multiToEmailAddress, title, content, session);
             // 发送消息
             Transport.send(message);
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
+        } catch (MessagingException e) {
+            log.error("邮件发送失败, 接收人[{}], 主题[{}], 正文[{}]", CollectionUtil.show(multiToEmailAddress), title, LoggerUtil.shortenLogContent(content));
+            e.printStackTrace();
         }
     }
 
@@ -144,7 +146,7 @@ public class MailService {
         // 1.设置邮件服务器
         properties.put(SEND_HOST_KEY, mailProperties.getMailSendHost());
         // 2.开启ssl加密
-        properties.put(SSL_AUTH_KEY, mailProperties.isEnableSSL());
+        properties.put(SSL_AUTH_KEY, mailProperties.getEnableSSL());
         // 3.获取默认session对象
         return Session.getDefaultInstance(properties, new Authenticator() {
             // 3.1发件人邮件用户名、密码

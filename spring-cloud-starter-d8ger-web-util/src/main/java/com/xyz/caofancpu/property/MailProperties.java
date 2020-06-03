@@ -18,6 +18,7 @@
 
 package com.xyz.caofancpu.property;
 
+import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.Data;
@@ -48,7 +49,8 @@ public class MailProperties {
     /**
      * 开启SSL认证加密, 默认开启
      */
-    private boolean enableSSL = true;
+    @AttentionDoc("字符串的布尔值, 以兼容某些场景下报错503的问题")
+    private String enableSSL = "true";
 
     /**
      * 授权码(授权码, 一般不是真实密码)
