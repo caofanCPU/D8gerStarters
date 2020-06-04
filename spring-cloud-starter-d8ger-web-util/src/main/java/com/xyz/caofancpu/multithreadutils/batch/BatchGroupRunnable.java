@@ -22,11 +22,11 @@ package com.xyz.caofancpu.multithreadutils.batch;
 import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import com.xyz.caofancpu.logger.trace.ThreadUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,8 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author D8GER
  */
+@Slf4j
 public class BatchGroupRunnable implements Runnable {
-    private static final Logger LOG = LoggerFactory.getLogger(BatchGroupRunnable.class);
     private final AtomicInteger count;
     private final List<Runnable> runnableList;
     private final String threadTraceId;
@@ -106,13 +106,13 @@ public class BatchGroupRunnable implements Runnable {
 
     private void execute(BatchGroupRunnable batchGroupRunnable) {
         batchGroupRunnable.state = true;
-        if (batchGroupRunnable.onUpdateRate != null) {
+        if (Objects.nonNull(batchGroupRunnable.onUpdateRate)) {
             batchGroupRunnable.onUpdateRate.updateRate(batchGroupRunnable.runnableList.size(), 0);
         }
         for (Runnable runnable : batchGroupRunnable.runnableList) {
             if (runnable instanceof BatchGroupRunnable) {
                 BatchGroupRunnable childRunnable = (BatchGroupRunnable) runnable;
-                if (childRunnable.onSuccessCallback != null) {
+                if (Objects.nonNull(childRunnable.onSuccessCallback)) {
                     OnSuccessCallback callback = childRunnable.onSuccessCallback;
                     childRunnable.onSuccess(() -> {
                         callback.callback();
@@ -124,7 +124,7 @@ public class BatchGroupRunnable implements Runnable {
                 execute(childRunnable);
             } else {
                 ItemRunnable itemRunnable = batchGroupRunnable.new ItemRunnable(runnable);
-                if (this.pool == null) {
+                if (Objects.isNull(this.pool)) {
                     itemRunnable.run();
                 } else {
                     this.pool.execute(itemRunnable);
@@ -135,14 +135,14 @@ public class BatchGroupRunnable implements Runnable {
 
     public synchronized void countDown() {
         int activeNum = count.decrementAndGet();
-        if (onUpdateRate != null) {
+        if (Objects.nonNull(onUpdateRate)) {
             onUpdateRate.updateRate(runnableList.size(), runnableList.size() - activeNum);
         }
-        if (activeNum == 0 && onSuccessCallback != null) {
+        if (activeNum == 0 && Objects.nonNull(onSuccessCallback)) {
             try {
                 onSuccessCallback.callback();
             } catch (Exception e) {
-                LoggerUtil.error(LOG, "线程回调异常", e, "threadTraceId", threadTraceId);
+                LoggerUtil.error(log, "线程回调异常", e, "threadTraceId", threadTraceId);
             }
         }
     }

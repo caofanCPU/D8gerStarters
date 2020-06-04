@@ -59,6 +59,26 @@ public final class D8gerConstants {
     public static final String D8_MAIL_ENABLE = "spring.cloud.d8ger.mail.enable";
 
     /**
+     * MQ开关, 默认true打开
+     */
+    public static final String D8_MQ_ENABLE = "spring.cloud.d8ger.mq.enable";
+
+    /**
+     * MQ生产者开关, 默认true打开
+     */
+    public static final String D8_MQ_PRODUCER_ENABLE = "spring.cloud.d8ger.mq.producer.enable";
+
+    /**
+     * MQ生产者发送回调开关, 默认true打开
+     */
+    public static final String D8_MQ_PRODUCER_SEND_CALLBACK_ENABLE = "spring.cloud.d8ger.mq.producer.default-send-callback.enable";
+
+    /**
+     * MQ消费者开关, 默认true打开
+     */
+    public static final String D8_MQ_CONSUMER_ENABLE = "spring.cloud.d8ger.mq.consumer.enable";
+
+    /**
      * RestTemplate属性配置前缀
      */
     public static final String REST_TEMPLATE_PROPERTY_PREFIX = "spring.cloud.d8ger.rest-template";
@@ -82,6 +102,11 @@ public final class D8gerConstants {
      * Mail属性配置前缀
      */
     public static final String MAIL_PROPERTY_PREFIX = "spring.cloud.d8ger.mail";
+
+    /**
+     * MQ属性配置前缀
+     */
+    public static final String MQ_PROPERTY_PREFIX = "spring.cloud.d8ger.mq";
 
     private D8gerConstants() {
         throw new AssertionError("Must not instantiate constant utility class");

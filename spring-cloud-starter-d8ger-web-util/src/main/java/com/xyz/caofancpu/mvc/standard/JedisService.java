@@ -89,13 +89,10 @@ public class JedisService {
      * @param maxSinglePipelineCmdNum
      */
     public JedisService(@NonNull JedisPool jedisPool, int rDbIndex, int maxSinglePipelineCmdNum) {
-        if (rDbIndex > 0) {
-            this.rDbIndex = rDbIndex;
-        }
+        this(jedisPool, rDbIndex);
         if (maxSinglePipelineCmdNum > 0) {
             this.maxSinglePipelineCmdNum = maxSinglePipelineCmdNum;
         }
-        this.jedisPool = jedisPool;
     }
 
     //============================list操作========================//

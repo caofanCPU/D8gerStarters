@@ -16,28 +16,24 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu;
+package com.xyz.caofancpu.middleware.mq;
 
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
-import com.xyz.caofancpu.mvc.configuration.BusinessPoolConfiguration;
 import com.xyz.caofancpu.mvc.configuration.MQConfiguration;
-import com.xyz.caofancpu.mvc.configuration.MailConfiguration;
-import com.xyz.caofancpu.mvc.configuration.RedisConfiguration;
-import com.xyz.caofancpu.mvc.configuration.RestTemplateConfiguration;
-import com.xyz.caofancpu.mvc.configuration.StandardHTTPMessageConfiguration;
-import com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration;
-import com.xyz.caofancpu.mvc.standard.JedisService;
+import com.xyz.caofancpu.mvc.standard.mq.D8BaseMessage;
 import com.xyz.caofancpu.mvc.standard.mq.D8BaseProducer;
-import com.xyz.caofancpu.remote.DemoHttpRemoteInvoker;
-import com.xyz.caofancpu.remote.DemoRemoteReq;
-import com.xyz.caofancpu.remote.DemoRemoteRespBody;
-import com.xyz.caofancpu.result.GlobalErrorInfoException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
@@ -46,6 +42,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 
 /**
  * 启动测试类
@@ -53,21 +50,10 @@ import javax.annotation.Resource;
  * @author D8GER
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {D8gerWebApplicationTest.TestConfig.class},
-        properties = {
-                "spring.cloud.d8ger.redis.ip=172.16.10.41",
-                "spring.cloud.d8ger.redis.port=6381",
-                "spring.cloud.d8ger.redis.pwd=redishtjy1",
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-public class D8gerWebApplicationTest {
-
-    @Resource
-    private DemoHttpRemoteInvoker demoHttpRemoteInvoker;
-
-    @Resource
-    private JedisService jedisService;
+@SpringBootApplication
+@SpringBootTest(classes = {D8gerWebApplicationMQTest.TestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Slf4j
+public class D8gerWebApplicationMQTest {
 
     @Resource
     private D8BaseProducer mqProducer;
@@ -83,21 +69,23 @@ public class D8gerWebApplicationTest {
     }
 
     @Test
-    public void testRemoteInvoke()
-            throws GlobalErrorInfoException {
-        DemoRemoteReq remoteReq = new DemoRemoteReq().setVideoId(59002451L);
-        DemoRemoteRespBody body = demoHttpRemoteInvoker.execute(remoteReq);
-        NormalUseForTestUtil.out(body);
+    public void testSendMQ() {
+        @SuppressWarnings("unchecked")
+        D8BaseMessage d8BaseMessage = new D8BaseMessage()
+                .setTopic("D8TOPIC")
+                .setTag("D8TAG")
+                .setKey("USER-D8GER")
+                .setData(new JSONX("name", "帝八哥"));
+        mqProducer.sendMsgAsyn(d8BaseMessage);
     }
 
-    @Test
-    public void testRedis() {
-        NormalUseForTestUtil.out(jedisService.info());
-    }
-
-    @Test
-    public void testMQ() {
-        NormalUseForTestUtil.out(mqProducer);
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Accessors(chain = true)
+    public static class JSONX implements Serializable {
+        private String key;
+        private String value;
     }
 
     /**
@@ -110,18 +98,12 @@ public class D8gerWebApplicationTest {
             HibernateJpaAutoConfiguration.class
     })
     @ImportAutoConfiguration({
-            BusinessPoolConfiguration.class,
-            RestTemplateConfiguration.class,
-            StandardHTTPMessageConfiguration.class,
-            SwaggerConfiguration.class,
-            DemoHttpRemoteInvoker.class,
-            RedisConfiguration.class,
-            MailConfiguration.class,
-            MQConfiguration.class
+            MQConfiguration.class,
+            D8MQConcurrentlyListener.class,
+            MQConsumerConfiguration.class
     })
     public static class TestConfig {
 
     }
-
 
 }

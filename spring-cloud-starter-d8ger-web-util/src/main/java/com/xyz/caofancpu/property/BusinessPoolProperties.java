@@ -79,12 +79,12 @@ public class BusinessPoolProperties {
 
         @Override
         public Integer getValue() {
-            return null;
+            return this.value;
         }
 
         @Override
         public String getName() {
-            return null;
+            return this.name;
         }
     }
 

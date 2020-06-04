@@ -171,7 +171,7 @@ public class JSONUtil {
      * @param clazz
      * @return
      */
-    public static Object deserializeJSON(String jsonStr, Class<? extends Serializable> clazz) {
+    public static <T extends Serializable> T deserializeJSON(String jsonStr, Class<T> clazz) {
         return JSONObject.parseObject(jsonStr, clazz);
     }
 
@@ -183,7 +183,7 @@ public class JSONUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Serializable> T deepCloneBySerialization(T t) {
-        return (T) deserializeJSON(serializeJSON(t), t.getClass());
+        return deserializeJSON(serializeJSON(t), (Class<T>) t.getClass());
     }
 
     /**

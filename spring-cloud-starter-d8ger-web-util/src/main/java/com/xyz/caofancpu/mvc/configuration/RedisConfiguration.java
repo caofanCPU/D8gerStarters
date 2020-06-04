@@ -18,6 +18,7 @@
 
 package com.xyz.caofancpu.mvc.configuration;
 
+import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.mvc.standard.JedisService;
 import com.xyz.caofancpu.property.RedisProperties;
@@ -60,6 +61,7 @@ public class RedisConfiguration {
     @Bean(name = "jedisPool")
     @ConditionalOnProperty(name = D8gerConstants.D8_REDIS_ENABLE, matchIfMissing = true)
     @ConditionalOnMissingBean(value = JedisPool.class)
+    @AttentionDoc("当容器中不存在JedisPool才执行创建")
     public JedisPool jedisPool() {
         log.info("D8GER....执行Redis连接池初始化");
         JedisPoolConfig config = new JedisPoolConfig();

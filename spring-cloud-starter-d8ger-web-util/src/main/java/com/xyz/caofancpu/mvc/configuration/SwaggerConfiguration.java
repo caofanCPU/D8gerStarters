@@ -20,10 +20,12 @@ package com.xyz.caofancpu.mvc.configuration;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableSwaggerBootstrapUi;
 import com.google.common.collect.Lists;
+import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.property.SwaggerProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -62,8 +64,15 @@ public class SwaggerConfiguration {
     @Resource
     private SwaggerProperties swaggerProperties;
 
+    /**
+     * 创建Swagger
+     *
+     * @return
+     */
     @Bean(name = "swaggerDocket")
     @ConditionalOnProperty(name = D8gerConstants.D8_SWAGGER_ENABLE, matchIfMissing = true)
+    @ConditionalOnMissingBean(value = Docket.class)
+    @AttentionDoc("当容器中不存在Docket才执行创建")
     public Docket swaggerDocket() {
         log.info("D8GER....执行SwaggerApi初始化");
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
@@ -78,6 +87,11 @@ public class SwaggerConfiguration {
         return docket;
     }
 
+    /**
+     * 文档主页信息
+     *
+     * @return
+     */
     private ApiInfo apiInfo() {
         SwaggerProperties.D8Project project = swaggerProperties.getProject();
         return new ApiInfoBuilder()
@@ -88,6 +102,11 @@ public class SwaggerConfiguration {
                 .build();
     }
 
+    /**
+     * 统一设置请求头
+     *
+     * @return
+     */
     private List<Parameter> setDefaultHeaderParameter() {
         if (!swaggerProperties.isShowApi() || CollectionUtil.isEmpty(swaggerProperties.getHeaderParameters())) {
             return Lists.newArrayList();

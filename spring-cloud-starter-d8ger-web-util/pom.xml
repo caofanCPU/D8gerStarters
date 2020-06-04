@@ -105,6 +105,11 @@
             <artifactId>jedis</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+        </dependency>
+
         <!--自动装配-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
