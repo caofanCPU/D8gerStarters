@@ -18,6 +18,7 @@
 
 package com.xyz.caofancpu;
 
+import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import com.xyz.caofancpu.mvc.configuration.BusinessPoolConfiguration;
 import com.xyz.caofancpu.mvc.configuration.MQConfiguration;
@@ -29,8 +30,8 @@ import com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration;
 import com.xyz.caofancpu.mvc.standard.JedisService;
 import com.xyz.caofancpu.mvc.standard.mq.D8BaseProducer;
 import com.xyz.caofancpu.remote.DemoHttpRemoteInvoker;
-import com.xyz.caofancpu.remote.DemoRemoteReq;
-import com.xyz.caofancpu.remote.DemoRemoteRespBody;
+import com.xyz.caofancpu.remote.SSOLoginReq;
+import com.xyz.caofancpu.remote.SSOLoginRespBody;
 import com.xyz.caofancpu.result.GlobalErrorInfoException;
 import org.junit.After;
 import org.junit.Before;
@@ -43,6 +44,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
@@ -85,9 +87,13 @@ public class D8gerWebApplicationTest {
     @Test
     public void testRemoteInvoke()
             throws GlobalErrorInfoException {
-        DemoRemoteReq remoteReq = new DemoRemoteReq().setVideoId(59002451L);
-        DemoRemoteRespBody body = demoHttpRemoteInvoker.execute(remoteReq);
-        NormalUseForTestUtil.out(body);
+        // 密码登录超管账号
+        SSOLoginReq req = new SSOLoginReq().setPhone("13720203891").setPwd("ht123456.").setLoginType(0);
+        // 登录需要特殊的请求头, 指明从哪个应用登录
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("HT-app", "3");
+        SSOLoginRespBody body = demoHttpRemoteInvoker.execute(req, httpHeaders);
+        NormalUseForTestUtil.out("测试结果: \n" + JSONUtil.formatStandardJSON(body));
     }
 
     @Test

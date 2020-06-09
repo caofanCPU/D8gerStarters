@@ -35,7 +35,6 @@ import java.io.Serializable;
 @Data
 @Accessors(chain = true)
 public class D8Response<T> implements Serializable {
-
     @ApiModelProperty(value = "状态码", example = "200", position = 1)
     private String code;
     @ApiModelProperty(value = "报错信息", example = "请求参数错误", position = 2)

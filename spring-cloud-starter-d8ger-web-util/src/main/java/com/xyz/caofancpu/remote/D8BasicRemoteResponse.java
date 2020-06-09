@@ -19,12 +19,14 @@
 package com.xyz.caofancpu.remote;
 
 import com.xyz.caofancpu.result.D8Response;
+import lombok.Data;
 
 /**
  * 远程调用响应基类
  *
  * @author D8GER
  */
+@Data
 public class D8BasicRemoteResponse<T> extends D8Response<T> {
 
 }

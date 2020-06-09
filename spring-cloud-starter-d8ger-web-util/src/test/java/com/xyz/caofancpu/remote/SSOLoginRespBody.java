@@ -21,17 +21,29 @@ package com.xyz.caofancpu.remote;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
- * @author D8GER
+ * @author ht-caofan
  */
 @Data
 @Accessors(chain = true)
-public class DemoRemoteReq extends AbstractD8BasicRemoteRequest<DemoRemoteRespBody> {
+public class SSOLoginRespBody implements Serializable {
+    /**
+     * 主账号令牌
+     */
+    private String refreshToken;
+    /**
+     * 访问子系统应用码
+     */
+    private int accessAppCode;
+    /**
+     * 子系统访问令牌
+     */
+    private String accessToken;
+    /**
+     * 是否更新子系统访问令牌
+     */
+    private boolean updateAccessToken;
 
-    private Long videoId;
-
-    @Override
-    public String getAccessUri() {
-        return DemoHttpRemoteInvoker.RUOK;
-    }
 }

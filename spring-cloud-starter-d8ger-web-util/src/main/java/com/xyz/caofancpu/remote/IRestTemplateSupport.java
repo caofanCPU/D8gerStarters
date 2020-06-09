@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * HTTP远程过程调用接口
@@ -60,6 +61,14 @@ public interface IRestTemplateSupport {
 
     default HttpEntity<Map<String, Object>> loadHttpEntity(@NonNull AbstractD8BasicRemoteRequest<?> req) {
         HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        return new HttpEntity<>(HttpStaticHandleUtil.extractNonNullParam(req), httpHeaders);
+    }
+
+    default HttpEntity<Map<String, Object>> loadCustomHttpEntity(@NonNull AbstractD8BasicRemoteRequest<?> req, HttpHeaders httpHeaders) {
+        if (Objects.isNull(httpHeaders)) {
+            httpHeaders = new HttpHeaders();
+        }
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         return new HttpEntity<>(HttpStaticHandleUtil.extractNonNullParam(req), httpHeaders);
     }

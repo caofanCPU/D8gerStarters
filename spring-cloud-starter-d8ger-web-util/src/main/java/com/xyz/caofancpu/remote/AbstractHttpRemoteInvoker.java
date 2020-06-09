@@ -66,7 +66,21 @@ public abstract class AbstractHttpRemoteInvoker implements IRestTemplateSupport 
      */
     public <T> T execute(AbstractD8BasicRemoteRequest<T> req)
             throws GlobalErrorInfoException {
-        return doHttp(loadCompleteAccessUrl(req), loadHttpEntity(req), HttpMethod.POST, req.getRemoteResponseType());
+        return execute(req, new HttpHeaders());
+    }
+
+    /**
+     * 最常用的请求, 支持个性化Header参数
+     * POST传Body
+     *
+     * @param req
+     * @param customHttpHeader
+     * @return
+     * @throws GlobalErrorInfoException
+     */
+    public <T> T execute(AbstractD8BasicRemoteRequest<T> req, HttpHeaders customHttpHeader)
+            throws GlobalErrorInfoException {
+        return doHttp(loadCompleteAccessUrl(req), loadCustomHttpEntity(req, customHttpHeader), HttpMethod.POST, req.getRemoteResponseType());
     }
 
     /**
@@ -127,7 +141,7 @@ public abstract class AbstractHttpRemoteInvoker implements IRestTemplateSupport 
         if (Objects.isNull(response)) {
             throw new GlobalErrorInfoException("远程调用出错[空]");
         }
-        if (isSuccess(response.getCode())) {
+        if (!isSuccess(response.getCode())) {
             throw new GlobalErrorInfoException(String.format("远程调用出错:%s", response.getMsg()));
         }
         return response.getData();

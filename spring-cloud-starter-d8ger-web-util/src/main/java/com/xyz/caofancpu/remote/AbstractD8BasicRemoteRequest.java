@@ -35,14 +35,10 @@ public abstract class AbstractD8BasicRemoteRequest<T> {
     public abstract String getAccessUri();
 
     /**
-     * 获取响应Type类型
+     * 获取响应Type类型, 交由子类个性化
      *
      * @return
      */
-    public ParameterizedTypeReference<D8BasicRemoteResponse<T>> getRemoteResponseType() {
-        return new ParameterizedTypeReference<D8BasicRemoteResponse<T>>() {
-        };
-    }
-
+    public abstract ParameterizedTypeReference<D8BasicRemoteResponse<T>> getRemoteResponseType();
 
 }

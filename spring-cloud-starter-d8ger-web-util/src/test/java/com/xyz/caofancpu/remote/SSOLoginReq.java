@@ -18,29 +18,30 @@
 
 package com.xyz.caofancpu.remote;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.Resource;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import org.springframework.core.ParameterizedTypeReference;
 
 /**
- * @author D8GER
+ * @author ht-caofan
  */
-@Component
-public class DemoHttpRemoteInvoker extends AbstractHttpRemoteInvoker {
+@Data
+@Accessors(chain = true)
+public class SSOLoginReq extends AbstractD8BasicRemoteRequest<SSOLoginRespBody> {
 
-    public static final String APP_LOGIN_URL = "/api/wireless/login";
-
-    @Resource
-    private RestTemplate restTemplate;
+    private String phone;
+    private String pwd;
+    private Integer loginType;
 
     @Override
-    public RestTemplate loadRestTemplate() {
-        return restTemplate;
+    public String getAccessUri() {
+        return DemoHttpRemoteInvoker.APP_LOGIN_URL;
     }
 
     @Override
-    public String loadDomain() {
-        return "https://sso.testa.huitong.com";
+    public ParameterizedTypeReference<D8BasicRemoteResponse<SSOLoginRespBody>> getRemoteResponseType() {
+        return new ParameterizedTypeReference<D8BasicRemoteResponse<SSOLoginRespBody>>() {
+        };
     }
+
 }

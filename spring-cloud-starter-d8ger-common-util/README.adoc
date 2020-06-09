@@ -1,0 +1,51 @@
+== 公共业务层工具类导航🌐
+
+- 高频核心工具
+- 集合利器, CollectionUtil
+- 时间刺客, DateUtil
+- 数值影流, NumberUtil
+- 万年树妖, WrapTreeUtil
+- 辅助工具
+- 正则天地新会所, VerbalExpressionUtil
+- 极限对齐字符串, StringAlignUtil
+- 特斯拉御用杰森, JSONUtil
+- 迈巴赫符号法典, SymbolConstantUtil
+- 弗雷尔枚举之根, IEnum
+- 友好式文档注解, AttentionDoc, ImportDoc, WarnDoc
+- 算法工具
+- 罗伯特•塔扬(Robert•Tarjan)-强连通算法, TarjanSSC, 鉴环算法
+
+==== Sentinel控制台
+
+* 版本``1.7.2``
+
+===== 版本及依赖
+
+.1.版本信息
+[source,xml]
+----
+<properties>
+    <springboot.version>2.1.2.RELEASE</springboot.version>
+    <!-- 接入sentinel版本 -->
+    <sentinel.version>1.7.1</sentinel.version>
+    <!-- sentinel-start版本 -->
+    <alibaba-sentinel-starter.version>2.2.1.RELEASE</alibaba-sentinel-starter.version>
+    <!-- nacos版本 -->
+    <nacos-config-spring-boot.version>0.2.7</nacos-config-spring-boot.version>
+</properties>
+----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
