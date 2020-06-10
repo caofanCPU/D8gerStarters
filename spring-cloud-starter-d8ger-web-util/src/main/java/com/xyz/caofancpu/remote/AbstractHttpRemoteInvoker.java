@@ -18,6 +18,8 @@
 
 package com.xyz.caofancpu.remote;
 
+import com.xyz.caofancpu.core.JSONUtil;
+import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import com.xyz.caofancpu.mvc.common.HttpStaticHandleUtil;
 import com.xyz.caofancpu.result.GlobalErrorInfoException;
 import lombok.extern.slf4j.Slf4j;
@@ -131,19 +133,24 @@ public abstract class AbstractHttpRemoteInvoker implements IRestTemplateSupport 
         D8BasicRemoteResponse<T> response;
         RestTemplate restTemplate = loadRestTemplate();
         try {
-            log.info("远程调用开始");
+            ThreadTraceUtil.beginTrace();
+            log.info("远程调用开始, 接口[{}], BODY参数[{}]", completeAccessUrl, JSONUtil.toJSONStringWithDateFormatAndEnumToString(entity.getBody()));
             response = restTemplate.exchange(completeAccessUrl, method, entity, typeReference).getBody();
             log.info("远程调用结束");
         } catch (Throwable t) {
             log.error("远程调用异常", t);
+            ThreadTraceUtil.endTrace();
             throw new GlobalErrorInfoException("远程调用异常");
         }
         if (Objects.isNull(response)) {
+            ThreadTraceUtil.endTrace();
             throw new GlobalErrorInfoException("远程调用出错[空]");
         }
         if (!isSuccess(response.getCode())) {
+            ThreadTraceUtil.endTrace();
             throw new GlobalErrorInfoException(String.format("远程调用出错:%s", response.getMsg()));
         }
+        log.info("远程调用OK, 响应BODY数据[{}]", JSONUtil.toJSONStringWithDateFormatAndEnumToString(response.getData()));
         return response.getData();
     }
 

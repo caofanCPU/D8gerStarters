@@ -20,7 +20,6 @@ package com.xyz.caofancpu.remote;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.core.ParameterizedTypeReference;
 
 /**
  * @author ht-caofan
@@ -38,10 +37,10 @@ public class SSOLoginReq extends AbstractD8BasicRemoteRequest<SSOLoginRespBody> 
         return DemoHttpRemoteInvoker.APP_LOGIN_URL;
     }
 
-    @Override
-    public ParameterizedTypeReference<D8BasicRemoteResponse<SSOLoginRespBody>> getRemoteResponseType() {
-        return new ParameterizedTypeReference<D8BasicRemoteResponse<SSOLoginRespBody>>() {
-        };
-    }
+//    @Override
+//    public ParameterizedTypeReference<D8BasicRemoteResponse<SSOLoginRespBody>> getRemoteResponseType() {
+//        return new ParameterizedTypeReference<D8BasicRemoteResponse<SSOLoginRespBody>>() {
+//        };
+//    }
 
 }
