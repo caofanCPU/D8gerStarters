@@ -327,7 +327,7 @@ public class CollectionUtil extends CollectionUtils {
         if (isEmpty(kvMap)) {
             return SymbolConstantUtil.EMPTY;
         }
-        List<String> entryShowList = CollectionUtil.transToList(
+        List<String> entryShowList = transToList(
                 kvMap.entrySet(),
                 entry -> SymbolConstantUtil.LESS_THEN
                         + entry.getKey().toString()
@@ -1209,7 +1209,7 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static Map<String, Object> removeNullElement(Map<String, Object> paramsMap) {
-        if (CollectionUtil.isEmpty(paramsMap)) {
+        if (isEmpty(paramsMap)) {
             return paramsMap;
         }
         /** 一般请求参数不会太多，故而使用单向顺序流即可 */
@@ -1227,7 +1227,7 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static Map<String, Object> removeSpecifiedElement(Map<String, Object> paramsMap, Class<?>[] clazzArray) {
-        if (CollectionUtil.isEmpty(paramsMap) || CollectionUtil.isEmpty(clazzArray)) {
+        if (isEmpty(paramsMap) || isEmpty(clazzArray)) {
             return paramsMap;
         }
         Map<String, Object> resultMap = new HashMap<>();
@@ -1255,7 +1255,7 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static Object[] removeSpecifiedElement(Object[] paramArray, Class<?>[] clazzArray) {
-        if (ArrayUtils.isEmpty(paramArray) || CollectionUtil.isEmpty(clazzArray)) {
+        if (ArrayUtils.isEmpty(paramArray) || isEmpty(clazzArray)) {
             return paramArray;
         }
         List<Object> resultList = new ArrayList<>(paramArray.length);
