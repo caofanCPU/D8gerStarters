@@ -18,12 +18,16 @@
 
 package com.xyz.caofancpu.mvc.configuration;
 
+import com.fasterxml.classmate.ResolvedType;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableSwaggerBootstrapUi;
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.D8gerConstants;
+import com.xyz.caofancpu.constant.IEnum;
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.property.SwaggerProperties;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,21 +35,31 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ModelPropertyBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.Annotations;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.schema.ApiModelProperties;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Swagger配置
@@ -87,6 +101,12 @@ public class SwaggerConfiguration {
         return docket;
     }
 
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE + 98)
+    public ModelPropertyBuilderPlugin builderPlugin() {
+        return new Swagger2ModelPropertyPlugin();
+    }
+
     /**
      * 文档主页信息
      *
@@ -121,6 +141,53 @@ public class SwaggerConfiguration {
                         .required(headerParameter.isRequired())
                         .build()
         );
+    }
+
+    /**
+     * Swagger2枚举类对象属性解析插件
+     *
+     * @author ht-caofan
+     */
+    private static class Swagger2ModelPropertyPlugin implements ModelPropertyBuilderPlugin {
+        /**
+         * 字段描述名称标识KEY
+         */
+        private static final String MODEL_DESCRIPTION_KEY = "description";
+
+        @Override
+        public void apply(ModelPropertyContext context) {
+            Optional<ApiModelProperty> annotation = Optional.empty();
+
+            if (context.getAnnotatedElement().isPresent()) {
+                annotation = Optional.of(annotation.orElseGet(ApiModelProperties.findApiModePropertyAnnotation(context.getAnnotatedElement().get())::get));
+            }
+            if (context.getBeanPropertyDefinition().isPresent()) {
+                annotation = Optional.of(annotation.orElseGet(Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), ApiModelProperty.class)::get));
+            }
+            final Class<?> rawPrimaryType = context.getBeanPropertyDefinition().get().getRawPrimaryType();
+            // 过滤得到目标类型
+            if (annotation.isPresent() && IEnum.class.isAssignableFrom(rawPrimaryType)) {
+                List<String> displayValueList = CollectionUtil.transToList(Arrays.asList(rawPrimaryType.getEnumConstants()), item -> {
+                    IEnum iEnum = (IEnum) item;
+                    return iEnum.getValue() + SymbolConstantUtil.ENGLISH_COLON + iEnum.getName();
+                });
+                String enumDescription = SymbolConstantUtil.SPACE + SymbolConstantUtil.ENGLISH_LEFT_BRACKET + String.join("; ", displayValueList) + SymbolConstantUtil.ENGLISH_RIGHT_BRACKET;
+                try {
+                    Field mField = ModelPropertyBuilder.class.getDeclaredField(MODEL_DESCRIPTION_KEY);
+                    mField.setAccessible(true);
+                    enumDescription = mField.get(context.getBuilder()) + enumDescription;
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+                final ResolvedType resolvedType = context.getResolver().resolve(int.class);
+                context.getBuilder().description(enumDescription).type(resolvedType);
+            }
+        }
+
+        @Override
+        public boolean supports(DocumentationType documentationType) {
+            return true;
+        }
     }
 
 }

@@ -96,6 +96,16 @@ public class SymbolConstantUtil {
     public static final String CHINESE_RIGHT_BRACKET = "）";
 
     /**
+     * 英文左括号
+     */
+    public static final String ENGLISH_LEFT_BRACKET = "(";
+
+    /**
+     * 英文右括号
+     */
+    public static final String ENGLISH_RIGHT_BRACKET = ")";
+
+    /**
      * 英文分号
      */
     public static final String ENGLISH_SEMICOLON = ";";
