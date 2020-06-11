@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
  *
  * @author D8GER
  */
+@Deprecated
 public class GeneratorSwaggerModelUtil {
 
     @SuppressWarnings("unchecked")

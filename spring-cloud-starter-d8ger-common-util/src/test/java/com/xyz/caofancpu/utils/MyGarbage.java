@@ -22,6 +22,7 @@ package com.xyz.caofancpu.utils;
  * FileName: MyGarbage
  */
 
+@Deprecated
 public class MyGarbage {
 
     public static void main(String[] args) {

@@ -83,6 +83,7 @@
         <swagger-model.version>1.5.21</swagger-model.version>
         <knife4j-spring-boot-starter.version>1.9.6</knife4j-spring-boot-starter.version>
         <pagehelper.version>1.2.12</pagehelper.version>
+        <junit.version>4.13</junit.version>
 
     </properties>
 
@@ -631,6 +632,15 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
             </dependency>
+
+            <!-- Junit单元测试 https://mvnrepository.com/artifact/junit/junit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

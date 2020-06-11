@@ -23,6 +23,8 @@ import com.xyz.caofancpu.core.FileUtil;
 import com.xyz.caofancpu.core.VerbalExpressionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import ru.lanwen.verbalregex.VerbalExpression;
 
 import java.util.ArrayList;
@@ -36,7 +38,9 @@ import java.util.stream.Collectors;
  *
  * @author D8GER
  */
+@RunWith(JUnit4.class)
 @Slf4j
+@Deprecated
 public class BeautySQLStringUtil {
 
     public static final String FILE_BASE_PATH = "/Users/htuser-085/Desktop/CAOFAN/IDEA-WORK/DebuggerBoot/DebuggerKingUtil/src/main/java/com/xyz/caofancpu/util/dataoperateutils/SQLString";

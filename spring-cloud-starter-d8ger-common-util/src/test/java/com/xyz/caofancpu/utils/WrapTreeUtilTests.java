@@ -26,6 +26,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -37,13 +42,21 @@ import java.util.function.Function;
  *
  * @author D8GER
  */
+@RunWith(JUnit4.class)
 public class WrapTreeUtilTests {
 
-    public static void main(String[] args) {
-        testInitOriginTreeByPid();
+    @Before
+    public void before() {
+        NormalUseForTestUtil.out("---------测试前---------");
     }
 
-    public static void testExpandSubTreeElements() {
+    @After
+    public void after() {
+        NormalUseForTestUtil.out("---------测试后---------");
+    }
+
+    @Test
+    public void testExpandSubTreeElements() {
         List<Area> nonNestedList = buildAreaList();
         List<Area> resultNonNestedList = WrapTreeUtil.expandSubTreeElements(nonNestedList, 10, Area::getPid, Area::getId, Area::setChildren, Area::getChildren, Function.identity(), Area::getSortNo);
         NormalUseForTestUtil.out("子树平铺结果\n" + JSONUtil.formatStandardJSON(resultNonNestedList));
@@ -53,45 +66,52 @@ public class WrapTreeUtilTests {
      * 使用情况: 在一些第三方接口中返回的字段用'_'而非驼峰, 因而产生树[Area]转换为树[Area]的需求
      * 根据pid装换树
      */
-    public static void testInitTreeByPid() {
+    @Test
+    public void testInitTreeByPid() {
         List<Area> areaList = buildAreaNestedList();
         List<Area> nonNestedList = WrapTreeUtil.expandNonNestedTreeList(areaList, Area::getPid, Area::getId, Area::setChildren, Area::getChildren, Function.identity(), Area::getSortNo);
         List<Area> resultTreeList = WrapTreeUtil.initOriginTreeByPid(nonNestedList, Area::getPid, Area::getId, Area::setChildren, Area::getSortNo);
         NormalUseForTestUtil.out("转换树\n" + JSONUtil.formatStandardJSON(resultTreeList));
     }
 
-    public static void testInitOriginTreeByPid() {
+    @Test
+    public void testInitOriginTreeByPid() {
         List<Area> nonNestedList = buildAreaList();
         List<Area> originTreeList = WrapTreeUtil.initOriginTreeByPid(nonNestedList, Area::getPid, Area::getId, Area::setChildren, Area::getSortNo);
         NormalUseForTestUtil.out("转换原始元素树\n" + JSONUtil.formatStandardJSON(originTreeList));
     }
 
-    public static void testCutTreeElementByDepth() {
+    @Test
+    public void testCutTreeElementByDepth() {
         List<Area> areaList = buildAreaNestedList();
         List<Area> resultList = WrapTreeUtil.cutTreeElementByDepth(areaList, 3, Area::getChildren, Area::getDepth);
         NormalUseForTestUtil.out("嵌套列表树按照深度裁剪结果\n" + JSONUtil.formatStandardJSON(resultList));
     }
 
-    public static void testSelectTreeLeafElements() {
+    @Test
+    public void testSelectTreeLeafElements() {
         List<Area> areaList = buildAreaNestedList();
         List<Area> resultList = WrapTreeUtil.selectRelativeTreeLeafByDepth(areaList, 2, Area::getChildren, Area::getDepth, Function.identity());
         NormalUseForTestUtil.out("嵌套列表树按照深度选择相对叶子节点及其父节点结果\n" + JSONUtil.formatStandardJSON(resultList));
     }
 
-    public static void testPureSelectTreeLeafElements() {
+    @Test
+    public void testPureSelectTreeLeafElements() {
         List<Area> areaList = buildAreaNestedList();
         List<Area> resultList = WrapTreeUtil.pureSelectRelativeTreeLeafByDepth(areaList, 1, Area::getPid, Area::getId, Area::setChildren, Area::getChildren, Area::getDepth, Function.identity(), Area::getSortNo);
         NormalUseForTestUtil.out("嵌套列表树按照深度选择相对叶子节点及其父节点(叶子节点子集置空)结果\n" + JSONUtil.formatStandardJSON(resultList));
         int a = 1;
     }
 
-    public static void testExpandTreeElements() {
+    @Test
+    public void testExpandTreeElements() {
         List<Area> areaList = buildAreaList();
         List<Area> resultList = WrapTreeUtil.expandNonNestedTreeList(areaList, Area::getPid, Area::getId, Area::setChildren, Area::getChildren, Function.identity(), Area::getSortNo);
         NormalUseForTestUtil.out("平铺列表树平铺结果\n" + JSONUtil.formatStandardJSON(resultList));
     }
 
-    public static void testCollectTreeLeafElements() {
+    @Test
+    public void testCollectTreeLeafElements() {
         List<Area> areaList = buildAreaList();
         List<Area> resultList = WrapTreeUtil.collectRelativeTreeLeafElements(areaList, 1, Area::getPid, Area::getId, Area::setChildren, Area::getChildren, Area::getDepth, Function.identity(), Area::getSortNo);
         NormalUseForTestUtil.out("平铺列表树按照深度选择相对叶子节点及其父节点结果结果\n" + JSONUtil.formatStandardJSON(resultList));

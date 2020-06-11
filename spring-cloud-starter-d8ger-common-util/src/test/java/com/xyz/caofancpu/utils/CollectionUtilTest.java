@@ -25,6 +25,11 @@ import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -59,13 +64,52 @@ import java.util.stream.IntStream;
  *
  * @author D8GER
  */
+@RunWith(JUnit4.class)
 public class CollectionUtilTest {
 
-    public static void main(String[] args) {
-        testSortMap();
+    @Before
+    public void before() {
+        NormalUseForTestUtil.out("---------测试前---------");
     }
 
-    public static void testTopK() {
+    @After
+    public void after() {
+        NormalUseForTestUtil.out("---------测试后---------");
+    }
+
+    @Test
+    public void testMapBasic() {
+        // Map.merge, 可以指定函数对结果进行合并, 当值为null时则清除
+        Map<String, List<Integer>> map = new HashMap<>();
+        map.merge("A", Lists.newArrayList(1, 2, 3), (oldList, newList) -> {
+            oldList.addAll(newList);
+            return oldList;
+        });
+        NormalUseForTestUtil.out(CollectionUtil.showMap(map));
+        map.merge("A", Lists.newArrayList(4, 5, 6), (oldList, newList) -> {
+            oldList.addAll(newList);
+            return oldList;
+        });
+        NormalUseForTestUtil.out(CollectionUtil.showMap(map));
+
+        // Map.compute|computeIfAbsent|computeIfPresent, 根据指定函数赋值, 当值为null时则清除
+        map.computeIfAbsent("B", init -> Lists.newArrayList()).addAll(Lists.newArrayList(20, 21));
+        map.computeIfAbsent("B", init -> Lists.newArrayList()).add(22);
+        NormalUseForTestUtil.out(CollectionUtil.showMap(map));
+        map.computeIfPresent("B", (k, vList) -> {
+            vList.add(222);
+            return vList;
+        });
+        NormalUseForTestUtil.out(CollectionUtil.showMap(map));
+
+        map.compute("B", (k, vList) -> null);
+        NormalUseForTestUtil.out(CollectionUtil.showMap(map));
+        map.compute("B", (k, vList) -> Lists.newArrayList(5, 2, 0));
+        NormalUseForTestUtil.out(CollectionUtil.showMap(map));
+    }
+
+    @Test
+    public void testTopK() {
         Integer[] nums = IntStream.rangeClosed(1, 9).boxed().toArray(Integer[]::new);
         ArrayUtils.shuffle(nums);
 
@@ -77,7 +121,8 @@ public class CollectionUtilTest {
         NormalUseForTestUtil.out("剔除前5个元素后剩余元素: " + Arrays.toString(removeTop5.toArray()));
     }
 
-    public static void testSortMap() {
+    @Test
+    public void testSortMap() {
         Map<Integer, Integer> kvMap = new HashMap<>(8, 0.75f);
         kvMap.put(11, 9);
         kvMap.put(4, 6);
@@ -103,20 +148,23 @@ public class CollectionUtilTest {
         keySubtractValueDescOrderResultMap.forEach((k, v) -> NormalUseForTestUtil.out("<" + k + ", " + v + ">"));
     }
 
-    public static void testFilterAndTransArray() {
+    @Test
+    public void testFilterAndTransArray() {
         List<TestExamData> sourceList = loadTestExamDatas();
         String[] resultArray = CollectionUtil.filterAndTransArray(sourceList, item -> item.getId() > 2001, TestExamData::getExamName, String[]::new);
         NormalUseForTestUtil.out(Arrays.toString(resultArray));
     }
 
-    public static void testSumTopK() {
+    @Test
+    public void testSumTopK() {
         List<Long> list = Lists.newArrayList(100L, 99L, 44L, 889L);
         BigDecimal minTop2Sum = CollectionUtil.sumTopK(list, Long::longValue, Comparator.comparing(Long::longValue), 2);
         BigDecimal maxTop2Sum = CollectionUtil.sumTopK(list, Long::longValue, Comparator.comparing(Long::longValue).reversed(), 2);
         System.out.println("最小前2: " + minTop2Sum.longValue() + "\n最大前2: " + maxTop2Sum.longValue());
     }
 
-    public static void testListToCollection() {
+    @Test
+    public void testListToCollection() {
         List<TestExamData> sourceList = loadTestExamDatas();
         // 转List
         List<String> examNameList = CollectionUtil.transToList(sourceList, TestExamData::getExamName);
@@ -145,7 +193,8 @@ public class CollectionUtilTest {
         String examNameJoinResult2 = CollectionUtil.join(examNameList.toArray(new String[0]), ",");
     }
 
-    public static void testListToMap() {
+    @Test
+    public void testListToMap() {
         List<TestExamData> sourceList = loadTestExamDatas();
         // 转Map
         Map<Integer, TestExamData> idMap = CollectionUtil.transToMap(HashMap::new, sourceList, TestExamData::getId);
@@ -171,7 +220,8 @@ public class CollectionUtilTest {
     /**
      * List转Map, 主要起到去重功能
      */
-    public static void testListToMapForDistinct() {
+    @Test
+    public void testListToMapForDistinct() {
         List<TestStudent> studentList = new ArrayList<>();
         TestStudent testStudent1 = new TestStudent().setStudentId(1223).setStudentName("渣渣辉");
         TestStudent testStudent2 = new TestStudent().setStudentId(1223).setStudentName("渣渣辉");
@@ -181,7 +231,8 @@ public class CollectionUtilTest {
         Map<Integer, TestStudent> studentMap2 = CollectionUtil.transToMap(HashMap::new, studentList, TestStudent::getStudentId);
     }
 
-    public static void testListByMerge() {
+    @Test
+    public void testListByMerge() {
         List<TestExamData> sourceList = loadTestExamStudentDatas();
         Map<TestExamData, List<TestStudent>> examStudentListHashMap = CollectionUtil.transToMapByMerge(HashMap::new, sourceList, Function.identity(), TestExamData::getStudentList);
         Map<TestStudent, List<TestExamData>> studentExamHashMap = CollectionUtil.reverseKV(examStudentListHashMap, Function.identity(), Function.identity());
@@ -189,7 +240,8 @@ public class CollectionUtilTest {
         int a = 1;
     }
 
-    public static void testgroupIndexToMapWithReferKey() {
+    @Test
+    public void testGroupIndexToMapWithReferKey() {
         TestExamData exam1 = new TestExamData().setId(3333).setExamName("E-A1");
         TestExamData exam2 = new TestExamData().setId(4444).setExamName("E-B2");
         TestExamData exam3 = new TestExamData().setId(5555).setExamName("E-C3");
@@ -201,14 +253,16 @@ public class CollectionUtilTest {
 
     }
 
-    public static void testFindOrExist() {
+    @Test
+    public void testFindOrExist() {
         List<D8gerEnum> sourceList = Lists.newArrayList(D8gerEnum.YESTERDAY, D8gerEnum.TOMORROW);
-        boolean existAdmin = CollectionUtil.exist(sourceList, item -> D8gerEnum.YESTERDAY.equals(item));
-        boolean existCombine = CollectionUtil.exist(sourceList, item -> D8gerEnum.TOMORROW.equals(item));
-        boolean existTeach = CollectionUtil.exist(sourceList, item -> D8gerEnum.TODAY.equals(item));
+        boolean existAdmin = CollectionUtil.exist(sourceList, D8gerEnum.YESTERDAY::equals);
+        boolean existCombine = CollectionUtil.exist(sourceList, D8gerEnum.TOMORROW::equals);
+        boolean existTeach = CollectionUtil.exist(sourceList, D8gerEnum.TODAY::equals);
     }
 
-    public static void testNameComparator() {
+    @Test
+    public void testNameComparator() {
         List<String> strings = Arrays.asList(
                 "丁海寅",
                 "周杰伦",
@@ -285,7 +339,6 @@ public class CollectionUtilTest {
         TOMORROW(3, "明天"),
 
         ;
-
 
         private final int value;
         private final String title;
