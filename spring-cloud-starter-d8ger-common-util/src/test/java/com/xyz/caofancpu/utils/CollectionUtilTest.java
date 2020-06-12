@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,6 +76,15 @@ public class CollectionUtilTest {
     @After
     public void after() {
         NormalUseForTestUtil.out("---------测试后---------");
+    }
+
+    @Test
+    public void testTransToCollWithFlatMap() {
+        List<Set<Integer>> dataList = Lists.newArrayList(Sets.newHashSet(1, 2), Sets.newHashSet(3, 2));
+        List<Integer> arrayList = CollectionUtil.transToCollWithFlatMap(ArrayList::new, dataList, Function.identity());
+        Set<Integer> hashSet = CollectionUtil.transToCollWithFlatMap(HashSet::new, dataList, Function.identity());
+        NormalUseForTestUtil.out(CollectionUtil.show(arrayList));
+        NormalUseForTestUtil.out(CollectionUtil.show(hashSet));
     }
 
     @Test

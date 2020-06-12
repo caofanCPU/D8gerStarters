@@ -382,10 +382,10 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 两层嵌套Collection折叠平铺为List, 底层默认使用ArrayList
+     * 两层嵌套Collection, 内层为List, 折叠平铺为List, 底层默认使用ArrayList
      * 多层嵌套的可以通过重复调用此方法完成平铺
      *
-     * @param source 两层嵌套List数据源
+     * @param source 两层嵌套Collection数据源
      * @param mapper 外层元素获取内Collection的执行函数
      * @return 平铺后收集到的List
      */
@@ -397,10 +397,10 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 两层嵌套Collection折叠平铺为Set去重, 底层默认使用HashSet
+     * 两层嵌套Collection, 内层为List, 折叠平铺为Set去重, 底层默认使用HashSet
      * 多层嵌套的可以通过重复调用此方法完成平铺
      *
-     * @param source 两层嵌套List数据源
+     * @param source 两层嵌套Collection数据源
      * @param mapper 外层元素获取内Collection的执行函数
      * @return 平铺后收集到的List
      */
@@ -409,6 +409,21 @@ public class CollectionUtil extends CollectionUtils {
             return Collections.emptySet();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).flatMap(List::stream).collect(Collectors.toSet());
+    }
+
+    /**
+     * 两层嵌套Collection(内外层任意)折叠平铺到指定收集容器, 支持常用集合, 例如ArrayList, HashSet等
+     * 多层嵌套的可以通过重复调用此方法完成平铺
+     *
+     * @param source 两层嵌套Collection数据源
+     * @param mapper 外层元素获取内Collection的执行函数
+     * @return 平铺后收集到的结果容器
+     */
+    public static <E, F, T extends Collection<F>, R extends Collection<F>> R transToCollWithFlatMap(Supplier<R> resultColl, Collection<E> source, Function<? super E, ? extends T> mapper) {
+        if (isEmpty(source)) {
+            return resultColl.get();
+        }
+        return source.stream().filter(Objects::nonNull).map(mapper).flatMap(Collection::stream).collect(Collectors.toCollection(resultColl));
     }
 
     /**
