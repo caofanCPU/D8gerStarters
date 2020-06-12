@@ -83,8 +83,10 @@ public class CollectionUtilTest {
         List<Set<Integer>> dataList = Lists.newArrayList(Sets.newHashSet(1, 2), Sets.newHashSet(3, 2));
         List<Integer> arrayList = CollectionUtil.transToCollWithFlatMap(ArrayList::new, dataList, Function.identity());
         Set<Integer> hashSet = CollectionUtil.transToCollWithFlatMap(HashSet::new, dataList, Function.identity());
+        HashSet<String> bossSet = CollectionUtil.enhanceTransToCollWithFlatMap(HashSet::new, dataList, Function.identity(), String::valueOf);
         NormalUseForTestUtil.out(CollectionUtil.show(arrayList));
         NormalUseForTestUtil.out(CollectionUtil.show(hashSet));
+        NormalUseForTestUtil.out(CollectionUtil.show(bossSet));
     }
 
     @Test

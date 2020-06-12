@@ -415,8 +415,9 @@ public class CollectionUtil extends CollectionUtils {
      * 两层嵌套Collection(内外层任意)折叠平铺到指定收集容器, 支持常用集合, 例如ArrayList, HashSet等
      * 多层嵌套的可以通过重复调用此方法完成平铺
      *
-     * @param source 两层嵌套Collection数据源
-     * @param mapper 外层元素获取内Collection的执行函数
+     * @param resultColl 结果收集容器
+     * @param source     两层嵌套Collection数据源
+     * @param mapper     外层元素获取内Collection的执行函数
      * @return 平铺后收集到的结果容器
      */
     public static <E, F, T extends Collection<F>, R extends Collection<F>> R transToCollWithFlatMap(Supplier<R> resultColl, Collection<E> source, Function<? super E, ? extends T> mapper) {
@@ -424,6 +425,24 @@ public class CollectionUtil extends CollectionUtils {
             return resultColl.get();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).flatMap(Collection::stream).collect(Collectors.toCollection(resultColl));
+    }
+
+    /**
+     * 两层嵌套Collection(内外层任意)折叠平铺到指定收集容器, 支持常用集合, 例如ArrayList, HashSet等
+     * 多层嵌套的可以通过重复调用此方法完成平铺
+     * 并支持元素转换
+     *
+     * @param resultColl    结果容器
+     * @param source        两层嵌套Collection数据源
+     * @param flatMapper    外层元素获取内Collection的执行函数
+     * @param convertMapper 元素转换函数
+     * @return 平铺后收集到的结果容器
+     */
+    public static <E, F, U, T extends Collection<F>, R extends Collection<U>> R enhanceTransToCollWithFlatMap(Supplier<R> resultColl, Collection<E> source, Function<? super E, ? extends T> flatMapper, Function<? super F, ? extends U> convertMapper) {
+        if (isEmpty(source)) {
+            return resultColl.get();
+        }
+        return source.stream().filter(Objects::nonNull).map(flatMapper).flatMap(Collection::stream).map(convertMapper).collect(Collectors.toCollection(resultColl));
     }
 
     /**
