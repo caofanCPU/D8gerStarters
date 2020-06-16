@@ -60,6 +60,44 @@ import java.util.stream.StreamSupport;
 public class CollectionUtil extends CollectionUtils {
 
     /**
+     * 从集合中截取前面的子集合
+     *
+     * @param resultColl
+     * @param source
+     * @param size
+     * @param mapper
+     * @param <T>
+     * @param <F>
+     * @param <R>
+     * @return
+     */
+    public static <T, F, R extends Collection<F>> R subListHead(Supplier<R> resultColl, Collection<T> source, int size, Function<? super T, ? extends F> mapper) {
+        if (size >= source.size()) {
+            return transToCollection(resultColl, source, mapper);
+        }
+        return source.stream().limit(size).filter(Objects::nonNull).map(mapper).collect(Collectors.toCollection(resultColl));
+    }
+
+    /**
+     * 从集合中截取后面的子集合
+     *
+     * @param resultColl
+     * @param source
+     * @param size
+     * @param mapper
+     * @param <T>
+     * @param <F>
+     * @param <R>
+     * @return
+     */
+    public static <T, F, R extends Collection<F>> R subListTail(Supplier<R> resultColl, Collection<T> source, int size, Function<? super T, ? extends F> mapper) {
+        if (size >= source.size()) {
+            return transToCollection(resultColl, source, mapper);
+        }
+        return source.stream().skip(source.size() - size).filter(Objects::nonNull).map(mapper).collect(Collectors.toCollection(resultColl));
+    }
+
+    /**
      * 对列表元素字段执行指定函数后, 按照comparator排列, 取前k个子列表
      *
      * @param coll
