@@ -62,13 +62,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 从集合中截取前面的子集合
      *
-     * @param resultColl
-     * @param source
-     * @param size
-     * @param mapper
-     * @param <T>
-     * @param <F>
-     * @param <R>
+     * @param resultColl 结果收集容器
+     * @param source     数据源
+     * @param size       截取元素总数
+     * @param mapper     元素转换函数
      * @return
      */
     public static <T, F, R extends Collection<F>> R subListHead(Supplier<R> resultColl, Collection<T> source, int size, Function<? super T, ? extends F> mapper) {
@@ -81,13 +78,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 从集合中截取后面的子集合
      *
-     * @param resultColl
-     * @param source
-     * @param size
-     * @param mapper
-     * @param <T>
-     * @param <F>
-     * @param <R>
+     * @param resultColl 结果收集容器
+     * @param source     数据源
+     * @param size       截取元素总数
+     * @param mapper     元素转换函数
      * @return
      */
     public static <T, F, R extends Collection<F>> R subListTail(Supplier<R> resultColl, Collection<T> source, int size, Function<? super T, ? extends F> mapper) {
@@ -100,12 +94,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素字段执行指定函数后, 按照comparator排列, 取前k个子列表
      *
-     * @param coll
-     * @param mapper
+     * @param coll       数据源
+     * @param mapper     元素转换函数
      * @param comparator 排序比较器
      * @param k          取前k个元素
-     * @param <T>
-     * @param <E>
      * @return
      */
     public static <T, E> List<T> filterTopK(@NonNull Collection<E> coll, Function<? super E, ? extends T> mapper, Comparator<T> comparator, int k) {
@@ -124,12 +116,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素字段执行指定函数后, 按照comparator排列, 排除前k个元素后的子列表
      *
-     * @param coll
-     * @param mapper
+     * @param coll       数据源
+     * @param mapper     元素转换函数
      * @param comparator 排序比较器
      * @param k          取前k个元素
-     * @param <T>
-     * @param <E>
      * @return
      */
     public static <T, E> List<T> removeTopK(@NonNull Collection<E> coll, Function<? super E, ? extends T> mapper, Comparator<T> comparator, int k) {
@@ -147,11 +137,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 求元素类型相同的两个集合的并集(a ∪ b), 可指定结果容器类型
      *
-     * @param resultColl
-     * @param a
-     * @param b
-     * @param <E>
-     * @param <C>
+     * @param resultColl 结果收集容器
+     * @param a          数据源a
+     * @param b          数据源b
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -164,11 +152,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 求元素类型相同的两个集合的交集(a ∩ b), 可指定结果容器类型
      *
-     * @param resultColl
-     * @param a
-     * @param b
-     * @param <E>
-     * @param <C>
+     * @param resultColl 结果收集容器
+     * @param a          数据源a
+     * @param b          数据源b
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -181,11 +167,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 求元素类型相同的两个集合的交集的补集((a ∪ b) - (a ∩ b)), 可指定结果容器类型
      *
-     * @param resultColl
-     * @param a
-     * @param b
-     * @param <E>
-     * @param <C>
+     * @param resultColl 结果收集容器
+     * @param a          数据源a
+     * @param b          数据源b
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -198,11 +182,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 求元素类型相同的两个集合的差集(a - ( a ∩ b)), 可指定结果容器类型
      *
-     * @param resultColl
-     * @param a
-     * @param b
-     * @param <E>
-     * @param <C>
+     * @param resultColl 结果收集容器
+     * @param a          数据源a
+     * @param b          数据源b
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -215,12 +197,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素指定函数(字段为数字类型)按照comparator排列后, 求前k个元素的和
      *
-     * @param coll
-     * @param numberValueFunction
+     * @param coll                数据源
+     * @param numberValueFunction 目标数值字段函数
      * @param comparator          排序比较器
      * @param k                   取前k个元素
-     * @param <F>
-     * @param <T>
      * @return
      */
     public static <F extends Number, T> BigDecimal sumTopK(@NonNull Collection<T> coll, Function<? super T, ? extends F> numberValueFunction, Comparator<F> comparator, int k) {
@@ -240,10 +220,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素指定函数(字段为数字类型)求和
      *
-     * @param coll
-     * @param numberValueFunction
-     * @param <F>
-     * @param <T>
+     * @param coll                数据源
+     * @param numberValueFunction 目标数值字段函数
      * @return
      */
     public static <F extends Number, T> BigDecimal sum(@NonNull Collection<T> coll, Function<? super T, ? extends F> numberValueFunction) {
@@ -258,10 +236,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素指定函数(字段为数字类型)求平均
      *
-     * @param coll
-     * @param numberValueFunction
-     * @param <F>
-     * @param <T>
+     * @param coll                数据源
+     * @param numberValueFunction 目标数值字段函数
      * @return
      */
     public static <F extends Number, T> BigDecimal average(@NonNull Collection<T> coll, Function<? super T, ? extends F> numberValueFunction) {
@@ -275,10 +251,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素指定函数(字段为数字类型), 求最大值
      *
-     * @param coll
-     * @param numberValueFunction
-     * @param <F>
-     * @param <T>
+     * @param coll                数据源
+     * @param numberValueFunction 目标数值字段函数
      * @return
      */
     public static <F extends Number, T> BigDecimal max(@NonNull Collection<T> coll, Function<? super T, ? extends F> numberValueFunction) {
@@ -294,10 +268,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对列表元素指定函数(字段为数字类型), 求最小值
      *
-     * @param coll
-     * @param numberValueFunction
-     * @param <F>
-     * @param <T>
+     * @param coll                数据源
+     * @param numberValueFunction 目标数值字段函数
      * @return
      */
     public static <F extends Number, T> BigDecimal min(@NonNull Collection<T> coll, Function<? super T, ? extends F> numberValueFunction) {
@@ -313,13 +285,11 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 对集合元素指定字段检测重复, 返回非空重复元素
      *
-     * @param coll
-     * @param mapper
-     * @param <T>
-     * @param <F>
+     * @param coll   数据源
+     * @param mapper 元素目标字段
      * @return
      */
-    public static <T, F> Set<F> probeRepeatValueSet(Collection<T> coll, Function<? super T, F> mapper) {
+    public static <T, F> Set<F> probeRepeatValueSet(Collection<T> coll, Function<? super T, ? extends F> mapper) {
         if (isEmpty(coll)) {
             return Collections.emptySet();
         }
@@ -332,10 +302,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 将按照分隔符固定拼接的字符串转换为指定[数字或其他类型]类型的List
      *
-     * @param source
-     * @param splitSymbol
-     * @param mapper
-     * @param <T>
+     * @param source      数据源
+     * @param splitSymbol 分隔符
+     * @param mapper      元素转换函数
      * @return
      */
     public static <T> List<T> splitDelimitedStringToList(@NonNull String source, @NonNull String splitSymbol, Function<String, T> mapper) {
@@ -359,7 +328,7 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 展示Map内容
      *
-     * @param kvMap
+     * @param kvMap 数据源
      * @return
      */
     public static <K, V> String showMap(Map<K, V> kvMap) {
@@ -655,8 +624,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 分组转换为Map<K, List<V>>，底层默认HashMap<K, ArrayList<V>>
      *
-     * @param source
-     * @param kFunction
+     * @param source    数据源
+     * @param kFunction key执行函数
      * @return
      */
     public static <E, K> Map<K, List<E>> groupIndexToMap(Collection<E> source, Function<? super E, ? extends K> kFunction) {
@@ -669,12 +638,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 分组转换为Map<K, List<V>>, 支持key函数, value函数, 底层默认HashMap<K, ArrayList<V>>
      *
-     * @param source
-     * @param kFunction
-     * @param vFunction
-     * @param <E>
-     * @param <K>
-     * @param <V>
+     * @param source    数据源
+     * @param kFunction key执行函数
+     * @param vFunction value执行函数
      * @return
      */
     public static <E, K, V> Map<K, List<V>> groupIndexToMap(Collection<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
@@ -711,9 +677,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 分组转换为指定的Map<K, List<V>>， 例如TreeMap<K, List<V>>/LinkedHashMap<K, List<V>>
      *
-     * @param mapColl
-     * @param source
-     * @param kFunction
+     * @param mapColl   结果收集容器
+     * @param source    数据源
+     * @param kFunction key执行函数
      * @return
      */
     public static <E, K, M extends Map<K, List<E>>> M groupIndexToMap(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends K> kFunction) {
@@ -726,10 +692,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 分组转换为指定Map<K, 指定的List<V>>，例如TreeMap<K, LinkedList<V>>/LinkedHashMap<K, LinkedList<V>>
      *
-     * @param mapColl
-     * @param vColl
-     * @param source
-     * @param kFunction
+     * @param mapColl   结果收集容器
+     * @param vColl     Map结果中value的收集容器
+     * @param source    数据源
+     * @param kFunction key执行函数
      */
     public static <E, K, M extends Map<K, C>, C extends Collection<E>> M groupIndexToMap(Supplier<M> mapColl, Supplier<C> vColl, Collection<E> source, Function<? super E, ? extends K> kFunction) {
         if (isEmpty(source)) {
@@ -742,11 +708,11 @@ public class CollectionUtil extends CollectionUtils {
      * 分组转换为指定Map<K, 指定的List<V>>，例如TreeMap<K, LinkedList<V>>/LinkedHashMap<K, LinkedList<V>>
      * 并且可对原始数组元素进行计算(转化)为其他对象
      *
-     * @param mapColl
-     * @param vColl
-     * @param source
-     * @param kGroupFunction
-     * @param vFunction
+     * @param mapColl        结果收集容器
+     * @param vColl          Map结果中value的收集容器
+     * @param source         数据源
+     * @param kGroupFunction key执行函数
+     * @param vFunction      value执行函数
      * @return
      */
     public static <E, K, V, M extends Map<K, C>, C extends Collection<V>> M groupIndexToMap(Supplier<M> mapColl, Supplier<C> vColl, Collection<E> source, Function<? super E, ? extends K> kGroupFunction, Function<? super E, ? extends V> vFunction) {
@@ -786,8 +752,8 @@ public class CollectionUtil extends CollectionUtils {
      * 转换为Map-Value
      * {@link #transToMap}
      *
-     * @param values
-     * @param kFunction
+     * @param values    数据源
+     * @param kFunction key执行函数
      * @return
      */
     @Deprecated
@@ -803,8 +769,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 转换为Map-Value
      *
-     * @param source
-     * @param kFunction
+     * @param source    数据源
+     * @param kFunction key执行函数
      * @return
      */
     public static <E, K> Map<K, E> transToMap(Collection<E> source, Function<? super E, ? extends K> kFunction) {
@@ -817,9 +783,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 转换为Map-Value, 重复KEY将抛出异常
      *
-     * @param mapColl
-     * @param source
-     * @param kFunction
+     * @param mapColl   结果收集容器
+     * @param source    数据源
+     * @param kFunction key执行函数
      * @return
      */
     public static <E, K, M extends Map<K, E>> M transToMap(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends K> kFunction) {
@@ -833,9 +799,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 转换为Map-Value, 允许重复KEY
      *
-     * @param mapColl
-     * @param source
-     * @param kFunction
+     * @param mapColl   结果收集容器
+     * @param source    数据源
+     * @param kFunction key执行函数
      * @return
      */
     public static <E, K, M extends Map<K, E>> M transToMapEnhance(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends K> kFunction) {
@@ -849,9 +815,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 转换为Map-Value
      *
-     * @param source
-     * @param kFunction
-     * @param vFunction
+     * @param source    数据源
+     * @param kFunction key执行函数
+     * @param vFunction value执行函数
      * @return
      */
     public static <E, K, V> Map<K, V> transToMap(Collection<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
@@ -865,10 +831,10 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 转换为Map-Value, 重复KEY将抛出异常
      *
-     * @param mapColl
-     * @param source
-     * @param kFunction
-     * @param vFunction
+     * @param mapColl   结果收集容器
+     * @param source    数据源
+     * @param kFunction key执行函数
+     * @param vFunction value执行函数
      * @return
      */
     public static <E, K, V, M extends Map<K, V>> M transToMap(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
@@ -884,13 +850,12 @@ public class CollectionUtil extends CollectionUtils {
      * 示例: adjustmentReferKeys有5个id, 但是source中只有4个id对应的数据
      * 返回Map.keys中仍然保持5个id, 缺少的id对应的value为空列表
      *
-     * @param mapColl
-     * @param vColl
-     * @param source
+     * @param mapColl             结果收集容器
+     * @param vColl               Map结果中value的收集容器
+     * @param source              数据源
      * @param adjustmentReferKeys 校准参考key集合
-     * @param kFunction
-     * @param vFunction
-     * @return
+     * @param kFunction           key执行函数
+     * @param vFunction           value执行函数
      */
     public static <E, K, V, C extends Collection<V>, M extends Map<K, C>> M transToMap(Supplier<M> mapColl, Supplier<C> vColl, Collection<E> source, Set<K> adjustmentReferKeys, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends C> vFunction) {
         if (isEmpty(source)) {
@@ -904,15 +869,15 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 可以将两层嵌套List，转换为Map<K, List<V>>，按照K叠加List<V>
+     * 可以将两层嵌套集合，转换为Map<K, Collection<V>>，按照K叠加Collection<V>
      *
-     * @param mapColl
-     * @param source
-     * @param kFunction
-     * @param vFunction
+     * @param mapColl   结果Map收集容器
+     * @param source    数据源
+     * @param kFunction key执行函数, 决定结果Map的Key的数据类型
+     * @param vFunction value执行函数, 决定结果Map的value的数据类型
      * @return
      */
-    public static <E, K, V, M extends Map<K, List<V>>> M transToMapByMerge(Supplier<M> mapColl, Collection<E> source, Function<? super E, K> kFunction, Function<? super E, List<V>> vFunction) {
+    public static <E, K, V, C extends Collection<V>, M extends Map<K, C>> M transToMapByMerge(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends C> vFunction) {
         if (isEmpty(source)) {
             return mapColl.get();
         }
@@ -921,9 +886,9 @@ public class CollectionUtil extends CollectionUtils {
                 .collect(Collectors.toMap(
                         kFunction,
                         vFunction,
-                        (list1, list2) -> {
-                            list1.addAll(list2);
-                            return list1;
+                        (collA, collB) -> {
+                            collA.addAll(collB);
+                            return collA;
                         },
                         mapColl)
                 );
@@ -932,8 +897,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 按照指定分隔符将数组元素拼接为字符串
      *
-     * @param arr
-     * @param separator
+     * @param arr       数组数据源
+     * @param separator 分隔符
      * @return
      */
     public static String join(Object[] arr, String separator) {
@@ -946,8 +911,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 按照指定分隔符将数组元素拼接为字符串
      *
-     * @param coll
-     * @param separator
+     * @param coll      数据源
+     * @param separator 分隔符
      * @return
      */
     public static <T> String join(Collection<T> coll, String separator) {
@@ -963,7 +928,7 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 展示集合
      *
-     * @param coll
+     * @param coll 数据源
      * @return
      */
     public static <T> String show(Collection<T> coll) {
@@ -976,8 +941,6 @@ public class CollectionUtil extends CollectionUtils {
      * @param sourceMap Map数据源
      * @param keyMapper key执行函数, 根据key进行运算后的结果进行排序
      * @param reverse   可选参数, 是否根据Key逆序排列, 默认增序排列
-     * @param <K>
-     * @param <V>
      * @return
      */
     public static <K, T extends Comparable<? super T>, V> LinkedHashMap<K, V> sortByKeyMapper(Map<K, V> sourceMap, Function<? super K, ? extends T> keyMapper, boolean... reverse) {
@@ -992,8 +955,6 @@ public class CollectionUtil extends CollectionUtils {
      *
      * @param sourceMap Map数据源
      * @param reverse   可选参数, 是否根据Key逆序排列, 默认增序排列
-     * @param <K>
-     * @param <V>
      * @return
      */
     public static <K extends Comparable<? super K>, V> LinkedHashMap<K, V> sortByKey(Map<K, V> sourceMap, boolean... reverse) {
@@ -1012,8 +973,6 @@ public class CollectionUtil extends CollectionUtils {
      *
      * @param sourceMap Map数据源
      * @param reverse   可选参数, 是否根据Value逆序排列, 默认增序排列
-     * @param <K>
-     * @param <V>
      * @return
      */
     public static <K, V extends Comparable<? super V>> LinkedHashMap<K, V> sortByValue(Map<K, V> sourceMap, boolean... reverse) {
@@ -1030,11 +989,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * Find a value in a array, normally used in Enum class
      *
-     * @param source
-     * @param function
-     * @param value
-     * @param <T>
-     * @param <F>
+     * @param source   数组数据源
+     * @param function 元素计算值函数
+     * @param value    目标值
      * @return
      */
     public static <T, F> T findAnyInArrays(T[] source, Function<? super T, ? extends F> function, @NonNull F value) {
@@ -1047,9 +1004,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 在List中根据指定字段(函数)查找元素，找到任意一个就返回，找不到就返回null
      *
-     * @param coll
-     * @param function
-     * @param value
+     * @param coll     数据源
+     * @param function 元素计算值函数
+     * @param value    目标值
      * @return
      */
     public static <T, F> T findAny(Collection<T> coll, Function<? super T, ? extends F> function, @NonNull F value) {
@@ -1062,9 +1019,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 在List中根据自定字段(函数)查找元素，返回找到的第一个元素，找不到就返回null
      *
-     * @param coll
-     * @param function
-     * @param value
+     * @param coll     数据源
+     * @param function 元素计算值函数
+     * @param value    目标值
      * @return
      */
     public static <T, F> T findFirst(Collection<T> coll, Function<? super T, ? extends F> function, @NonNull F value) {
@@ -1078,8 +1035,8 @@ public class CollectionUtil extends CollectionUtils {
      * 根据指定条件查找元素，返回找到的第一个非null元素，找不到就返回null
      * 不支持查找null元素
      *
-     * @param coll
-     * @param predicate
+     * @param coll      数据源
+     * @param predicate 查找条件
      * @return
      */
     public static <T> T findFirst(Collection<T> coll, Predicate<? super T> predicate) {
@@ -1092,9 +1049,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 从list里根据唯一字段值 查找所有满足条件不为Null的元素
      *
-     * @param coll
-     * @param function
-     * @param value
+     * @param coll     数据源
+     * @param function 元素计算值函数
+     * @param value    目标值
      * @return
      */
     public static <T, F> List<T> findAll(Collection<T> coll, Function<? super T, ? extends F> function, @NonNull F value) {
@@ -1110,8 +1067,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 从list里根据唯一字段值 查找所有满足条件不为Null的元素
      *
-     * @param coll
-     * @param predicate
+     * @param coll      数据源
+     * @param predicate 查找条件
      * @return
      */
     public static <T> List<T> findAll(Collection<T> coll, Predicate<? super T> predicate) {
@@ -1124,9 +1081,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 判断元素在list中存在至少一个值，存在就立马返回
      *
-     * @param coll
-     * @param function
-     * @param value
+     * @param coll     数据源
+     * @param function 元素计算值函数
+     * @param value    目标值
      * @return
      */
     public static <T, F> boolean existAtLeastOne(Collection<T> coll, Function<? super T, ? extends F> function, @NonNull F value) {
@@ -1139,9 +1096,9 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 判断元素在list中是否存在
      *
-     * @param coll
-     * @param function
-     * @param value
+     * @param coll     数据源
+     * @param function 元素计算值函数
+     * @param value    目标值
      * @return
      */
     public static <T, F> boolean exist(Collection<T> coll, Function<? super T, ? extends F> function, @NonNull F value) {
@@ -1154,9 +1111,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 判断非null元素在list中是否存在
      *
-     * @param coll
-     * @param predicate
-     * @return
+     * @param coll      数据源
+     * @param predicate 查找条件
      */
     public static <T> boolean exist(Collection<T> coll, Predicate<? super T> predicate) {
         if (isEmpty(coll)) {
@@ -1173,9 +1129,9 @@ public class CollectionUtil extends CollectionUtils {
      * ⬇
      * {stu1 : [examA, examB], stu2 : [examA, examB], stu3 : [examA]}
      *
-     * @param sourceMap
-     * @param kFunction
-     * @param vFunction
+     * @param sourceMap Map数据源
+     * @param kFunction 针对Map数据源key的计算函数
+     * @param vFunction 针对Map数据源value的计算函数
      * @return
      */
     public static <E1, E2, K1, K2> Map<K2, List<E2>> reverseKV(@NonNull Map<K1, List<E1>> sourceMap, Function<? super K1, ? extends E2> kFunction, Function<? super E1, ? extends K2> vFunction) {
@@ -1197,11 +1153,11 @@ public class CollectionUtil extends CollectionUtils {
      * kFunction.apply(k1) ==> v2
      * vFunction.apply(v1) ==> k2
      *
-     * @param mapColl
-     * @param vColl
-     * @param sourceMap
-     * @param kFunction
-     * @param vFunction
+     * @param mapColl   结果收集容器
+     * @param vColl     Map结果中value的收集容器
+     * @param sourceMap Map数据源
+     * @param kFunction 针对Map数据源key的计算函数
+     * @param vFunction 针对Map数据源value的计算函数
      * @return
      */
     public static <V1, V2, K1, K2, C1 extends Collection<V1>, C2 extends Collection<V2>, M1 extends Map<K1, C1>, M2 extends Map<K2, C2>>
@@ -1220,16 +1176,16 @@ public class CollectionUtil extends CollectionUtils {
      * 针对复杂Map中，查找key匹配函数的键值对集合
      * 不满足匹配函数条件时返回空
      *
-     * @param srcMap
-     * @param kFunction
-     * @param value
+     * @param sourceMap 数据源
+     * @param kFunction 目标key的计算函数
+     * @param value     目标值
      * @return
      */
-    public static <K, V, T> List<Entry<K, V>> findInMap(Map<K, V> srcMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
-        if (isEmpty(srcMap)) {
+    public static <K, V, T> List<Entry<K, V>> findInMap(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
+        if (isEmpty(sourceMap)) {
             return null;
         }
-        return srcMap.entrySet().stream()
+        return sourceMap.entrySet().stream()
                 .filter(Objects::nonNull)
                 .map(entry -> {
                     if (value.equals(kFunction.apply(entry.getKey()))) {
@@ -1245,16 +1201,16 @@ public class CollectionUtil extends CollectionUtils {
      * 针对复杂Map中，查找key匹配函数的键值对，只取一个
      * 不满足匹配函数条件时返回null
      *
-     * @param srcMap
-     * @param kFunction
-     * @param value
+     * @param sourceMap 数据源
+     * @param kFunction 目标key的计算函数
+     * @param value     目标值
      * @return
      */
-    public static <K, V, T> Entry<K, V> findOneInMap(Map<K, V> srcMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
-        if (isEmpty(srcMap)) {
+    public static <K, V, T> Entry<K, V> findOneInMap(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
+        if (isEmpty(sourceMap)) {
             return null;
         }
-        return srcMap.entrySet().stream()
+        return sourceMap.entrySet().stream()
                 .filter(Objects::nonNull)
                 .filter(entry -> value.equals(kFunction.apply(entry.getKey())))
                 .findAny()
@@ -1265,20 +1221,20 @@ public class CollectionUtil extends CollectionUtils {
      * 针对复杂Map中，查找key匹配函数的键值对，只取一个
      * 不满足匹配函数条件时返回null
      *
-     * @param srcMap
-     * @param kFunction
-     * @param value
+     * @param sourceMap 数据源
+     * @param kFunction 目标key的计算函数
+     * @param value     目标值
      * @return
      */
-    public static <K, V, T> V findOneValue(Map<K, V> srcMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
-        Entry<K, V> resultEntry = findOneInMap(srcMap, kFunction, value);
+    public static <K, V, T> V findOneValue(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
+        Entry<K, V> resultEntry = findOneInMap(sourceMap, kFunction, value);
         return Objects.isNull(resultEntry) ? null : resultEntry.getValue();
     }
 
     /**
      * 剔除请求中值为null的参数
      *
-     * @param paramsMap
+     * @param paramsMap 参数数据源
      * @return
      */
     public static Map<String, Object> removeNullElement(Map<String, Object> paramsMap) {
@@ -1296,7 +1252,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 从Map中移除类型为文件MultipartFile/File的元素
      *
-     * @param paramsMap
+     * @param paramsMap  参数数据源
+     * @param clazzArray 目标类
      * @return
      */
     public static Map<String, Object> removeSpecifiedElement(Map<String, Object> paramsMap, Class<?>[] clazzArray) {
@@ -1323,8 +1280,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 从数组中移除指定类型的元素
      *
-     * @param paramArray
-     * @param clazzArray
+     * @param paramArray 参数数据源
+     * @param clazzArray 目标类
      * @return
      */
     public static Object[] removeSpecifiedElement(Object[] paramArray, Class<?>[] clazzArray) {
@@ -1554,10 +1511,8 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 根据比较器对Map排序
      *
-     * @param sourceMap
-     * @param comparator
-     * @param <K>
-     * @param <V>
+     * @param sourceMap  数据源
+     * @param comparator 比较器
      * @return
      */
     private static <K, V> LinkedHashMap<K, V> sortMap(Map<K, V> sourceMap, Comparator<Entry<K, V>> comparator) {
@@ -1610,7 +1565,7 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * 获取中文姓名比较器
      *
-     * @param function
+     * @param function 姓名字段执行函数
      * @return
      */
     public static <T> Comparator<T> getNameComparator(Function<T, String> function) {
