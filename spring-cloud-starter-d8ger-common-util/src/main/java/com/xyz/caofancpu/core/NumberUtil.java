@@ -51,7 +51,7 @@ public class NumberUtil {
     /**
      * 汉语中货币单位大写，设计类似占位符
      */
-    private static final String[] CN_UPPER_MONETRAY_UNIT = {"分", "角", "元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟", "兆", "拾", "佰", "仟"};
+    private static final String[] CN_UPPER_MONEY_UNIT = {"分", "角", "元", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟", "兆", "拾", "佰", "仟"};
 
     /**
      * 特殊字符：整
@@ -130,12 +130,12 @@ public class NumberUtil {
             numUnit = (int) (number % 10);
             if (numUnit > 0) {
                 if ((numIndex == 9) && (zeroSize >= 3)) {
-                    sb.insert(0, CN_UPPER_MONETRAY_UNIT[6]);
+                    sb.insert(0, CN_UPPER_MONEY_UNIT[6]);
                 }
                 if ((numIndex == 13) && (zeroSize >= 3)) {
-                    sb.insert(0, CN_UPPER_MONETRAY_UNIT[10]);
+                    sb.insert(0, CN_UPPER_MONEY_UNIT[10]);
                 }
-                sb.insert(0, CN_UPPER_MONETRAY_UNIT[numIndex]);
+                sb.insert(0, CN_UPPER_MONEY_UNIT[numIndex]);
                 sb.insert(0, CN_UPPER_NUMBER[numUnit]);
                 getZero = false;
                 zeroSize = 0;
@@ -145,9 +145,9 @@ public class NumberUtil {
                     sb.insert(0, CN_UPPER_NUMBER[numUnit]);
                 }
                 if (numIndex == 2) {
-                    sb.insert(0, CN_UPPER_MONETRAY_UNIT[numIndex]);
+                    sb.insert(0, CN_UPPER_MONEY_UNIT[numIndex]);
                 } else if (((numIndex - 2) % 4 == 0) && (number % 1000 > 0)) {
-                    sb.insert(0, CN_UPPER_MONETRAY_UNIT[numIndex]);
+                    sb.insert(0, CN_UPPER_MONEY_UNIT[numIndex]);
                 }
                 getZero = true;
             }
@@ -257,7 +257,7 @@ public class NumberUtil {
      * @return
      */
     public static <T extends Number> Map<Integer, BigDecimal> calculateDefaultPercentage(List<T> source, int precision) {
-        return calculatePercentageResult(source, precision, BigDecimal.ONE);
+        return calculateDistributionValueByPercentage(source, precision, BigDecimal.valueOf(ONE_HUNDRED));
     }
 
     /**
@@ -271,21 +271,6 @@ public class NumberUtil {
      * 商品价格(单位:分)列表[500, 1000, 1500], 达到了满3000分减1000分的条件, 那么利用本方法求得每个商品的分摊优惠价
      * precision=0时: Map.Entry[<0, 167>, <1, 333>, <2, 500>], 该结果与用元表示时结果一致
      *
-     * @param source
-     * @param precision
-     * @param referValue
-     * @param <T>
-     * @return Map<数字元素索引, 结果值>
-     */
-    public static <T extends Number> Map<Integer, BigDecimal> calculateDistributionValueByPercentage(List<T> source, int precision, BigDecimal referValue) {
-        Map<Integer, BigDecimal> percentageResultValueMap = calculatePercentageResult(source, precision, referValue);
-        Map<Integer, BigDecimal> resultValueMap = Maps.newLinkedHashMap();
-        BigDecimal oneHundred = BigDecimal.valueOf(ONE_HUNDRED);
-        percentageResultValueMap.forEach((key, value) -> resultValueMap.put(key, value.divide(oneHundred, precision, BigDecimal.ROUND_HALF_UP)));
-        return resultValueMap;
-    }
-
-    /**
      * 计算列表中各数字元素所占的百分比, 在四舍五入的情况下保证百分比和为1, 且尽可能保证结果的方差最小
      * 示例: [3, 4, 5] ==> 占比数值     [0.25000000, 0.33333333, 0.41666667]
      * 占比数值 * 100 ==> 转换为百分数   [25.000000, 33.333333, 41.666667]
@@ -305,7 +290,7 @@ public class NumberUtil {
      * @param referValue 参考基数, 默认参考值为1 ==> 计算结果为百分比数值
      * @return Map<数字元素索引, 结果值>
      */
-    public static <T extends Number> Map<Integer, BigDecimal> calculatePercentageResult(List<T> source, int precision, BigDecimal referValue) {
+    public static <T extends Number> Map<Integer, BigDecimal> calculateDistributionValueByPercentage(List<T> source, int precision, BigDecimal referValue) {
         if (CollectionUtil.isEmpty(source)) {
             return Maps.newHashMap();
         }
@@ -316,42 +301,37 @@ public class NumberUtil {
             referValue = BigDecimal.ONE;
         }
 
-        BigDecimal oneHundred = BigDecimal.valueOf(ONE_HUNDRED);
-        BigDecimal multiple = BigDecimal.valueOf(Math.pow(10, 2 + precision));
-        BigDecimal valueSum = BigDecimal.valueOf(source.stream().mapToDouble(Number::doubleValue).sum());
+        // 根据精度要求需要扩大的倍数
+        BigDecimal timesValue = BigDecimal.valueOf(Math.pow(10, precision));
+        BigDecimal originSum = CollectionUtil.sum(source, Number::doubleValue);
         Map<Integer, BigDecimal> percentageMap = Maps.newHashMap();
         for (int i = 0; i < source.size(); i++) {
             T item = source.get(i);
             BigDecimal value = BigDecimal.valueOf(item.doubleValue())
+                    .multiply(timesValue)
                     .multiply(referValue)
-                    .multiply(multiple)
-                    .divide(valueSum, 8, BigDecimal.ROUND_HALF_UP);
+                    .divide(originSum, 8, BigDecimal.ROUND_HALF_UP);
             percentageMap.put(i, value);
         }
-        // 所有百分比向下取整
+        // 所有占比结果向下取整
         Map<Integer, BigDecimal> downPercentageMap = Maps.newHashMap();
-        percentageMap.forEach((index, percentage) -> downPercentageMap.put(index, percentage.setScale(0, BigDecimal.ROUND_HALF_UP)));
-        int downPercentageSum = downPercentageMap.values().stream().reduce(BigDecimal::add).orElse(oneHundred).intValue();
-        // 因向下取整得到的偏差
-        int deltaPercentageSum = multiple.intValue() - downPercentageSum;
+        percentageMap.forEach((index, percentage) -> downPercentageMap.put(index, percentage.setScale(0, BigDecimal.ROUND_DOWN)));
+        int downPercentageSum = CollectionUtil.sum(downPercentageMap.values(), BigDecimal::doubleValue).intValue();
+        // 占比因向下取整得到的偏差
+        int deltaPercentageSum = referValue.multiply(timesValue).intValue() - downPercentageSum;
         Map<Integer, BigDecimal> deltaPercentageMap = Maps.newHashMap();
         percentageMap.forEach((index, percentage) -> deltaPercentageMap.put(index, percentage.subtract(downPercentageMap.get(index))));
         // 按照偏差由大到小排序
         LinkedHashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionUtil.sortByValue(deltaPercentageMap, true);
+        Map<Integer, BigDecimal> resultMap = Maps.newLinkedHashMap();
         for (Integer index : deltaPercentageSortedByValueMap.keySet()) {
             if (deltaPercentageSum > 0) {
                 downPercentageMap.put(index, downPercentageMap.get(index).add(BigDecimal.ONE));
                 deltaPercentageSum--;
-            } else {
-                break;
             }
+            resultMap.put(index, downPercentageMap.get(index).divide(timesValue, precision, BigDecimal.ROUND_DOWN));
         }
-        Map<Integer, BigDecimal> resultMap = Maps.newLinkedHashMap();
-        for (Integer index : downPercentageMap.keySet()) {
-            BigDecimal percentage = downPercentageMap.get(index);
-            BigDecimal percentageValue = percentage.multiply(oneHundred).divide(multiple, precision, BigDecimal.ROUND_HALF_UP);
-            resultMap.put(index, percentageValue);
-        }
+
         return resultMap;
     }
 
@@ -363,7 +343,7 @@ public class NumberUtil {
      * @return
      */
     public static String convertViewPriceFromFenToYuan(@NonNull Long price) {
-        return convertPriceFromFenToYuan(price).toString() + CN_UPPER_MONETRAY_UNIT[2];
+        return convertPriceFromFenToYuan(price).toString() + CN_UPPER_MONEY_UNIT[2];
     }
 
     /**
@@ -501,7 +481,7 @@ public class NumberUtil {
         if (k == 0) {
             return new int[1][0];
         }
-        int combNum = calculateNChooseK(n, k > (n - k) ? n - k : k);
+        int combNum = calculateNChooseK(n, Math.min(k, (n - k)));
         int[][] comb = new int[combNum][k];
         int rowEndIndex = n - k + 1;
         for (int i = 0, k1 = k - 1; i < rowEndIndex; i++) {
@@ -544,7 +524,7 @@ public class NumberUtil {
             throw new IllegalArgumentException("N must be less than or equal to 31");
         }
         checkNK(n, k);
-        k = (k > (n - k)) ? n - k : k;
+        k = Math.min(k, (n - k));
         if (k <= 1) {
             // C(n, 0) = 1, C(n, 1) = n
             return k == 0 ? 1 : n;
