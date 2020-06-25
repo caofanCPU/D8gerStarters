@@ -18,6 +18,8 @@
 
 package com.xyz.caofancpu.utils;
 
+import com.alibaba.druid.sql.SQLUtils;
+
 /**
  * FileName: MyGarbage
  */
@@ -26,9 +28,12 @@ package com.xyz.caofancpu.utils;
 public class MyGarbage {
 
     public static void main(String[] args) {
-        int n = 16;
-        n = n - (n >>> 2);
-        out(n + "");
+        String just = SQLUtils.formatMySql(" select exam_no, task_id, subject_organ, school_id, group_id, subject_total_score, sum_total_score, sum_judge_score, max_score, min_score, avg_score, mid_score, student_score, absent_student_score, push_student_num, report_subject_type, exam_name, task_name, group_name, group_sort, report_group_type, major\n" +
+                " from DWH_52.dws_group_subject\n" +
+                " where exam_no = 'O15923032799452020060001010' and school_id = 10236754;");
+        just = just.replaceAll("\t", "    ");
+        just += ";";
+        out(just);
     }
 
     public static void out(String text) {

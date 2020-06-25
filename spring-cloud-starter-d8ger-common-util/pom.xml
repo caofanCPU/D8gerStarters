@@ -104,6 +104,11 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+
         <!--二维码-->
         <dependency>
             <groupId>com.google.zxing</groupId>

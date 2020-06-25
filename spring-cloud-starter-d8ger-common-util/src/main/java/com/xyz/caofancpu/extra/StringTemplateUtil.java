@@ -18,10 +18,19 @@
 
 package com.xyz.caofancpu.extra;
 
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.parser.ParserException;
+import com.alibaba.druid.sql.parser.SQLParseException;
+import com.alibaba.druid.sql.visitor.SQLASTOutputVisitor;
+import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -60,6 +69,26 @@ public class StringTemplateUtil {
             templateContent = matcher.replaceAll(NormalUseForTestUtil.convertToString(entry.getValue()));
         }
         return templateContent;
+    }
+
+    public static String formatMySQL(String sql) {
+        if (StringUtils.isBlank(sql)) {
+            return sql;
+        }
+        try {
+            String dbType = JdbcUtils.MYSQL;
+            List<SQLStatement> statementList = SQLUtils.toStatementList(sql, dbType);
+
+            StringBuilder out = new StringBuilder();
+            SQLASTOutputVisitor visitor = SQLUtils.createFormatOutputVisitor(out, statementList, dbType);
+            for (SQLStatement stmt : statementList) {
+                stmt.accept(visitor);
+            }
+
+            return out.toString().replaceAll(SymbolConstantUtil.ORIGIN_TAB, SymbolConstantUtil.TAB) + SymbolConstantUtil.ENGLISH_SEMICOLON;
+        } catch (SQLParseException | ParserException ex) {
+            return sql;
+        }
     }
 
 }

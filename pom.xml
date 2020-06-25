@@ -70,6 +70,7 @@
         <lomok.version>1.18.8</lomok.version>
 
         <fastjson.version>1.2.54</fastjson.version>
+        <druid.version>0.2.9</druid.version>
         <jackson-ext.version>2.9.9</jackson-ext.version>
         <guava.version>29.0-jre</guava.version>
         <code.zxin.version>3.3.2</code.zxin.version>
@@ -611,6 +612,13 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.alibaba.druid/druid-wrapper -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
             </dependency>
 
             <!--二维码-->

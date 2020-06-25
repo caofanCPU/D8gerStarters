@@ -71,6 +71,11 @@ public class SymbolConstantUtil {
     public static final String TAB = CollectionUtil.join(Collections.nCopies(4, SPACE), EMPTY);
 
     /**
+     * 原始Tab符号
+     */
+    public static final String ORIGIN_TAB = "\t";
+
+    /**
      * 填空占位符: 两条短横线
      */
     public static final String FILL_EMPTY_PLACE_HOLDER = "--";
