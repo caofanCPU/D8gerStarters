@@ -67,6 +67,6 @@ public class InitCompletedRunner implements CommandLineRunner, ApplicationListen
     public void onApplicationEvent(WebServerInitializedEvent webServerInitializedEvent) {
         this.serverPort = webServerInitializedEvent.getWebServer().getPort();
         this.localIP = LogIpConfigUtil.getRequestSourceIp();
-        this.publicIP = LogIpConfigUtil.getSelfPublicIp();
+        this.publicIP = springConfigProperties.showPublicIp ? LogIpConfigUtil.getSelfPublicIp() : "NONE";
     }
 }

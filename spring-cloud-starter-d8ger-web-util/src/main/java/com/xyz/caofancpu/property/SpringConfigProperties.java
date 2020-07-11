@@ -41,6 +41,12 @@ public class SpringConfigProperties {
     public String applicationName;
 
     /**
+     * 启动时是否展示公网IP
+     */
+    @Value("${showPublicIp:false}")
+    public boolean showPublicIp;
+
+    /**
      * 文件服务访问地址
      */
     @Value("${ms.file.url:NONE}")
