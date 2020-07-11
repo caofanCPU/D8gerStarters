@@ -24,7 +24,7 @@
     <parent>
         <artifactId>spring-cloud-d8ger-starters</artifactId>
         <groupId>com.xyz.caofanCPU</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
 
     <artifactId>spring-cloud-starter-d8ger-common-util</artifactId>

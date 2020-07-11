@@ -37,7 +37,7 @@ public class SpringConfigProperties {
     /**
      * 应用名称
      */
-    @Value("${spring.application.name:}")
+    @Value("${spring.application.name:NONE}")
     public String applicationName;
 
     /**

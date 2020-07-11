@@ -71,18 +71,24 @@ import java.util.Objects;
 @Component
 @Slf4j
 public class SpringBootJunitTestUtil {
-
     private MockMvc mvc;
+
+    private RestTemplate restTemplate;
 
     @Resource
     private WebApplicationContext context;
 
     @Resource
-    private RestTemplate restTemplate;
-
-    @Resource
     private SpringConfigProperties springConfigProperties;
 
+    /**
+     * Set方式注入
+     *
+     * @param restTemplate
+     */
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = Objects.nonNull(restTemplate) ? restTemplate : new RestTemplate();
+    }
 
     /**
      * 默认就执行

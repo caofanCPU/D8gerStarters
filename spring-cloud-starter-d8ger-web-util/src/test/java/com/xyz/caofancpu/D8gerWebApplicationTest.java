@@ -18,7 +18,6 @@
 
 package com.xyz.caofancpu;
 
-import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import com.xyz.caofancpu.mvc.configuration.BusinessPoolConfiguration;
 import com.xyz.caofancpu.mvc.configuration.MQConfiguration;
@@ -27,10 +26,8 @@ import com.xyz.caofancpu.mvc.configuration.RedisConfiguration;
 import com.xyz.caofancpu.mvc.configuration.RestTemplateConfiguration;
 import com.xyz.caofancpu.mvc.configuration.StandardHTTPMessageConfiguration;
 import com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration;
-import com.xyz.caofancpu.remote.DemoHttpRemoteInvoker;
-import com.xyz.caofancpu.remote.SSOLoginReq;
-import com.xyz.caofancpu.remote.SSOLoginRespBody;
-import com.xyz.caofancpu.result.GlobalErrorInfoException;
+import com.xyz.caofancpu.property.SpringConfigProperties;
+import com.xyz.caofancpu.test.SpringBootJunitTestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,10 +39,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.annotation.Resource;
 
 /**
  * 启动测试类
@@ -63,8 +57,8 @@ import javax.annotation.Resource;
 )
 public class D8gerWebApplicationTest {
 
-    @Resource
-    private DemoHttpRemoteInvoker demoHttpRemoteInvoker;
+//    @Resource
+//    private DemoHttpRemoteInvoker demoHttpRemoteInvoker;
 
 //    @Resource
 //    private JedisService jedisService;
@@ -82,17 +76,17 @@ public class D8gerWebApplicationTest {
         NormalUseForTestUtil.out("---------测试后---------");
     }
 
-    @Test
-    public void testRemoteInvoke()
-            throws GlobalErrorInfoException {
-        // 密码登录超管账号
-        SSOLoginReq req = new SSOLoginReq().setPhone("13720203891").setPwd("ht123456.").setLoginType(0);
-        // 登录需要特殊的请求头, 指明从哪个应用登录
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("HT-app", "3");
-        SSOLoginRespBody body = demoHttpRemoteInvoker.execute(req, httpHeaders);
-        NormalUseForTestUtil.out("测试结果: \n" + JSONUtil.formatStandardJSON(body));
-    }
+//    @Test
+//    public void testRemoteInvoke()
+//            throws GlobalErrorInfoException {
+//        // 密码登录超管账号
+//        SSOLoginReq req = new SSOLoginReq().setPhone("13720203891").setPwd("ht123456.").setLoginType(0);
+//        // 登录需要特殊的请求头, 指明从哪个应用登录
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add("HT-app", "3");
+//        SSOLoginRespBody body = demoHttpRemoteInvoker.execute(req, httpHeaders);
+//        NormalUseForTestUtil.out("测试结果: \n" + JSONUtil.formatStandardJSON(body));
+//    }
 
 //    @Test
 //    public void testRedis() {
@@ -118,10 +112,11 @@ public class D8gerWebApplicationTest {
             RestTemplateConfiguration.class,
             StandardHTTPMessageConfiguration.class,
             SwaggerConfiguration.class,
-            DemoHttpRemoteInvoker.class,
             RedisConfiguration.class,
             MailConfiguration.class,
-            MQConfiguration.class
+            MQConfiguration.class,
+            SpringBootJunitTestUtil.class,
+            SpringConfigProperties.class
     })
     public static class TestConfig {
 
