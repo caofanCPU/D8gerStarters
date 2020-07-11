@@ -43,25 +43,25 @@ public class SpringConfigProperties {
     /**
      * 文件服务访问地址
      */
-    @Value("${ms.file.url}")
+    @Value("${ms.file.url:NONE}")
     public String fileAccessUrl;
 
     /**
      * SSO访问地址
      */
-    @Value("${ms.sso.url}")
+    @Value("${ms.sso.url:NONE}")
     public String ssoAccessUrl;
 
     /**
      * LOCAL磁盘下载文件夹, 根据自身环境修改开发环境配置文件
      */
-    @Value("${local.oss.download}")
+    @Value("${local.oss.download:NONE}")
     public String localOSSDownloadRoot;
 
     /**
      * LOCAL磁盘下载文件夹, 根据自身环境修改开发环境配置文件
      */
-    @Value("${local.oss.upload}")
+    @Value("${local.oss.upload:NONE}")
     public String localOSSUploadRoot;
 
 }

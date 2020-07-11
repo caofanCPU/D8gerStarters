@@ -34,6 +34,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * Redis统一配置
@@ -51,7 +52,7 @@ public class RedisConfiguration {
     private RedisProperties redisProperties;
 
     @Resource
-    private JedisPool jedisPool;
+    private Optional<JedisPool> optionalJedisPool;
 
     /**
      * jedis连接池, 不存在JedisPool实例时才进行初始化
@@ -82,9 +83,10 @@ public class RedisConfiguration {
 
     @Bean(name = "redisClient")
     @ConditionalOnProperty(name = D8gerConstants.D8_REDIS_ENABLE, matchIfMissing = true)
+    @ConditionalOnMissingBean(value = JedisService.class)
     @ConditionalOnBean(name = "jedisPool")
     public JedisService jedisService() {
-        JedisService redisClient = new JedisService(jedisPool, redisProperties.getRDbIndex(), redisProperties.getMaxSinglePipelineCmdNum());
+        JedisService redisClient = new JedisService(optionalJedisPool.orElse(null), redisProperties.getRDbIndex(), redisProperties.getMaxSinglePipelineCmdNum());
         log.info("D8GER....[redisClient]客户端初始化完成!");
         return redisClient;
     }

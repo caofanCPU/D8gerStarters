@@ -16,21 +16,25 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.mvc.standard.mq;
+package com.xyz.caofancpu.middleware.mq;
 
 import com.xyz.caofancpu.annotation.AttentionDoc;
+import com.xyz.caofancpu.mvc.standard.mq.D8BaseMessage;
+import com.xyz.caofancpu.mvc.standard.mq.D8BaseSendCallback;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * MQ默认发送回调函数
  *
  * @author D8GER
  */
+@Component
 @AllArgsConstructor
 @Slf4j
 @AttentionDoc("若想覆盖, 只需实现D8BaseSendCallback, 注册到容器中即可")
-public class DefaultSendCallback implements D8BaseSendCallback {
+public class D8gerSendCallback implements D8BaseSendCallback {
 
     @Override
     public void onSuccess(D8BaseMessage d8BaseMessage)

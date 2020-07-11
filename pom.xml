@@ -24,7 +24,7 @@
 
     <groupId>com.xyz.caofanCPU</groupId>
     <artifactId>spring-cloud-d8ger-starters</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
 
     <modules>

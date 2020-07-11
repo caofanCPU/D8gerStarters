@@ -52,7 +52,7 @@ public class D8BaseProducer {
     private final MQProperties mqProperties;
 
     /**
-     * 成功回调处理
+     * 回调处理
      */
     private final D8BaseSendCallback sendCallback;
 
@@ -251,6 +251,9 @@ public class D8BaseProducer {
      * @param d8Message
      */
     private void handleSuccess(D8BaseMessage d8Message) {
+        if (Objects.isNull(sendCallback)) {
+            return;
+        }
         try {
             sendCallback.onSuccess(d8Message);
         } catch (Exception e) {
@@ -264,6 +267,9 @@ public class D8BaseProducer {
      * @param d8Message
      */
     private void handleFailed(D8BaseMessage d8Message) {
+        if (Objects.isNull(sendCallback)) {
+            return;
+        }
         try {
             sendCallback.onFailed(d8Message);
         } catch (Exception e) {

@@ -69,11 +69,6 @@ public final class D8gerConstants {
     public static final String D8_MQ_PRODUCER_ENABLE = "spring.cloud.d8ger.mq.producer.enable";
 
     /**
-     * MQ生产者发送回调开关, 默认true打开
-     */
-    public static final String D8_MQ_PRODUCER_SEND_CALLBACK_ENABLE = "spring.cloud.d8ger.mq.producer.default-send-callback.enable";
-
-    /**
      * MQ消费者开关, 默认true打开
      */
     public static final String D8_MQ_CONSUMER_ENABLE = "spring.cloud.d8ger.mq.consumer.enable";

@@ -33,6 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * MQ配置
@@ -41,7 +42,7 @@ import javax.annotation.Resource;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-@ConditionalOnProperty(name = D8gerConstants.D8_ENABLE, matchIfMissing = true)
+@ConditionalOnProperty(name = {D8gerConstants.D8_ENABLE, D8gerConstants.D8_MQ_ENABLE, D8gerConstants.D8_MQ_PRODUCER_ENABLE}, matchIfMissing = true)
 @EnableConfigurationProperties(MQProperties.class)
 @Slf4j
 public class MQConfiguration {
@@ -49,32 +50,17 @@ public class MQConfiguration {
     @Resource
     private MQProperties mqProperties;
 
-    @Resource(type = D8BaseSendCallback.class)
-    private D8BaseSendCallback sendCallback;
-
     @Resource
-    private D8BaseProducer d8BaseProducer;
+    private Optional<D8BaseSendCallback> optionalD8BaseSendCallback;
 
     @Bean(name = "mqProducer")
-    @ConditionalOnProperty(name = {D8gerConstants.D8_MQ_ENABLE, D8gerConstants.D8_MQ_PRODUCER_ENABLE}, matchIfMissing = true)
     @ConditionalOnMissingBean(value = D8BaseProducer.class)
     @AttentionDoc("当容器中不存在D8BaseProducer才执行创建")
     public D8BaseProducer mqProducer() {
         log.info("D8GER....执行MQ生产者初始化");
-        D8BaseProducer mqProducer = new D8BaseProducer(mqProperties, sendCallback);
+        D8BaseProducer mqProducer = new D8BaseProducer(mqProperties, optionalD8BaseSendCallback.orElse(new DefaultSendCallback()));
         log.info("D8GER....[mqProducer]MQ生产者初始化完成!");
         return mqProducer;
-    }
-
-    @Bean(name = "sendCallback")
-    @ConditionalOnProperty(name = {D8gerConstants.D8_MQ_ENABLE, D8gerConstants.D8_MQ_PRODUCER_ENABLE, D8gerConstants.D8_MQ_PRODUCER_SEND_CALLBACK_ENABLE}, matchIfMissing = true)
-    @ConditionalOnMissingBean(value = D8BaseSendCallback.class)
-    @AttentionDoc("当容器中不存在D8BaseSendCallback才执行创建")
-    public D8BaseSendCallback defaultSendCallback() {
-        log.info("D8GER....执行MQ发送回调处理器初始化");
-        D8BaseSendCallback sendCallback = new DefaultSendCallback(d8BaseProducer);
-        log.info("D8GER....[sendCallback]MQ发送回调处理器初始化完成!");
-        return sendCallback;
     }
 
 }

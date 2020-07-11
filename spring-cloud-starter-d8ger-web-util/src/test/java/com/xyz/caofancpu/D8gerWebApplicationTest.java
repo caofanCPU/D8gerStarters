@@ -27,8 +27,6 @@ import com.xyz.caofancpu.mvc.configuration.RedisConfiguration;
 import com.xyz.caofancpu.mvc.configuration.RestTemplateConfiguration;
 import com.xyz.caofancpu.mvc.configuration.StandardHTTPMessageConfiguration;
 import com.xyz.caofancpu.mvc.configuration.SwaggerConfiguration;
-import com.xyz.caofancpu.mvc.standard.JedisService;
-import com.xyz.caofancpu.mvc.standard.mq.D8BaseProducer;
 import com.xyz.caofancpu.remote.DemoHttpRemoteInvoker;
 import com.xyz.caofancpu.remote.SSOLoginReq;
 import com.xyz.caofancpu.remote.SSOLoginRespBody;
@@ -68,11 +66,11 @@ public class D8gerWebApplicationTest {
     @Resource
     private DemoHttpRemoteInvoker demoHttpRemoteInvoker;
 
-    @Resource
-    private JedisService jedisService;
-
-    @Resource
-    private D8BaseProducer mqProducer;
+//    @Resource
+//    private JedisService jedisService;
+//
+//    @Resource
+//    private D8BaseProducer mqProducer;
 
     @Before
     public void before() {
@@ -96,14 +94,14 @@ public class D8gerWebApplicationTest {
         NormalUseForTestUtil.out("测试结果: \n" + JSONUtil.formatStandardJSON(body));
     }
 
-    @Test
-    public void testRedis() {
-        NormalUseForTestUtil.out(jedisService.info());
-    }
+//    @Test
+//    public void testRedis() {
+//        NormalUseForTestUtil.out(jedisService.info());
+//    }
 
     @Test
     public void testMQ() {
-        NormalUseForTestUtil.out(mqProducer);
+//        NormalUseForTestUtil.out(mqProducer);
     }
 
     /**
