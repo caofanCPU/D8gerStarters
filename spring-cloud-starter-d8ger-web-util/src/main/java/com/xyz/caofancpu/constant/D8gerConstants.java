@@ -41,7 +41,7 @@ public final class D8gerConstants {
     /**
      * SwaggerApi文档开关, 默认true打开
      */
-    public static final String D8_SWAGGER_ENABLE = "spring.cloud.d8ger.rest-template.enable";
+    public static final String D8_SWAGGER_ENABLE = "spring.cloud.d8ger.swagger.enable";
 
     /**
      * 业务线程池开关, 默认true打开

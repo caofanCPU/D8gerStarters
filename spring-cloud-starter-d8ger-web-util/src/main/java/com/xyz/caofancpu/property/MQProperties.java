@@ -25,6 +25,7 @@ import com.xyz.caofancpu.constant.IEnum;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
@@ -193,20 +194,11 @@ public class MQProperties {
         DELAY_TWO_HOURS(18, "2h"),
         ;
 
-        private final int value;
+        @Getter
+        private final Integer value;
 
+        @Getter
         private final String name;
-
-
-        @Override
-        public Integer getValue() {
-            return this.value;
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
-        }
     }
 }
 

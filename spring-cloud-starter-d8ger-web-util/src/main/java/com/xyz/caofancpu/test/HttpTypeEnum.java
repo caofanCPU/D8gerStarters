@@ -20,6 +20,7 @@ package com.xyz.caofancpu.test;
 
 import com.xyz.caofancpu.constant.IEnum;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Http请求方式枚举
@@ -34,17 +35,10 @@ public enum HttpTypeEnum implements IEnum {
 
     ;
 
-    private final int value;
+    @Getter
+    private final Integer value;
 
+    @Getter
     private final String name;
 
-    @Override
-    public Integer getValue() {
-        return null;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
 }

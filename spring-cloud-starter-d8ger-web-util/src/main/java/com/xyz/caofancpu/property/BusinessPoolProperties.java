@@ -22,6 +22,7 @@ import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.constant.IEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -73,19 +74,11 @@ public class BusinessPoolProperties {
         DISCARD_POLICY(2, "静悄悄丢弃任务"),
         DISCARD_OLDEST_POLICY(3, "挤掉之前的其他任务, 再尝试运行");
 
-        private final int value;
+        @Getter
+        private final Integer value;
 
+        @Getter
         private final String name;
-
-        @Override
-        public Integer getValue() {
-            return this.value;
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
-        }
     }
 
 }
