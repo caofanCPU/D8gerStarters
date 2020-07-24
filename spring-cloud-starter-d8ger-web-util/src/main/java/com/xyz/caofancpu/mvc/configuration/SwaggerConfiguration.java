@@ -30,6 +30,7 @@ import com.xyz.caofancpu.property.SwaggerProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -214,14 +215,25 @@ public class SwaggerConfiguration {
                 if (notNull.isPresent()) {
                     validAnnotationMessageList.add(notNull.get().message());
                 }
-                com.google.common.base.Optional<NotBlank> notBlank = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), NotBlank.class);
-                if (notBlank.isPresent()) {
-                    validAnnotationMessageList.add(notBlank.get().message());
+                // javax.validation.constraints.NotBlank | NotEmpty 必须配合javax.validation.constraints.NotNull使用, 否则形同虚设
+                com.google.common.base.Optional<NotBlank> fakeNotBlank = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), NotBlank.class);
+                if (fakeNotBlank.isPresent()) {
+                    validAnnotationMessageList.add(fakeNotBlank.get().message());
                 }
-                com.google.common.base.Optional<NotEmpty> notEmpty = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), NotEmpty.class);
-                if (notEmpty.isPresent()) {
-                    validAnnotationMessageList.add(notEmpty.get().message());
+                com.google.common.base.Optional<NotEmpty> fakeNotEmpty = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), NotEmpty.class);
+                if (fakeNotEmpty.isPresent()) {
+                    validAnnotationMessageList.add(fakeNotEmpty.get().message());
                 }
+                // org.hibernate.validator.constraints.NotBlank | NotEmpty 则自带NotNull属性
+                com.google.common.base.Optional<org.hibernate.validator.constraints.NotBlank> realNotBlank = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), org.hibernate.validator.constraints.NotBlank.class);
+                if (realNotBlank.isPresent()) {
+                    validAnnotationMessageList.add(realNotBlank.get().message());
+                }
+                com.google.common.base.Optional<org.hibernate.validator.constraints.NotEmpty> realNotEmpty = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), org.hibernate.validator.constraints.NotEmpty.class);
+                if (realNotEmpty.isPresent()) {
+                    validAnnotationMessageList.add(realNotEmpty.get().message());
+                }
+
                 com.google.common.base.Optional<Digits> digits = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), Digits.class);
                 if (digits.isPresent()) {
                     validAnnotationMessageList.add(digits.get().message());
@@ -245,6 +257,10 @@ public class SwaggerConfiguration {
                 com.google.common.base.Optional<Size> size = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), Size.class);
                 if (size.isPresent()) {
                     validAnnotationMessageList.add(size.get().message());
+                }
+                com.google.common.base.Optional<Range> range = Annotations.findPropertyAnnotation(context.getBeanPropertyDefinition().get(), Range.class);
+                if (range.isPresent()) {
+                    validAnnotationMessageList.add(range.get().message());
                 }
             }
             return CollectionUtil.join(validAnnotationMessageList, SymbolConstantUtil.ENGLISH_SEMICOLON + SymbolConstantUtil.SPACE);
