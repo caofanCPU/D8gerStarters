@@ -22,14 +22,26 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.collect.Maps;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.result.GlobalErrorInfoRuntimeException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
@@ -40,6 +52,7 @@ import java.util.stream.Stream;
  *
  * @author D8GER
  */
+@Slf4j
 public class HttpStaticHandleUtil {
 
     /**
@@ -111,5 +124,68 @@ public class HttpStaticHandleUtil {
         });
         // 对于文件类型字段, 直接移除, 交由后续流程特殊处理
         return CollectionUtil.removeSpecifiedElement(resultMap, new Class[]{File.class, InputStreamSource.class});
+    }
+
+    /**
+     * 下载文件
+     */
+    public static void downloadExcel(HttpServletRequest request, HttpServletResponse response, String filePath) {
+        LoggerUtil.info(log, "下载excel开始", "filePath", filePath);
+        File file = new File(filePath);
+        try (OutputStream out = response.getOutputStream(); BufferedInputStream input = new BufferedInputStream(new FileInputStream(file))) {
+            response.reset();
+            response.setHeader("Content-Disposition", "attachment;fileName=" + encodeFilename(request, file.getName()));
+            response.addHeader("Content-Length", "" + file.length());
+            response.setContentType("application/octet-stream;charset=UTF-8");
+            IOUtils.copy(input, out);
+            out.flush();
+        } catch (IOException e) {
+            LoggerUtil.error(log, "下载excel发生错误", e, "filePath", filePath);
+        }
+    }
+
+    public static void downloadExcel(HttpServletRequest request, HttpServletResponse response, Workbook wb, String fileName) {
+        LoggerUtil.info(log, "下载excel开始", "fileName", fileName);
+        response.setHeader("Content-Disposition", "attachment;fileName=" + encodeFilename(request, fileName));
+        response.setHeader("Pragma", "No-cache");
+        response.setContentType("application/vnd.ms-excel");
+        try (OutputStream outputStream = response.getOutputStream()) {
+            wb.write(outputStream);
+            outputStream.flush();
+        } catch (IOException e) {
+            LoggerUtil.error(log, "下载excel发生错误", e, "fileName", fileName);
+        }
+    }
+
+
+    /**
+     * 设置下载文件中文件的名称
+     *
+     * @param fileName
+     * @return
+     */
+    public static String encodeFilename(HttpServletRequest request, String fileName) {
+        String agent = request.getHeader("USER-AGENT");
+        if (agent == null) {
+            return fileName;
+        }
+        try {
+            if (agent.contains("Trident") || agent.contains("MSIE")) {
+                // IE
+                fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+            } else if (agent.contains("Firefox")) {
+                // Firefox
+                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+            } else if (agent.contains("Chrome")) {
+                fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+            } else if (agent.contains("Safari")) {
+                // Safari
+                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+            } else {
+                fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString());
+            }
+        } catch (UnsupportedEncodingException ignored) {
+        }
+        return fileName;
     }
 }
