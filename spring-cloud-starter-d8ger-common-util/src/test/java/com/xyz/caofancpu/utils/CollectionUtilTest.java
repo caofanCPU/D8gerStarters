@@ -61,7 +61,7 @@ import java.util.stream.IntStream;
  * 3.操作Map
  * -
  * -
- * 4.姓名首字母排序比较器
+ * 4.姓名首字母排序比较器, 支持null值的增序比较器降序比较器
  *
  * @author D8GER
  */
@@ -274,17 +274,29 @@ public class CollectionUtilTest {
     }
 
     @Test
+    public void testAscOrDescComparator() {
+        List<Integer> numbers = Arrays.asList(null, 4, 7, 2, null, 3, null);
+        numbers.sort(CollectionUtil.getAscComparator(Function.identity()));
+        System.out.println(CollectionUtil.show(numbers));
+        numbers.sort(CollectionUtil.getDescComparator(Function.identity()));
+        System.out.println(CollectionUtil.show(numbers));
+    }
+
+    @Test
     public void testNameComparator() {
         List<String> strings = Arrays.asList(
+                null,
                 "丁海寅",
                 "周杰伦",
                 "胡歌",
+                null,
                 "谢霆锋",
                 "陈伟霆",
-                "陈道明"
+                "陈道明",
+                null
         );
         System.out.println(CollectionUtil.join(strings, ","));
-        Comparator<String> nameComparator = CollectionUtil.getNameComparator(String::intern);
+        Comparator<String> nameComparator = CollectionUtil.getNameComparator(Function.identity());
         strings.sort(nameComparator);
         System.out.println(CollectionUtil.join(strings, ","));
     }

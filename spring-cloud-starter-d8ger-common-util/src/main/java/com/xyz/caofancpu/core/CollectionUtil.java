@@ -922,7 +922,7 @@ public class CollectionUtil extends CollectionUtils {
         if (Objects.isNull(separator)) {
             separator = StringUtils.EMPTY;
         }
-        return coll.stream().filter(Objects::nonNull).map(Object::toString).collect(Collectors.joining(separator));
+        return coll.stream().map(e -> Objects.nonNull(e) ? e.toString() : SymbolConstantUtil.NULL_SHOW).collect(Collectors.joining(separator));
     }
 
     /**
@@ -1532,11 +1532,11 @@ public class CollectionUtil extends CollectionUtils {
         return (Comparator<T> & Serializable) (c1, c2) -> {
             U u2 = keyExtractor.apply(c2);
             if (Objects.isNull(u2)) {
-                return 1;
+                return -1;
             }
             U u1 = keyExtractor.apply(c1);
             if (Objects.isNull(u1)) {
-                return -1;
+                return 1;
             }
             return u1.compareTo(u2);
         };
@@ -1552,11 +1552,11 @@ public class CollectionUtil extends CollectionUtils {
         return (Comparator<T> & Serializable) (c1, c2) -> {
             U u2 = keyExtractor.apply(c2);
             if (Objects.isNull(u2)) {
-                return 1;
+                return -1;
             }
             U u1 = keyExtractor.apply(c1);
             if (Objects.isNull(u1)) {
-                return -1;
+                return 1;
             }
             return u2.compareTo(u1);
         };
@@ -1586,6 +1586,12 @@ public class CollectionUtil extends CollectionUtils {
         public int compare(T o1, T o2) {
             String name1 = function.apply(o1);
             String name2 = function.apply(o2);
+            if (Objects.isNull(name2)) {
+                return -1;
+            }
+            if (Objects.isNull(name1)) {
+                return 1;
+            }
             for (int i = 0; i < name1.length() && i < name2.length(); i++) {
                 int codePoint1 = name1.charAt(i);
                 int codePoint2 = name2.charAt(i);
