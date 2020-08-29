@@ -22,6 +22,8 @@ import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.multithreadutils.batch.OnSuccessCallback;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 /**
  * 线程相关
  *
@@ -38,11 +40,11 @@ public class ThreadUtil {
         } catch (Throwable e) {
             LoggerUtil.error(log, "线程执行异常", e, "traceId", threadTraceId);
         } finally {
-            if (success != null) {
+            if (Objects.nonNull(success)) {
                 try {
                     success.callback();
                 } catch (Exception e) {
-                    LoggerUtil.error(log, "线程结束.回调异常", e, "traceId", threadTraceId);
+                    LoggerUtil.error(log, "线程结束, 回调异常", e, "traceId", threadTraceId);
                 }
             }
             ThreadTraceUtil.endTrace();
