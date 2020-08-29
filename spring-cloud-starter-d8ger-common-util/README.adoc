@@ -2,50 +2,19 @@
 
 - 高频核心工具
 * 集合利器, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/CollectionUtil.java[CollectionUtil]
-* 时间刺客, DateUtil
-* 数值影流, NumberUtil
-* 万年树妖, WrapTreeUtil
+* 时间刺客, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/DateUtil.java[DateUtil]
+* 数值影流, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/NumberUtil.java[NumberUtil]
+* 万年树妖, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/WrapTreeUtil.java[WrapTreeUtil]
 - 辅助工具
-* 正则天地新会所, VerbalExpressionUtil
-* 极限对齐字符串, StringAlignUtil
-* 特斯拉御用杰森, JSONUtil
-* 迈巴赫符号法典, SymbolConstantUtil
-* 弗雷尔枚举之根, IEnum
-* 友好式文档注解, AttentionDoc, ImportDoc, WarnDoc
+* 正则天地新会所, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/VerbalExpressionUtil.java[VerbalExpressionUtil]
+* 极限对齐字符串, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/extra/StringAlignUtil.java[StringAlignUtil]
+* 特斯拉御用杰森, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/JSONUtil.java[JSONUtil]
+* 迈巴赫符号法典, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/constant/SymbolConstantUtil.java[SymbolConstantUtil]
+* 弗雷尔枚举之根, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/constant/IEnum.java[IEnum]
+* 友好式文档注解
+. 提醒标识, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/annotation/AttentionDoc.java[AttentionDoc]
+. 重要标识, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/annotation/ImportDoc.java[ImportDoc]
+. 警告标识, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/annotation/WarnDoc.java[WarnDoc]
 - 算法工具
-* 罗伯特•塔扬(Robert•Tarjan)-强连通算法, TarjanSSC, 鉴环算法
-
-==== Sentinel控制台
-
-* 版本``1.7.2``
-
-===== 版本及依赖
-
-.1.版本信息
-[source,xml]
-----
-<properties>
-    <springboot.version>2.1.2.RELEASE</springboot.version>
-    <!-- 接入sentinel版本 -->
-    <sentinel.version>1.7.1</sentinel.version>
-    <!-- sentinel-start版本 -->
-    <alibaba-sentinel-starter.version>2.2.1.RELEASE</alibaba-sentinel-starter.version>
-    <!-- nacos版本 -->
-    <nacos-config-spring-boot.version>0.2.7</nacos-config-spring-boot.version>
-</properties>
-----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* 罗伯特•塔扬(Robert•Tarjan)-强连通算法, TarjanSSC, 鉴环算法, link:/spring-cloud-starter-d8ger-common-util/src/test/java/com/xyz/caofancpu/StrategyRuleTest.java[StrategyRuleTest]
 
