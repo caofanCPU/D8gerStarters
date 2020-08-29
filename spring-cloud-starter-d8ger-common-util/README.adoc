@@ -1,7 +1,7 @@
 == 公共业务层工具类导航🌐
 
 - 高频核心工具
-* 集合利器, CollectionUtil
+* 集合利器, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/core/CollectionUtil.java[CollectionUtil]
 * 时间刺客, DateUtil
 * 数值影流, NumberUtil
 * 万年树妖, WrapTreeUtil
