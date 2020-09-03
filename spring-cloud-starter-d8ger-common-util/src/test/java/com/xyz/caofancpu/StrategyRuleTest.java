@@ -260,6 +260,8 @@ public class StrategyRuleTest {
         dataMap.put(Pair.of("D", "F"), Boolean.TRUE);
         dataMap.put(Pair.of("D", "B"), Boolean.TRUE);
         dataMap.put(Pair.of("E", "F"), Boolean.TRUE);
+        dataMap.put(Pair.of("F", "G"), Boolean.TRUE);
+        dataMap.put(Pair.of("G", "E"), Boolean.TRUE);
         return dataMap;
     }
 
