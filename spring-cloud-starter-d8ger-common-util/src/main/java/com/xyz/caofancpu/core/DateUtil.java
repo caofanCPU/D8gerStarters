@@ -18,11 +18,13 @@
 
 package com.xyz.caofancpu.core;
 
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -106,6 +108,28 @@ public class DateUtil {
                 .withSecond(0)
                 .withNano(0);
         return (int) (tomorrowZero.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli() - now.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli());
+    }
+
+    /**
+     * Long 转换 localDateTime
+     */
+    public static LocalDateTime toLocalDateTime(@NonNull Long milliSeconds) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSeconds), DEFAULT_ZONE_OFFSET);
+    }
+
+    /**
+     * Long 转换 localDateTime得到标准字符串
+     */
+    public static String toLocalDateTimeString(@NonNull Long milliSeconds) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSeconds), DEFAULT_ZONE_OFFSET);
+        return localDateTime.toString().replaceAll("T", SymbolConstantUtil.SPACE);
+    }
+
+    /**
+     * Long 转换 localDate
+     */
+    public static LocalDate toLocalDate(@NonNull Long timestamp) {
+        return Instant.ofEpochMilli(timestamp).atZone(DEFAULT_ZONE_OFFSET).toLocalDate();
     }
 
     /**
