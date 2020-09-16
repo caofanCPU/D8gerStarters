@@ -23,7 +23,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.VerbalExpressionUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -110,7 +109,7 @@ public class LogIpConfigUtil extends ClassicConverter {
         String htmlText = null;
         try {
             htmlText = restTemplate.postForObject(wwwUrl, null, String.class);
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         if (Objects.isNull(htmlText)) {
