@@ -90,7 +90,7 @@ public class D8GlobalExceptionSupport<T> {
      * @param ex
      * @return
      */
-    @ExceptionHandler(value = {RuntimeException.class, Throwable.class})
+    @ExceptionHandler(value = {RuntimeException.class})
     public D8Response<T> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
         LoggerUtil.error(log, "服务器内部错误", "url", request.getServletPath(), "错误原因", ex.getMessage());
         endTrace();
