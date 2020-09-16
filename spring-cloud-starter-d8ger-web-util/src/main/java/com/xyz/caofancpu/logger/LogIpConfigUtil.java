@@ -21,9 +21,7 @@ package com.xyz.caofancpu.logger;
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.VerbalExpressionUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -32,11 +30,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -103,31 +98,7 @@ public class LogIpConfigUtil extends ClassicConverter {
      * @return
      */
     public static String getSelfPublicIp() {
-        RestTemplate restTemplate = new RestTemplate();
-        String wwwUrl = "http://www.net.cn/static/customercare/yourip.asp";
-
-        String htmlText = null;
-        try {
-            htmlText = restTemplate.postForObject(wwwUrl, null, String.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (Objects.isNull(htmlText)) {
-            htmlText = SymbolConstantUtil.EMPTY;
-        }
-        String[] sourceLines = htmlText.split(SymbolConstantUtil.NEXT_LINE);
-        List<String> matchIpItemList = new ArrayList<>(4);
-        for (int i = 0; i < sourceLines.length; i++) {
-            if (!WWW_PUBLIC_IP_REGEX.matcher(sourceLines[i]).find()) {
-                continue;
-            }
-            Matcher matcher = VerbalExpressionUtil.IP_PATTERN.matcher(sourceLines[i]);
-            while (matcher.find()) {
-                matchIpItemList.add(matcher.group());
-            }
-            return matchIpItemList.get(0);
-        }
-        log.warn("未能找到本机公网IP, 使用LocalHost代替");
+        log.warn("请自行获取本机公网IP, 默认使用LocalHost代替");
         return LOCALHOST;
     }
 
