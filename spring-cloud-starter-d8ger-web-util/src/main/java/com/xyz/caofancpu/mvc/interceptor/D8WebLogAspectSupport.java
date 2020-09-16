@@ -128,9 +128,8 @@ public class D8WebLogAspectSupport {
     }
 
     public void doAfterThrowingAdvice(JoinPoint joinPoint, Throwable ex) {
-        LoggerUtil.error(errorLog, "接口处理异常", getInterfaceFullName(joinPoint), ex.getMessage());
-        // 结束线程追踪
-        ThreadTraceUtil.endTrace();
+        // 只记录警告级别, 将异常抛出, 由外层捕获处理
+        LoggerUtil.warn(log, "接口处理异常", getInterfaceFullName(joinPoint), ex.getMessage());
     }
 
     public void doAfterReturning(JoinPoint joinPoint, Object returnValue) {

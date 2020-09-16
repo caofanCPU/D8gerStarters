@@ -21,10 +21,12 @@ package com.xyz.caofancpu.mvc.interceptor;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.logger.LoggerUtil;
+import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import com.xyz.caofancpu.result.D8Response;
 import com.xyz.caofancpu.result.GlobalErrorInfoEnum;
 import com.xyz.caofancpu.result.GlobalErrorInfoException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -65,6 +67,7 @@ public class D8GlobalExceptionSupport<T> {
             List<String> messageList = CollectionUtil.transToList(((MethodArgumentNotValidException) ex).getBindingResult().getFieldErrors(), FieldError::getDefaultMessage);
             errorMsg = CollectionUtil.join(messageList, SymbolConstantUtil.ENGLISH_SEMICOLON);
         }
+        endTrace();
         return D8Response.fail(GlobalErrorInfoEnum.PARA_ERROR.getCode(), errorMsg);
     }
 
@@ -76,7 +79,8 @@ public class D8GlobalExceptionSupport<T> {
      */
     @ExceptionHandler(value = GlobalErrorInfoException.class)
     public D8Response<T> handleCustomerException(GlobalErrorInfoException ex, HttpServletRequest request) {
-        LoggerUtil.info(log, "业务异常", "url", request.getServletPath(), "异常原因", ex.getMessage());
+        LoggerUtil.error(log, "业务异常", "url", request.getServletPath(), "异常原因", ex.getMessage());
+        endTrace();
         return D8Response.fail(ex.getCode(), ex.getMsg());
     }
 
@@ -88,7 +92,25 @@ public class D8GlobalExceptionSupport<T> {
      */
     @ExceptionHandler(value = {RuntimeException.class, Throwable.class})
     public D8Response<T> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
-        LoggerUtil.info(log, "服务器内部错误", "url", request.getServletPath(), "错误原因", ex.getMessage());
+        LoggerUtil.error(log, "服务器内部错误", "url", request.getServletPath(), "错误原因", ex.getMessage());
+        endTrace();
         return D8Response.fail(GlobalErrorInfoEnum.INTERNAL_ERROR);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public D8Response<T> handleTopException(Exception e, HttpServletRequest request) {
+        if (StringUtils.isNotBlank(e.getMessage()) && (e.getMessage().contains("断开的管道") || e.getMessage().contains("Broken pipe"))) {
+            // This exception appeared when user canceled optimization
+            LoggerUtil.warn(log, "系统异常", e, "url", request.getServletPath(), "errorMsg", e.getMessage());
+        } else {
+            LoggerUtil.error(log, "系统异常", e, "url", request.getServletPath(), "errorMsg", e.getMessage());
+        }
+        endTrace();
+        return D8Response.fail(GlobalErrorInfoEnum.INTERNAL_ERROR);
+    }
+
+    private void endTrace() {
+        // end thread trace
+        ThreadTraceUtil.endTrace();
     }
 }
