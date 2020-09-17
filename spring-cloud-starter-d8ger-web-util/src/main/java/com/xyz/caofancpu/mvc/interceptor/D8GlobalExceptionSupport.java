@@ -79,7 +79,7 @@ public class D8GlobalExceptionSupport<T> {
      */
     @ExceptionHandler(value = GlobalErrorInfoException.class)
     public D8Response<T> handleCustomerException(GlobalErrorInfoException ex, HttpServletRequest request) {
-        LoggerUtil.error(log, "业务异常", "url", request.getServletPath(), "异常原因", ex.getMessage());
+        LoggerUtil.error(log, "业务异常", "url", request.getServletPath(), "异常原因", ex.getMessage(), "异常明细", ex);
         endTrace();
         return D8Response.fail(ex.getCode(), ex.getMsg());
     }
@@ -92,18 +92,18 @@ public class D8GlobalExceptionSupport<T> {
      */
     @ExceptionHandler(value = {RuntimeException.class})
     public D8Response<T> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
-        LoggerUtil.error(log, "服务器内部错误", "url", request.getServletPath(), "错误原因", ex.getMessage());
+        LoggerUtil.error(log, "服务器内部错误", "url", request.getServletPath(), "错误原因", ex.getMessage(), "异常明细", ex);
         endTrace();
         return D8Response.fail(GlobalErrorInfoEnum.INTERNAL_ERROR);
     }
 
     @ExceptionHandler(Throwable.class)
-    public D8Response<T> handleTopException(Exception e, HttpServletRequest request) {
-        if (StringUtils.isNotBlank(e.getMessage()) && (e.getMessage().contains("断开的管道") || e.getMessage().contains("Broken pipe"))) {
+    public D8Response<T> handleTopException(Exception ex, HttpServletRequest request) {
+        if (StringUtils.isNotBlank(ex.getMessage()) && (ex.getMessage().contains("断开的管道") || ex.getMessage().contains("Broken pipe"))) {
             // This exception appeared when user canceled optimization
-            LoggerUtil.warn(log, "系统异常", e, "url", request.getServletPath(), "errorMsg", e.getMessage());
+            LoggerUtil.warn(log, "系统异常", ex, "url", request.getServletPath(), "errorMsg", ex.getMessage());
         } else {
-            LoggerUtil.error(log, "系统异常", e, "url", request.getServletPath(), "errorMsg", e.getMessage());
+            LoggerUtil.error(log, "系统异常", ex, "url", request.getServletPath(), "errorMsg", ex.getMessage(), "异常明细", ex);
         }
         endTrace();
         return D8Response.fail(GlobalErrorInfoEnum.INTERNAL_ERROR);

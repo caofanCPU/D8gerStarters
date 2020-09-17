@@ -33,6 +33,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 
 /**
@@ -66,8 +68,10 @@ import java.util.Date;
  */
 @Slf4j
 public class DateUtil {
+    public static final Pattern DATE_TIME_REGEX = Pattern.compile("(?:[Tt])+");
     public final static String DATETIME_FORMAT_SIMPLE = "yyyy-MM-dd HH:mm:ss";
     public final static String DATETIME_FORMAT_DETAIL = "yyyy-MM-dd HH:mm:ss:SSS";
+    public final static String DATETIME_FORMAT_DETAIL_DOT = "yyyy-MM-dd HH:mm:ss.SSS";
     public final static String DATETIME_FORMAT_CN = "yyyy年MM月dd日HH时mm分ss秒";
 
     public final static String DATE_FORMAT_SIMPLE = "yyyy-MM-dd";
@@ -369,6 +373,42 @@ public class DateUtil {
      */
     public static long parseStandardMilliSeconds(String dateTimeStr) {
         return parseStandardDateTime(dateTimeStr).toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli();
+    }
+
+    /**
+     * 增强型时间戳数值转换MySQL标准时间串: 2020-09-16 15:22:33.456
+     */
+    public static String enhanceToLocalDateTime(@NonNull Long milliSeconds) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(milliSeconds), DEFAULT_ZONE_OFFSET);
+        return localDateTime.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT_DETAIL_DOT));
+    }
+
+    /**
+     * 增强型解析时间, 转换为时间戳数值串
+     *
+     * @param dateTimeStr
+     * @return
+     */
+    public static String enhanceParseMilliSeconds(String dateTimeStr) {
+        if (StringUtils.isBlank(dateTimeStr)) {
+            return dateTimeStr;
+        }
+        String originWord = dateTimeStr.replaceAll(DATE_TIME_REGEX.pattern(), SymbolConstantUtil.SPACE);
+        LocalDateTime parse = null;
+        try {
+            parse = LocalDateTime.parse(originWord, DateTimeFormatter.ofPattern(DATETIME_FORMAT_SIMPLE));
+        } catch (Exception e) {
+            try {
+                parse = LocalDateTime.parse(originWord, DateTimeFormatter.ofPattern(DATETIME_FORMAT_DETAIL));
+            } catch (Exception exception) {
+                try {
+                    parse = LocalDateTime.parse(originWord, DateTimeFormatter.ofPattern(DATETIME_FORMAT_DETAIL_DOT));
+                } catch (Exception ex) {
+                    parse = LocalDateTime.parse(originWord, DateTimeFormatter.ofPattern(DATETIME_FORMAT_CN));
+                }
+            }
+        }
+        return Objects.nonNull(parse) ? String.valueOf(parse.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli()) : dateTimeStr;
     }
 
     /**
