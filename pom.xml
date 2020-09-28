@@ -52,9 +52,7 @@
         <mybatis-spring-boot.version>2.1.0</mybatis-spring-boot.version>
         <jedis.version>3.3.0</jedis.version>
         <redisson.version>3.13.0</redisson.version>
-        <redisson.version>3.10.0</redisson.version>
         <rocketmq-client.version>4.7.0</rocketmq-client.version>
-        <spring-boot-starter-data-redis.version>2.1.1.RELEASE</spring-boot-starter-data-redis.version>
         <netty.version>4.1.44.Final</netty.version>
         <spring-kafka.version>2.2.8.RELEASE</spring-kafka.version>
         <springcloud.common.version>2.1.2.RELEASE</springcloud.common.version>
