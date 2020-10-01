@@ -99,8 +99,6 @@ public class D8WebLogAspectSupport {
             LoggerUtil.info(log, "入参为文件(InputStreamSource)或HttpRequest等类型, 打印对象地址信息");
             requestBody = Arrays.toString(joinPoint.getArgs());
         }
-        // 开始线程追踪
-        ThreadTraceUtil.beginTrace();
         if (printReqLog(joinPoint)) {
             String requestSb = "\n[前端页面请求]" +
                     "\n请求IP=" + LogIpConfigUtil.getRequestSourceIp() +
@@ -116,6 +114,9 @@ public class D8WebLogAspectSupport {
 
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint)
             throws Throwable {
+        // 开始线程追踪
+        ThreadTraceUtil.beginTrace();
+        doBefore(proceedingJoinPoint);
         String requestInterface = getInterfaceFullName(proceedingJoinPoint);
         long startTime = System.currentTimeMillis();
         Object result;
