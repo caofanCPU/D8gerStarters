@@ -83,7 +83,7 @@
         <swagger-model.version>1.5.21</swagger-model.version>
         <knife4j-spring-boot-starter.version>1.9.6</knife4j-spring-boot-starter.version>
         <pagehelper.version>1.2.12</pagehelper.version>
-        <junit.version>4.13</junit.version>
+        <junit.version>4.13.1</junit.version>
 
     </properties>
 
