@@ -75,7 +75,7 @@
         <code.zxin.version>3.3.2</code.zxin.version>
         <pinyin4j.version>2.5.0</pinyin4j.version>
         <string-template.version>4.0.2</string-template.version>
-        <java.verbal.expressions.version>1.4</java.verbal.expressions.version>
+        <java.verbal.expressions.version>1.6</java.verbal.expressions.version>
         <java-oolamda.version>0.9.13</java-oolamda.version>
 
         <jasypt.version>1.18</jasypt.version>

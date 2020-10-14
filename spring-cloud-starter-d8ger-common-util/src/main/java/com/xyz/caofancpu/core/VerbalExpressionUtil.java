@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 
 /**
  * 正则处理工具类
+ * VerbalExpression.regex().startOfLine().capt().find("a").oneOrMore().then("X").endCapt().endOfLine().build()  -->  ^((?:a)+(?:X))$
  *
  * @author D8GER
  */
