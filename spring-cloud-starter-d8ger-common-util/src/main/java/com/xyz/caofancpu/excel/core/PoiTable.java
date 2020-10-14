@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -57,6 +58,11 @@ public abstract class PoiTable<T> extends Node implements Area, Styleable, Title
      */
     @Setter
     private PoiStyle titleStyle;
+    /**
+     * 数据类型小数精度, 默认1位
+     */
+    @Setter
+    private Integer scale = 1;
 
     /**
      * 设置值
@@ -138,7 +144,11 @@ public abstract class PoiTable<T> extends Node implements Area, Styleable, Title
         if (object == null) {
             return column.getDefaultValue();
         }
-
+        // 特殊数据类型处理
+        if (object instanceof Float) {
+            double excelNumber = ((Float) object).doubleValue();
+            return BigDecimal.valueOf(excelNumber).setScale(this.scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+        }
         if (column.getFormat() != null) {
             return String.format(column.getFormat(), object);
         }
