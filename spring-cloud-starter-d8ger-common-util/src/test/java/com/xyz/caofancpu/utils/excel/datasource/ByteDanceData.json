@@ -1,0 +1,82 @@
+{
+    "analysisResultList": [
+        {
+            "viewName": "年级理科班",
+            "totalStudent": 679,
+            "actualStudent": 253,
+            "maxScore": 92,
+            "minScore": 21,
+            "avgScore": 64.7,
+            "sigma": 11.21,
+            "excellentRate": "2.37%",
+            "goodRate": "17.39%",
+            "passRate": "50.2%",
+            "failedRate": "30.04%",
+            "difficulty": 0.65,
+            "distinction": 0.27
+        },
+        {
+            "viewName": "11班",
+            "totalStudent": 63,
+            "actualStudent": 61,
+            "maxScore": 92,
+            "minScore": 48,
+            "avgScore": 70.3,
+            "sigma": 10.32,
+            "excellentRate": "6.56%",
+            "goodRate": "32.79%",
+            "passRate": "44.26%",
+            "failedRate": "16.39%",
+            "difficulty": 0.7,
+            "distinction": 0.26,
+            "teacherName": "JackMa"
+        },
+        {
+            "viewName": "12班",
+            "totalStudent": 64,
+            "actualStudent": 63,
+            "maxScore": 87,
+            "minScore": 48,
+            "avgScore": 68.4,
+            "sigma": 7.81,
+            "excellentRate": "1.59%",
+            "goodRate": "22.22%",
+            "passRate": "61.9%",
+            "failedRate": "14.29%",
+            "difficulty": 0.68,
+            "distinction": 0.19,
+            "teacherName": "Tony"
+        },
+        {
+            "viewName": "13班",
+            "totalStudent": 64,
+            "actualStudent": 62,
+            "maxScore": 79,
+            "minScore": 37,
+            "avgScore": 60.9,
+            "sigma": 10.04,
+            "goodRate": "6.45%",
+            "passRate": "50.0%",
+            "failedRate": "43.55%",
+            "difficulty": 0.61,
+            "distinction": 0.25,
+            "teacherName": "Tony"
+        },
+        {
+            "viewName": "14班",
+            "totalStudent": 67,
+            "actualStudent": 67,
+            "maxScore": 86,
+            "minScore": 21,
+            "avgScore": 59.8,
+            "sigma": 12.37,
+            "excellentRate": "1.49%",
+            "goodRate": "8.95%",
+            "passRate": "44.78%",
+            "failedRate": "44.78%",
+            "difficulty": 0.6,
+            "distinction": 0.28,
+            "teacherName": "JackMa"
+        }
+    ]
+}

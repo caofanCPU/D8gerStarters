@@ -1,0 +1,628 @@
+{
+    "examResultList": [
+        {
+            "examNo": "A123",
+            "examName": "周测",
+            "subjectResultList": [
+                {
+                    "subjectCode": 1,
+                    "subjectName": "高等数学",
+                    "groupResultList": [
+                        {
+                            "groupId": 20129007,
+                            "groupName": "电信1班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 0.6560,
+                                    "goodRate": 0.3279,
+                                    "passRate": 0.4426,
+                                    "failedRate": 0.1639,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 34,
+                                    "reviewerName": "JackMa华腾"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 64,
+                                    "actualStudent": 63,
+                                    "maxScore": 87,
+                                    "minScore": 48,
+                                    "avgScore": 68.4,
+                                    "sigma": 7.81,
+                                    "excellentRate": -0.1590,
+                                    "goodRate": 0.2222,
+                                    "passRate": 0.6190,
+                                    "failedRate": 0.1429,
+                                    "difficulty": 0.68,
+                                    "distinction": 0.19,
+                                    "reviewerId": 88,
+                                    "reviewerName": "Faker姜承禄"
+                                },
+                                {
+                                    "reviewOrderId": 3,
+                                    "totalStudent": 64,
+                                    "actualStudent": 62,
+                                    "maxScore": 79,
+                                    "minScore": 37,
+                                    "avgScore": 60.9,
+                                    "sigma": 10.04,
+                                    "goodRate": 6.45,
+                                    "passRate": 50.0,
+                                    "failedRate": 43.55,
+                                    "difficulty": 0.61,
+                                    "distinction": 0.25,
+                                    "reviewerId": 10086,
+                                    "reviewerName": "联通大王"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": 20129238,
+                            "groupName": "通信4班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 679,
+                                    "actualStudent": 253,
+                                    "maxScore": 92,
+                                    "minScore": 21,
+                                    "avgScore": 0.0,
+                                    "sigma": 11.21,
+                                    "excellentRate": 2.37,
+                                    "goodRate": 17.39,
+                                    "passRate": 50.2,
+                                    "failedRate": 30.04,
+                                    "difficulty": 0.65,
+                                    "distinction": 0.27,
+                                    "reviewerId": 29,
+                                    "reviewerName": "川普唐纳德"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 65.0,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 231,
+                                    "reviewerName": "罗斯福川崎"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "subjectCode": 2,
+                    "subjectName": "概率论与数理统计",
+                    "groupResultList": [
+                        {
+                            "groupId": 20129007,
+                            "groupName": "电信1班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": -0.5,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 34,
+                                    "reviewerName": "JackMa华腾"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 64,
+                                    "actualStudent": 63,
+                                    "maxScore": 87,
+                                    "minScore": 48,
+                                    "avgScore": 68.4,
+                                    "sigma": 7.81,
+                                    "excellentRate": 1.59,
+                                    "goodRate": 22.22,
+                                    "passRate": 61.9,
+                                    "failedRate": 14.29,
+                                    "difficulty": 0.68,
+                                    "distinction": 0.19,
+                                    "reviewerId": 88,
+                                    "reviewerName": "Faker姜承禄"
+                                },
+                                {
+                                    "reviewOrderId": 3,
+                                    "totalStudent": 64,
+                                    "actualStudent": 62,
+                                    "maxScore": 79,
+                                    "minScore": 37,
+                                    "avgScore": 60.9,
+                                    "sigma": 10.04,
+                                    "goodRate": 6.45,
+                                    "passRate": 50.0,
+                                    "failedRate": 43.55,
+                                    "difficulty": 0.61,
+                                    "distinction": 0.25,
+                                    "reviewerId": 10086,
+                                    "reviewerName": "联通大王"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": 20129238,
+                            "groupName": "通信4班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 679,
+                                    "actualStudent": 253,
+                                    "maxScore": 92,
+                                    "minScore": 21,
+                                    "avgScore": 64.7,
+                                    "sigma": 11.21,
+                                    "excellentRate": 2.37,
+                                    "goodRate": 17.39,
+                                    "passRate": 50.2,
+                                    "failedRate": 30.04,
+                                    "difficulty": 0.65,
+                                    "distinction": 0.27,
+                                    "reviewerId": 29,
+                                    "reviewerName": "川普唐纳德"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 231,
+                                    "reviewerName": "罗斯福川崎"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "subjectCode": 3,
+                    "subjectName": "电磁波原理",
+                    "groupResultList": [
+                        {
+                            "groupId": 20129007,
+                            "groupName": "电信1班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 34,
+                                    "reviewerName": "JackMa华腾"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 64,
+                                    "actualStudent": 63,
+                                    "maxScore": 87,
+                                    "minScore": 48,
+                                    "avgScore": 68.4,
+                                    "sigma": 7.81,
+                                    "excellentRate": 1.59,
+                                    "goodRate": 22.22,
+                                    "passRate": 61.9,
+                                    "failedRate": 14.29,
+                                    "difficulty": 0.68,
+                                    "distinction": 0.19,
+                                    "reviewerId": 88,
+                                    "reviewerName": "Faker姜承禄"
+                                },
+                                {
+                                    "reviewOrderId": 3,
+                                    "totalStudent": 64,
+                                    "actualStudent": 62,
+                                    "maxScore": 79,
+                                    "minScore": 37,
+                                    "avgScore": 60.9,
+                                    "sigma": 10.04,
+                                    "goodRate": 6.45,
+                                    "passRate": 50.0,
+                                    "failedRate": 43.55,
+                                    "difficulty": 0.61,
+                                    "distinction": 0.25,
+                                    "reviewerId": 10086,
+                                    "reviewerName": "联通大王"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": 20129238,
+                            "groupName": "通信4班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 679,
+                                    "actualStudent": 253,
+                                    "maxScore": 92,
+                                    "minScore": 21,
+                                    "avgScore": 64.7,
+                                    "sigma": 11.21,
+                                    "excellentRate": 2.37,
+                                    "goodRate": 17.39,
+                                    "passRate": 50.2,
+                                    "failedRate": 30.04,
+                                    "difficulty": 0.65,
+                                    "distinction": 0.27,
+                                    "reviewerId": 29,
+                                    "reviewerName": "川普唐纳德"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 231,
+                                    "reviewerName": "罗斯福川崎"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "examNo": "B888",
+            "examName": "毕业考试",
+            "subjectResultList": [
+                {
+                    "subjectCode": 202,
+                    "subjectName": "信号与系统",
+                    "groupResultList": [
+                        {
+                            "groupId": 20129007,
+                            "groupName": "电信1班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 34,
+                                    "reviewerName": "JackMa华腾"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 64,
+                                    "actualStudent": 63,
+                                    "maxScore": 87,
+                                    "minScore": 48,
+                                    "avgScore": 68.4,
+                                    "sigma": 7.81,
+                                    "excellentRate": 1.59,
+                                    "goodRate": 22.22,
+                                    "passRate": 61.9,
+                                    "failedRate": 14.29,
+                                    "difficulty": 0.68,
+                                    "distinction": 0.19,
+                                    "reviewerId": 88,
+                                    "reviewerName": "Faker姜承禄"
+                                },
+                                {
+                                    "reviewOrderId": 3,
+                                    "totalStudent": 64,
+                                    "actualStudent": 62,
+                                    "maxScore": 79,
+                                    "minScore": 37,
+                                    "avgScore": 60.9,
+                                    "sigma": 10.04,
+                                    "goodRate": 6.45,
+                                    "passRate": 50.0,
+                                    "failedRate": 43.55,
+                                    "difficulty": 0.61,
+                                    "distinction": 0.25,
+                                    "reviewerId": 10086,
+                                    "reviewerName": "联通大王"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": 20129238,
+                            "groupName": "通信4班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 679,
+                                    "actualStudent": 253,
+                                    "maxScore": 92,
+                                    "minScore": 21,
+                                    "avgScore": 64.7,
+                                    "sigma": 11.21,
+                                    "excellentRate": 2.37,
+                                    "goodRate": 17.39,
+                                    "passRate": 50.2,
+                                    "failedRate": 30.04,
+                                    "difficulty": 0.65,
+                                    "distinction": 0.27,
+                                    "reviewerId": 29,
+                                    "reviewerName": "川普唐纳德"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 231,
+                                    "reviewerName": "罗斯福川崎"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "subjectCode": 332,
+                    "subjectName": "微机原理",
+                    "groupResultList": [
+                        {
+                            "groupId": 20129007,
+                            "groupName": "电信1班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 34,
+                                    "reviewerName": "JackMa华腾"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 64,
+                                    "actualStudent": 63,
+                                    "maxScore": 87,
+                                    "minScore": 48,
+                                    "avgScore": 68.4,
+                                    "sigma": 7.81,
+                                    "excellentRate": 1.59,
+                                    "goodRate": 22.22,
+                                    "passRate": 61.9,
+                                    "failedRate": 14.29,
+                                    "difficulty": 0.68,
+                                    "distinction": 0.19,
+                                    "reviewerId": 88,
+                                    "reviewerName": "Faker姜承禄"
+                                },
+                                {
+                                    "reviewOrderId": 3,
+                                    "totalStudent": 64,
+                                    "actualStudent": 62,
+                                    "maxScore": 79,
+                                    "minScore": 37,
+                                    "avgScore": 60.9,
+                                    "sigma": 10.04,
+                                    "goodRate": 6.45,
+                                    "passRate": 50.0,
+                                    "failedRate": 43.55,
+                                    "difficulty": 0.61,
+                                    "distinction": 0.25,
+                                    "reviewerId": 10086,
+                                    "reviewerName": "联通大王"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": 20129238,
+                            "groupName": "通信4班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 679,
+                                    "actualStudent": 253,
+                                    "maxScore": 92,
+                                    "minScore": 21,
+                                    "avgScore": 64.7,
+                                    "sigma": 11.21,
+                                    "excellentRate": 2.37,
+                                    "goodRate": 17.39,
+                                    "passRate": 50.2,
+                                    "failedRate": 30.04,
+                                    "difficulty": 0.65,
+                                    "distinction": 0.27,
+                                    "reviewerId": 29,
+                                    "reviewerName": "川普唐纳德"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 231,
+                                    "reviewerName": "罗斯福川崎"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "subjectCode": 1787,
+                    "subjectName": "数据结构",
+                    "groupResultList": [
+                        {
+                            "groupId": 20129007,
+                            "groupName": "电信1班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 34,
+                                    "reviewerName": "JackMa华腾"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 64,
+                                    "actualStudent": 63,
+                                    "maxScore": 87,
+                                    "minScore": 48,
+                                    "avgScore": 68.4,
+                                    "sigma": 7.81,
+                                    "excellentRate": 1.59,
+                                    "goodRate": 22.22,
+                                    "passRate": 61.9,
+                                    "failedRate": 14.29,
+                                    "difficulty": 0.68,
+                                    "distinction": 0.19,
+                                    "reviewerId": 88,
+                                    "reviewerName": "Faker姜承禄"
+                                },
+                                {
+                                    "reviewOrderId": 3,
+                                    "totalStudent": 64,
+                                    "actualStudent": 62,
+                                    "maxScore": 79,
+                                    "minScore": 37,
+                                    "avgScore": 60.9,
+                                    "sigma": 10.04,
+                                    "goodRate": 6.45,
+                                    "passRate": 50.0,
+                                    "failedRate": 43.55,
+                                    "difficulty": 0.61,
+                                    "distinction": 0.25,
+                                    "reviewerId": 10086,
+                                    "reviewerName": "联通大王"
+                                }
+                            ]
+                        },
+                        {
+                            "groupId": 20129238,
+                            "groupName": "通信4班",
+                            "analysisResultList": [
+                                {
+                                    "reviewOrderId": 1,
+                                    "totalStudent": 679,
+                                    "actualStudent": 253,
+                                    "maxScore": 92,
+                                    "minScore": 21,
+                                    "avgScore": 64.7,
+                                    "sigma": 11.21,
+                                    "excellentRate": 2.37,
+                                    "goodRate": 17.39,
+                                    "passRate": 50.2,
+                                    "failedRate": 30.04,
+                                    "difficulty": 0.65,
+                                    "distinction": 0.27,
+                                    "reviewerId": 29,
+                                    "reviewerName": "川普唐纳德"
+                                },
+                                {
+                                    "reviewOrderId": 2,
+                                    "totalStudent": 63,
+                                    "actualStudent": 61,
+                                    "maxScore": 92,
+                                    "minScore": 48,
+                                    "avgScore": 70.3,
+                                    "sigma": 10.32,
+                                    "excellentRate": 6.56,
+                                    "goodRate": 32.79,
+                                    "passRate": 44.26,
+                                    "failedRate": 16.39,
+                                    "difficulty": 0.7,
+                                    "distinction": 0.26,
+                                    "reviewerId": 231,
+                                    "reviewerName": "罗斯福川崎"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

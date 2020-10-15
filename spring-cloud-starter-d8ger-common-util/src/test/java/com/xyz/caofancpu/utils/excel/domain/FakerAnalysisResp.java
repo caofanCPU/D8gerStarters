@@ -24,10 +24,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 成绩排名分析响应
+ * 分析响应
  *
  * @author D8GER
  */
@@ -35,14 +36,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class RankAnalysisResp {
-    private List<RankResult> analysisResultList = Lists.newArrayList();
+public class FakerAnalysisResp implements Serializable {
+    private List<FakerResult> analysisResultList = Lists.newArrayList();
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Accessors(chain = true)
-    public static class RankResult {
+    public static class FakerResult implements Serializable {
         private Long groupId;
 
         private String groupName;
@@ -51,7 +52,7 @@ public class RankAnalysisResp {
 
         private String schoolNo;
 
-        private String htSchoolNo;
+        private String uuid;
 
         private List<SubjectResult> subjectResultList = Lists.newArrayList();
     }
@@ -60,7 +61,7 @@ public class RankAnalysisResp {
     @NoArgsConstructor
     @AllArgsConstructor
     @Accessors(chain = true)
-    public static class SubjectResult {
+    public static class SubjectResult implements Serializable {
         private Integer subjectCode;
 
         private String subjectName;

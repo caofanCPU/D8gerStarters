@@ -24,10 +24,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 三率一分分析响应
+ * 分析响应
  *
  * @author D8GER
  */
@@ -35,14 +36,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class ExcellentRateAnalysisResp {
-    private List<ExcellentRateResult> analysisResultList = Lists.newArrayList();
+public class ByteDanceAnalysisResp implements Serializable {
+    private List<ByteDanceResult> analysisResultList = Lists.newArrayList();
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Accessors(chain = true)
-    public static class ExcellentRateResult {
+    public static class ByteDanceResult implements Serializable {
         private String viewName;
 
         private Integer totalStudent;

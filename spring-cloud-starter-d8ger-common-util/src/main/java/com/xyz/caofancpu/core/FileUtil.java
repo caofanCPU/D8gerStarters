@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
@@ -91,6 +93,24 @@ public class FileUtil {
         FileUtils.copyFile(sourceFile, destFile);
     }
 
+    /**
+     * 本地保存excel文件
+     *
+     * @param targetPath
+     * @param wb
+     * @throws IOException
+     */
+    public static String saveExcelFile(String targetPath, Workbook wb)
+            throws IOException {
+        File targetFile = new File(targetPath);
+        try (OutputStream out = new FileOutputStream(targetFile)) {
+            wb.write(out);
+        } finally {
+            wb.close();
+        }
+        return targetPath;
+    }
+
     public static String readFileToString(String fileFullPath)
             throws IOException {
         File file = new File(fileFullPath);
@@ -142,8 +162,7 @@ public class FileUtil {
             IOUtils.closeQuietly(ois);
             IOUtils.closeQuietly(fis);
         }
-        T result = JSONObject.parseObject(JSONObject.toJSONString(sourceObj), clazz);
-        return result;
+        return JSONObject.parseObject(JSONObject.toJSONString(sourceObj), clazz);
     }
 
     /**

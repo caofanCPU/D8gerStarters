@@ -19,11 +19,15 @@
 package com.xyz.caofancpu.excel.util;
 
 
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
+import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.excel.core.ItemFunction;
 import com.xyz.caofancpu.excel.core.Node;
 import com.xyz.caofancpu.excel.core.PoiStyle;
 import com.xyz.caofancpu.excel.core.face.Styleable;
 import com.xyz.caofancpu.excel.core.face.Titleable;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -34,6 +38,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
 /**
  * poi自定义导出工具类
  */
@@ -42,6 +49,23 @@ public class PoiUtil {
      * 空标题
      */
     private static final String[] EMPTY_TITLE = new String[0];
+
+    /**
+     * 绿色字体关键字
+     */
+    public static final String GREEN_STYLE_KEY = "[Green]";
+    /**
+     * 红色字体样式关键字
+     */
+    public static final String RED_STYLE_KEY = "[Red]";
+    /**
+     * 上涨
+     */
+    public static final String UP_ARROW = "↑";
+    /**
+     * 下跌
+     */
+    public static final String DOWN_ARROW = "↓";
 
     public static Row getRow(Sheet sheet, int rowIndex) {
         Row wrongRow = sheet.getRow(rowIndex);
@@ -73,21 +97,24 @@ public class PoiUtil {
         } else {
             Cell cell = row.createCell(colNum);
             cell.setCellStyle(style);
-            cell.setCellValue(value != null ? value.toString() : "");
+            cell.setCellValue(Objects.nonNull(value) ? value.toString() : SymbolConstantUtil.EMPTY);
         }
     }
 
     public static void setCellValue(Row row, int colNum, Number value, CellStyle style) {
-        setCellValue(row, colNum, value, "", style);
+        setCellValue(row, colNum, value, 1, SymbolConstantUtil.EMPTY, style);
     }
 
-    public static void setCellValue(Row row, int colNum, Number value, String defaultVaue, CellStyle style) {
+    public static void setCellValue(Row row, int colNum, Number value, Integer decimalScale, String defaultValue, CellStyle style) {
         Cell cell = row.createCell(colNum);
         cell.setCellStyle(style);
-        if (value != null) {
-            cell.setCellValue(value.doubleValue());
+        if (Objects.isNull(decimalScale) || decimalScale < 0) {
+            decimalScale = 0;
+        }
+        if (Objects.nonNull(value)) {
+            cell.setCellValue(BigDecimal.valueOf(value.doubleValue()).setScale(decimalScale, BigDecimal.ROUND_HALF_UP).doubleValue());
         } else {
-            cell.setCellValue(defaultVaue);
+            cell.setCellValue(defaultValue);
         }
     }
 
@@ -113,109 +140,79 @@ public class PoiUtil {
     }
 
     /**
-     * 居中并且没有下边框的单元格
-     */
-    public static PoiStyle getCenterNonBottomPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
-    }
-
-    /**
-     * 居中并且没有上边框的单元格
-     */
-    public static PoiStyle getCenterNonTopPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
-    }
-
-    /**
-     * 居中并且有边框的单元格
+     * 水平居中+垂直居中+内外所有边框的单元格
+     * 如果不需要某个属性, 置为null即可
      */
     public static PoiStyle getCenterPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
-    }
-
-    /**
-     * 上下居中并且有边框的单元格
-     */
-    public static PoiStyle getVCenterPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
-    }
-
-    /**
-     * 居中并且有边框的单元格
-     *
-     * @return
-     */
-    public static PoiStyle getCenterCellPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 左右居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);//自动换行
-        return centerStyle;
-    }
-
-    /**
-     * 箭头(绿涨红跌) + 百分号 + 居中特殊样式
-     *
-     * @return
-     */
-    public static PoiStyle getArrowPercentCenterPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setStyleFormat("[Green]↑ 0.0%;[Red]↓ 0.0%;0.0%");
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
+        return new PoiStyle()
+                // 水平居中
+                .setAlign(HorizontalAlignment.CENTER)
+                // 垂直居中
+                .setVAlign(VerticalAlignment.CENTER)
+                // 上边框
+                .setBorderTop(BorderStyle.THIN)
+                // 下边框
+                .setBorderBottom(BorderStyle.THIN)
+                // 左边框
+                .setBorderLeft(BorderStyle.THIN)
+                // 右边框
+                .setBorderRight(BorderStyle.THIN)
+                // 文本自动换行
+                .setWrapText(true);
     }
 
     /**
      * 箭头(绿涨红跌) + 居中特殊样式
+     * [Green]↑ 0.0;[Red]↓ 0.0;0.0
+     * [Red]↑ 0.0;[Green]↓ 0.0;0.0
+     *
+     * @param opposite 可选参数, 传true则为红涨绿跌
+     * @return
+     */
+    public static PoiStyle getDefaultNumberArrowCenterPoiStyle(boolean... opposite) {
+        boolean reverse = CollectionUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
+        return getNumberDynamicArrowCenterPoiStyle(1, null, reverse);
+    }
+
+    /**
+     * 箭头(绿涨红跌) + 百分号 + 居中特殊样式
+     * [Green]↑ 0.0%;[Red]↓ 0.0%;0.0%
+     * [Red]↑ 0.0%;[Green]↓ 0.0%;0.0%
+     *
+     * @param referValue 涨跌参考值
+     * @param opposite 可选参数, 传true则为红涨绿跌
      *
      * @return
      */
-    public static PoiStyle getArrowCenterPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setStyleFormat("[Green]↑ 0.0;[Red]↓ 0.0;0.0");
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
+    public static PoiStyle getDefaultNumberPercentArrowCenterPoiStyle(Number referValue, boolean... opposite) {
+        boolean reverse = CollectionUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
+        return getNumberPercentDynamicArrowCenterPoiStyle(1, reverse);
+    }
+
+    public static PoiStyle getNumberPercentDynamicArrowCenterPoiStyle(Integer decimalScale, boolean... opposite) {
+        boolean reverse = CollectionUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
+        return getNumberDynamicArrowCenterPoiStyle(decimalScale, SymbolConstantUtil.PERCENT, reverse);
+    }
+
+    /**
+     * @param decimalScale
+     * @param excelFlagSuffix
+     * @param reverse
+     * @return
+     */
+    public static PoiStyle getNumberDynamicArrowCenterPoiStyle(Integer decimalScale, String excelFlagSuffix, boolean reverse) {
+        if (Objects.isNull(decimalScale)) {
+            decimalScale = 0;
+        }
+        String excelReferFlag = BigDecimal.valueOf(0).setScale(decimalScale, BigDecimal.ROUND_HALF_UP).toString();
+        if (StringUtils.isNotBlank(excelFlagSuffix)) {
+            excelReferFlag += excelFlagSuffix;
+        }
+        String format = GREEN_STYLE_KEY + (reverse ? DOWN_ARROW : UP_ARROW)
+                + SymbolConstantUtil.SPACE + excelReferFlag + SymbolConstantUtil.ENGLISH_SEMICOLON
+                + RED_STYLE_KEY + (reverse ? UP_ARROW : DOWN_ARROW)
+                + SymbolConstantUtil.SPACE + excelReferFlag + SymbolConstantUtil.ENGLISH_SEMICOLON + excelReferFlag;
+        return getCenterPoiStyle().setStyleFormat(format);
     }
 
     /**
@@ -224,16 +221,7 @@ public class PoiUtil {
      * @return
      */
     public static PoiStyle getRedCenterPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setFontColor(IndexedColors.RED);
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
+        return getCenterPoiStyle().setFontColor(IndexedColors.RED);
     }
 
     /**
@@ -242,16 +230,7 @@ public class PoiUtil {
      * @return
      */
     public static PoiStyle getGreenCenterPoiStyle() {
-        PoiStyle centerStyle = new PoiStyle();
-        centerStyle.setFontColor(IndexedColors.GREEN);
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
+        return getCenterPoiStyle().setFontColor(IndexedColors.GREEN);
     }
 
     /**
@@ -260,132 +239,7 @@ public class PoiUtil {
      * @return
      */
     public static PoiStyle getRedFrontAndYellowBgCenterPoiStyle() {
-        PoiStyle style = new PoiStyle();
-        style.setFontColor(IndexedColors.GREEN);
-        style.setBgColor(IndexedColors.YELLOW);
-        style.setAlign(HorizontalAlignment.CENTER); // 居中
-        style.setVAlign(VerticalAlignment.CENTER); //上下居中
-        style.setBorderBottom(BorderStyle.THIN); //下边框
-        style.setBorderLeft(BorderStyle.THIN); //左边框
-        style.setBorderTop(BorderStyle.THIN); //上边框
-        style.setBorderRight(BorderStyle.THIN); //右边框
-        style.setWrapText(true);
-        return style;
-    }
-
-    /**
-     * 居右并且有边框的单元格
-     *
-     * @return
-     */
-    public static PoiStyle getRightCellPoiStyle() {
-        PoiStyle rightStyle = new PoiStyle();
-        rightStyle.setAlign(HorizontalAlignment.RIGHT); // 居右
-        rightStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        rightStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        rightStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        rightStyle.setBorderTop(BorderStyle.THIN); //上边框
-        rightStyle.setBorderRight(BorderStyle.THIN); //右边框
-        rightStyle.setWrapText(true);//自动换行
-        return rightStyle;
-    }
-
-    /**
-     * 居左并且有边框的单元格
-     *
-     * @return
-     */
-    public static PoiStyle getLeftCellPoiStyle() {
-        PoiStyle leftStyle = new PoiStyle();
-        leftStyle.setAlign(HorizontalAlignment.LEFT); // 居右
-        leftStyle.setVAlign(VerticalAlignment.CENTER); //上下居中
-        leftStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        leftStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        leftStyle.setBorderTop(BorderStyle.THIN); //上边框
-        leftStyle.setBorderRight(BorderStyle.THIN); //右边框
-        leftStyle.setWrapText(true);//自动换行
-        return leftStyle;
-    }
-
-    /**
-     * 填充蓝底
-     *
-     * @return
-     */
-    public static PoiStyle getBlueBgPoiStyle() {
-        PoiStyle style = new PoiStyle();
-        style.setBgColor(IndexedColors.PALE_BLUE);
-        style.setAlign(HorizontalAlignment.CENTER); // 居中
-        style.setVAlign(VerticalAlignment.CENTER); //上下居中
-        style.setBorderBottom(BorderStyle.THIN); //下边框
-        style.setBorderLeft(BorderStyle.THIN); //左边框
-        style.setBorderTop(BorderStyle.THIN); //上边框
-        style.setBorderRight(BorderStyle.THIN); //右边框
-        style.setWrapText(true);
-        return style;
-    }
-
-    /**
-     * 填充蓝底 字体靠左
-     *
-     * @return
-     */
-    public static PoiStyle getBlueBgLeftCellPoiStyle() {
-        PoiStyle style = new PoiStyle();
-        style.setBgColor(IndexedColors.PALE_BLUE);
-        style.setAlign(HorizontalAlignment.LEFT); // 居中
-        style.setVAlign(VerticalAlignment.CENTER); //上下居中
-        style.setBorderBottom(BorderStyle.THIN); //下边框
-        style.setBorderLeft(BorderStyle.THIN); //左边框
-        style.setBorderTop(BorderStyle.THIN); //上边框
-        style.setBorderRight(BorderStyle.THIN); //右边框
-        style.setWrapText(true);
-        return style;
-    }
-
-    /**
-     * 填充黄底
-     *
-     * @return
-     */
-    public static PoiStyle getYellowBgPoiStyle() {
-        PoiStyle style = new PoiStyle();
-        style.setBgColor(IndexedColors.YELLOW);
-        style.setAlign(HorizontalAlignment.CENTER); // 居中
-        style.setVAlign(VerticalAlignment.CENTER); //上下居中
-        style.setBorderBottom(BorderStyle.THIN); //下边框
-        style.setBorderLeft(BorderStyle.THIN); //左边框
-        style.setBorderTop(BorderStyle.THIN); //上边框
-        style.setBorderRight(BorderStyle.THIN); //右边框
-        style.setWrapText(true);
-        return style;
-    }
-
-    /**
-     * 红跌绿涨箭头：小数处理
-     *
-     * @param decimals 小数位
-     * @return
-     */
-    public static PoiStyle getUpDownDisplayStyle(Integer decimals) {
-        PoiStyle centerStyle = new PoiStyle();
-        String digital = "0";
-        if (decimals == 0) {
-            digital = "0";
-        } else if (decimals == 1) {
-            digital = "0.0";
-        } else if (decimals == 2) {
-            digital = "0.00";
-        }
-        centerStyle.setStyleFormat("[Green]↑ " + digital + ";[Red]↓ " + digital + ";" + digital);
-        centerStyle.setAlign(HorizontalAlignment.CENTER); // 水平居中
-        centerStyle.setVAlign(VerticalAlignment.CENTER); //垂直居中
-        centerStyle.setBorderBottom(BorderStyle.THIN); //下边框
-        centerStyle.setBorderLeft(BorderStyle.THIN); //左边框
-        centerStyle.setBorderTop(BorderStyle.THIN); //上边框
-        centerStyle.setBorderRight(BorderStyle.THIN); //右边框
-        centerStyle.setWrapText(true);
-        return centerStyle;
+        return getCenterPoiStyle().setFontColor(IndexedColors.RED).setBgColor(IndexedColors.YELLOW);
     }
 
     public static PoiStyle getStyle(Node node) {
@@ -426,5 +280,26 @@ public class PoiUtil {
 
     public static <T> ItemFunction<T, String[]> emptyTitle() {
         return item -> EMPTY_TITLE;
+    }
+
+    public static void main(String[] args) {
+        Number referValue = 20;
+        String excelFlagSuffix = SymbolConstantUtil.PERCENT;
+        boolean reverse = true;
+        if (Objects.isNull(referValue)) {
+            referValue = 0D;
+        }
+        for (int i = 0; i < 5; i++) {
+            Integer decimalScale = i;
+            String excelReferFlag = BigDecimal.valueOf(referValue.doubleValue()).setScale(decimalScale, BigDecimal.ROUND_HALF_UP).toString();
+            if (StringUtils.isNotBlank(excelFlagSuffix)) {
+                excelReferFlag += excelFlagSuffix;
+            }
+            String format = GREEN_STYLE_KEY + (reverse ? DOWN_ARROW : UP_ARROW)
+                    + SymbolConstantUtil.SPACE + excelReferFlag + SymbolConstantUtil.ENGLISH_SEMICOLON
+                    + RED_STYLE_KEY + (reverse ? UP_ARROW : DOWN_ARROW)
+                    + SymbolConstantUtil.SPACE + excelReferFlag + SymbolConstantUtil.ENGLISH_SEMICOLON + excelReferFlag;
+            System.out.println(format);
+        }
     }
 }

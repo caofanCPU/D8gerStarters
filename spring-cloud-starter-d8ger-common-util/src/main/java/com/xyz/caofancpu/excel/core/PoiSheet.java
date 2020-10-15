@@ -91,7 +91,7 @@ public class PoiSheet extends Node {
         return row;
     }
 
-    protected Split addSplit(Integer split) {
+    public Split addSplit(Integer split) {
         return addSplit(new Split(split));
     }
 

@@ -24,10 +24,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 小题分分析响应
+ * 分析响应
  *
  * @author D8GER
  */
@@ -35,14 +36,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class QuestionAnalysisResp {
-    private List<QuestionAnalysisResult> analysisResultList = Lists.newArrayList();
+public class QPSAnalysisResp implements Serializable {
+    private List<QPSAnalysisResult> analysisResultList = Lists.newArrayList();
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Accessors(chain = true)
-    public static class QuestionAnalysisResult {
+    public static class QPSAnalysisResult implements Serializable {
         private Long groupId;
 
         private String groupName;
@@ -51,16 +52,16 @@ public class QuestionAnalysisResp {
 
         private String schoolNo;
 
-        private String htSchoolNo;
+        private String uuid;
 
-        private List<QuestionInfo> questionResultList = Lists.newArrayList();
+        private List<QPSInfo> questionResultList = Lists.newArrayList();
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Accessors(chain = true)
-    public static class QuestionInfo {
+    public static class QPSInfo implements Serializable {
         private String questionName;
 
         private Float score;
