@@ -22,6 +22,8 @@ package com.xyz.caofancpu.excel.core;
 import com.xyz.caofancpu.excel.core.face.Area;
 import com.xyz.caofancpu.excel.enums.ListAlign;
 import com.xyz.caofancpu.excel.tmp.Tmp;
+import com.xyz.caofancpu.excel.util.PoiAssert;
+import com.xyz.caofancpu.excel.util.PoiUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -39,6 +41,7 @@ public class PoiSheet extends Node {
      * sheet样式: 边距
      *
      * @see org.apache.poi.ss.usermodel.Sheet#setMargin(short, double)
+     * @see org.apache.poi.ss.usermodel.Sheet#LeftMargin
      */
     private final List<Tmp<Short, Double>> margins = new ArrayList<>();
     /**
@@ -81,6 +84,18 @@ public class PoiSheet extends Node {
         return table;
     }
 
+    /**
+     * 添加可指定行数、列数的一行
+     *
+     * @param rowCount    行数
+     * @param columnCount 列数
+     * @param value       数据
+     * @return
+     */
+    public PoiRow addRow(int rowCount, int columnCount, String value) {
+        return addRow(new PoiRow(rowCount, columnCount, value));
+    }
+
     public PoiRow addRow(String... values) {
         return addRow(new PoiRow(1, values));
     }
@@ -91,11 +106,29 @@ public class PoiSheet extends Node {
         return row;
     }
 
-    public Split addSplit(Integer split) {
-        return addSplit(new Split(split));
+    /**
+     * 添加空白行, 需保证表格是垂直方向排列的
+     *
+     * @param count 空白行数
+     * @return
+     */
+    public Split addWhiteRowSplit(Integer count) {
+        PoiAssert.isTrue(align == ListAlign.DOWN);
+        return addSplit(count);
     }
 
-    protected Split addSplit(Split split) {
+    /**
+     * 添加空白列, 需保证表格是水平方向排列的
+     *
+     * @param count 空白行数
+     * @return
+     */
+    public Split addWhiteColumnSplit(Integer count) {
+        return addSplit(count);
+    }
+
+    private Split addSplit(Integer splitNumber) {
+        Split split = new Split(splitNumber);
         split.parent(this);
         areas.add(split);
         return split;
@@ -107,12 +140,27 @@ public class PoiSheet extends Node {
         return align;
     }
 
-    public PoiSheet addMargins(short margin, double size) {
+    /**
+     * 指定特定边距
+     *
+     * @param margin
+     * @param size
+     * @return
+     */
+    public PoiSheet addSpecialMargins(short margin, double size) {
         this.margins.add(new Tmp<>(margin, size));
         return this;
     }
 
-    public PoiSheet addColumnWidth(int columnIndex, int width) {
+    /**
+     * 指定columnIndex列的宽度, 宽度值参见
+     *
+     * @param columnIndex
+     * @param width
+     * @return
+     * @see PoiUtil#getColumnWidth(java.lang.Integer)
+     */
+    public PoiSheet addSpecialColumnWidth(int columnIndex, int width) {
         this.columnWidths.add(new Tmp<>(columnIndex, width));
         return this;
     }

@@ -22,25 +22,13 @@ import com.xyz.caofancpu.excel.exception.ExcelException;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
+ * 断言
  *
+ * @author D8GER
  */
 public class PoiAssert {
-
-    /**
-     * 验证参数是不是空的.
-     * 实现中会根据object的实际类型做校验.
-     * 目前支持String、Collection、Map
-     *
-     * @param object 验证对象
-     */
-    public static void isEmpty(Object object) {
-        isEmpty(object, "参数为空");
-    }
-
-
     /**
      * 验证参数是不是空的.
      * 实现中会根据object的实际类型做校验.
@@ -58,25 +46,6 @@ public class PoiAssert {
         } else if (object instanceof Map) {
             isTrue(!((Map) object).isEmpty(), errorMessage);
         }
-    }
-
-    /**
-     * 验证参数是不是电话号码.
-     *
-     * @param phoneNumber 验证对象
-     */
-    public static void isPhoneNumber(String phoneNumber) {
-        isPhoneNumber(phoneNumber, "参数不是电话号码");
-    }
-
-    /**
-     * 验证参数是不是电话号码.
-     *
-     * @param phoneNumber  验证对象
-     * @param errorMessage 自定义错误消息
-     */
-    public static void isPhoneNumber(String phoneNumber, String errorMessage) {
-        isTrue(Pattern.matches("^1[0-9]{10}$", phoneNumber), errorMessage);
     }
 
     /**

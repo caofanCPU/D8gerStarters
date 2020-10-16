@@ -20,6 +20,7 @@ package com.xyz.caofancpu.excel.core;
 
 import com.xyz.caofancpu.excel.core.face.Area;
 import com.xyz.caofancpu.excel.enums.ListAlign;
+import com.xyz.caofancpu.excel.util.PoiAssert;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -59,11 +60,29 @@ public class Align extends Node implements Area {
         return row;
     }
 
-    protected Split addSplit(Integer split) {
-        return addSplit(new Split(split));
+    /**
+     * 添加空白行, 需保证表格是垂直方向排列的
+     *
+     * @param count 空白行数
+     * @return
+     */
+    public Split addWhiteRowSplit(Integer count) {
+        PoiAssert.isTrue(align == ListAlign.DOWN);
+        return addSplit(count);
     }
 
-    protected Split addSplit(Split split) {
+    /**
+     * 添加空白列, 需保证表格是水平方向排列的
+     *
+     * @param count 空白行数
+     * @return
+     */
+    public Split addWhiteColumnSplit(Integer count) {
+        return addSplit(count);
+    }
+
+    private Split addSplit(Integer splitNumber) {
+        Split split = new Split(splitNumber);
         split.parent(this);
         areas.add(split);
         return split;

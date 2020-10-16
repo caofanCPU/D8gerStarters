@@ -31,8 +31,8 @@
     <packaging>jar</packaging>
 
     <properties>
-        <poi.version>3.15</poi.version>
-        <xmlbeans.version>2.6.0</xmlbeans.version>
+        <poi.version>4.1.2</poi.version>
+        <xmlbeans.version>3.1.0</xmlbeans.version>
         <dom4j.version>1.6.1</dom4j.version>
         <common-bean-util.version>1.9.2</common-bean-util.version>
     </properties>

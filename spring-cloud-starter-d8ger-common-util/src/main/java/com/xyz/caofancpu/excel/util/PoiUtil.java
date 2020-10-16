@@ -281,25 +281,4 @@ public class PoiUtil {
     public static <T> ItemFunction<T, String[]> emptyTitle() {
         return item -> EMPTY_TITLE;
     }
-
-    public static void main(String[] args) {
-        Number referValue = 20;
-        String excelFlagSuffix = SymbolConstantUtil.PERCENT;
-        boolean reverse = true;
-        if (Objects.isNull(referValue)) {
-            referValue = 0D;
-        }
-        for (int i = 0; i < 5; i++) {
-            Integer decimalScale = i;
-            String excelReferFlag = BigDecimal.valueOf(referValue.doubleValue()).setScale(decimalScale, BigDecimal.ROUND_HALF_UP).toString();
-            if (StringUtils.isNotBlank(excelFlagSuffix)) {
-                excelReferFlag += excelFlagSuffix;
-            }
-            String format = GREEN_STYLE_KEY + (reverse ? DOWN_ARROW : UP_ARROW)
-                    + SymbolConstantUtil.SPACE + excelReferFlag + SymbolConstantUtil.ENGLISH_SEMICOLON
-                    + RED_STYLE_KEY + (reverse ? UP_ARROW : DOWN_ARROW)
-                    + SymbolConstantUtil.SPACE + excelReferFlag + SymbolConstantUtil.ENGLISH_SEMICOLON + excelReferFlag;
-            System.out.println(format);
-        }
-    }
 }

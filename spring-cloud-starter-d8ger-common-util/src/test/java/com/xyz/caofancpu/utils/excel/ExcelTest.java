@@ -152,7 +152,7 @@ public class ExcelTest {
         String baseDirFullPath = "/Users/D8GER/Desktop/CAOFAN/spring-cloud-d8ger-starters/spring-cloud-starter-d8ger-common-util/src/test/java/com/xyz/caofancpu/utils/excel/datasource";
         String dataSourceFullPath = baseDirFullPath + File.separator + "TestCompleteData.json";
         ThreeLevelAnalysisResp analysisResp = JSONUtil.deserializeJSON(FileUtil.readFileToString(dataSourceFullPath), ThreeLevelAnalysisResp.class);
-        PoiBook poiBook = PoiBook.newSXSSFBook("三层结构行列自动合并");
+        PoiBook poiBook = PoiBook.newSXSSFBook("就这");
         // 常规居中样式, 用户表格全局样式
         PoiStyle center = PoiUtil.getCenterPoiStyle();
         // 测试: 黄底红字
@@ -208,9 +208,9 @@ public class ExcelTest {
             }});
         }}).setTitleStyle(center).setStyle(center);
         // 添加5个空行
-        poiSheet.addSplit(5);
-        //写一行数据
-        poiSheet.addRow("帝八哥在这里");
+        poiSheet.addWhiteRowSplit(5);
+        //写一行数据, 该行区域指定 3个单元行*10个单元列
+        poiSheet.addRow(3, 10, "帝八哥在这里").setStyle(yellowBgRedFt);
         String excelSaveFullPath = baseDirFullPath + File.separator + poiBook.getFileName();
         FileUtil.saveExcelFile(excelSaveFullPath, poiBook.getWorkbook());
     }

@@ -19,6 +19,8 @@
 package com.xyz.caofancpu.excel.core;
 
 
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
+import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.excel.core.face.Area;
 import com.xyz.caofancpu.excel.core.face.Column;
 import com.xyz.caofancpu.excel.enums.ListAlign;
@@ -43,6 +45,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -78,11 +81,11 @@ public class PoiBuilder {
     private void buildSheet(PoiSheet poiSheet) {
         AreaIndex areaIndex = new AreaIndex(poiSheet.getAlign());
         Sheet sheet = wb.createSheet(poiSheet.getName());
-        buildShhetPrintSetup(sheet, poiSheet);
+        buildSheetPrintSetup(sheet, poiSheet);
         buildSheet(sheet, poiSheet.getAreas(), areaIndex);
     }
 
-    private void buildShhetPrintSetup(Sheet sheet, PoiSheet poiSheet) {
+    private void buildSheetPrintSetup(Sheet sheet, PoiSheet poiSheet) {
         for (Tmp<Short, Double> margin : poiSheet.getMargins()) {
             sheet.setMargin(margin.getKey(), margin.getValue());
         }
@@ -111,21 +114,20 @@ public class PoiBuilder {
         }
     }
 
-
-    private void buildAlign(Sheet sheet, Align align, AreaIndex parentRowcel) {
-        AreaIndex rowCell = createRowCel(parentRowcel, align.getAlign());
+    private void buildAlign(Sheet sheet, Align align, AreaIndex parentRowCel) {
+        AreaIndex rowCell = createRowCel(parentRowCel, align.getAlign());
         buildSheet(sheet, align.getAreas(), rowCell);
-        updateParent(parentRowcel, rowCell);
+        updateParent(parentRowCel, rowCell);
     }
 
-    private void buildTable(Sheet sheet, PoiTable table, AreaIndex rowcel) {
+    private void buildTable(Sheet sheet, PoiTable table, AreaIndex rowCel) {
         DataItem leafItem = table.getLeafItem();
         if (leafItem == null || !leafItem.loadNext()) {
             return;
         }
 
-        int startRowNum = rowcel.getRow();
-        int startCelNum = rowcel.getCel();
+        int startRowNum = rowCel.getRow();
+        int startCelNum = rowCel.getCel();
         int rowNum = startRowNum;
         int celNum = startCelNum;
 
@@ -140,15 +142,10 @@ public class PoiBuilder {
             celNum = getTitleCel(celNum, table);
         }
 
-        rowcel.setCel(celNum);
-
-        rowNum = table.setCellValue(rowNum, startCelNum, (firstRow, lastRow, firstCel, lastCel, value, style) -> {
-            PoiUtil.mergedRegion(sheet, firstRow, lastRow, firstCel, lastCel, value, getCellStyle(style));
-        });
-
-        rowcel.setRow(rowNum);
+        rowCel.setCel(celNum);
+        rowNum = table.setCellValue(rowNum, startCelNum, (firstRow, lastRow, firstCel, lastCel, value, style) -> PoiUtil.mergedRegion(sheet, firstRow, lastRow, firstCel, lastCel, value, getCellStyle(style)));
+        rowCel.setRow(rowNum);
     }
-
 
     /**
      * 优先合并列,再合并行
@@ -274,7 +271,7 @@ public class PoiBuilder {
      * 获取标题
      */
     private List<StyleTitle> getTitles(PoiColumnItems column, DataItem item) {
-        if (column.getTitles() == null) {
+        if (Objects.isNull(column.getTitles())) {
             return Collections.emptyList();
         }
         String[] titles = (String[]) column.getTitles().apply(item);
@@ -289,7 +286,7 @@ public class PoiBuilder {
      * 获取标题
      */
     private List<StyleTitle> getTitles(PoiColumn column, DataItem item) {
-        if (column.getTitles() == null) {
+        if (Objects.isNull(column.getTitles())) {
             return Collections.emptyList();
         }
         String[] titles = (String[]) column.getTitles().apply(item);
@@ -304,10 +301,10 @@ public class PoiBuilder {
      * 合并标题
      */
     private List<StyleTitle> mergeList(List<StyleTitle> list1, List<StyleTitle> list2) {
-        if (list1 == null || list1.isEmpty()) {
+        if (CollectionUtil.isEmpty(list1)) {
             return list2;
         }
-        if (list2 == null || list2.isEmpty()) {
+        if (CollectionUtil.isEmpty(list2)) {
             return list1;
         }
 
@@ -360,9 +357,9 @@ public class PoiBuilder {
         PoiUtil.setCellValue(row, celNum, value, getCellStyle(titleStyle, value));
     }
 
-    private void buildRow(Sheet sheet, PoiRow poiRow, AreaIndex rowcel) {
-        int rowNum = rowcel.getRow();
-        int celNum = rowcel.getCel();
+    private void buildRow(Sheet sheet, PoiRow poiRow, AreaIndex rowCel) {
+        int rowNum = rowCel.getRow();
+        int celNum = rowCel.getCel();
 
         Row row = PoiUtil.getRow(sheet, rowNum++);
         for (PoiRow.D8Cell d8Cell : poiRow.getD8Cells()) {
@@ -380,33 +377,33 @@ public class PoiBuilder {
             }
         }
 
-        rowcel.setCel(celNum);
-        rowcel.setRow(rowNum);
+        rowCel.setCel(celNum);
+        rowCel.setRow(rowNum);
     }
 
-    private void buildSplit(Sheet sheet, Split split, AreaIndex rowcel) {
+    private void buildSplit(Sheet sheet, Split split, AreaIndex rowCel) {
         Integer splitNum = split.getSplit();
         if (splitNum != null) {
-            if (rowcel.getAlign() == ListAlign.DOWN) {
-                rowcel.setRow(rowcel.getRow() + splitNum);
+            if (rowCel.getAlign() == ListAlign.DOWN) {
+                rowCel.setRow(rowCel.getRow() + splitNum);
             } else {
                 if (split.getColumnWidth() != null) {
                     for (int i = 0; i < splitNum; i++) {
-                        sheet.setColumnWidth(rowcel.getCel() + i, getColumnWidth(split.getColumnWidth()));
+                        sheet.setColumnWidth(rowCel.getCel() + i, getColumnWidth(split.getColumnWidth()));
                     }
                 }
-                rowcel.setCel(rowcel.getCel() + splitNum);
+                rowCel.setCel(rowCel.getCel() + splitNum);
             }
         }
     }
 
-    private AreaIndex createRowCel(AreaIndex parentRowcel, ListAlign align) {
-        return new AreaIndex(align, parentRowcel.getRow(), parentRowcel.getCel());
+    private AreaIndex createRowCel(AreaIndex parentRowCel, ListAlign align) {
+        return new AreaIndex(align, parentRowCel.getRow(), parentRowCel.getCel());
     }
 
-    private void updateParent(AreaIndex parentRowcel, AreaIndex rowcel) {
-        parentRowcel.setRow(rowcel.getMaxRow());
-        parentRowcel.setCel(rowcel.getMaxCel());
+    private void updateParent(AreaIndex parentRowCel, AreaIndex rowCel) {
+        parentRowCel.setRow(rowCel.getMaxRow());
+        parentRowCel.setCel(rowCel.getMaxCel());
     }
 
     private CellStyle getMergeStyle(PoiStyle beginStyle, PoiStyle endStyle) {
@@ -445,11 +442,11 @@ public class PoiBuilder {
     private CellStyle getDefaultStyle() {
         if (defaultStyle == null) {
             defaultStyle = wb.createCellStyle();
-            defaultStyle.setVerticalAlignment(VerticalAlignment.CENTER); //上下居中
-            defaultStyle.setBorderBottom(BorderStyle.THIN); //下边框
-            defaultStyle.setBorderLeft(BorderStyle.THIN); //左边框
-            defaultStyle.setBorderTop(BorderStyle.THIN); //上边框
-            defaultStyle.setBorderRight(BorderStyle.THIN); //右边框
+            defaultStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            defaultStyle.setBorderBottom(BorderStyle.THIN);
+            defaultStyle.setBorderLeft(BorderStyle.THIN);
+            defaultStyle.setBorderTop(BorderStyle.THIN);
+            defaultStyle.setBorderRight(BorderStyle.THIN);
         }
         return defaultStyle;
     }
@@ -461,7 +458,6 @@ public class PoiBuilder {
 
         void setCelValue(int firstRow, int lastRow, int firstCel, int lastCel, Object value, PoiStyle style);
     }
-
 
     private static class TitleHandler {
         /**
@@ -504,7 +500,6 @@ public class PoiBuilder {
             return addTitle(cel, new StyleTitle(title, titleStyle));
         }
 
-
         /**
          * 添加一行标题
          *
@@ -521,7 +516,6 @@ public class PoiBuilder {
             }
             return getEndRow(cel);
         }
-
 
         /**
          * 添加一行标题
@@ -593,16 +587,16 @@ public class PoiBuilder {
 
         private StyleTitle getEmptyTitle(int cel) {
             List<StyleTitle> styleTitles = celTitlesMap.get(cel - 1);
-            if (styleTitles == null || styleTitles.isEmpty()) {
+            if (CollectionUtil.isEmpty(styleTitles)) {
                 for (List<StyleTitle> value : celTitlesMap.values()) {
-                    if (!value.isEmpty()) {
-                        return new StyleTitle("", value.get(0).getPoiStyle());
+                    if (CollectionUtil.isNotEmpty(value)) {
+                        return new StyleTitle(SymbolConstantUtil.EMPTY, value.get(0).getPoiStyle());
                     }
                 }
             } else {
-                return new StyleTitle("", styleTitles.get(0).getPoiStyle());
+                return new StyleTitle(SymbolConstantUtil.EMPTY, styleTitles.get(0).getPoiStyle());
             }
-            return new StyleTitle("", (PoiStyle) null);
+            return new StyleTitle(SymbolConstantUtil.EMPTY, (PoiStyle) null);
         }
     }
 

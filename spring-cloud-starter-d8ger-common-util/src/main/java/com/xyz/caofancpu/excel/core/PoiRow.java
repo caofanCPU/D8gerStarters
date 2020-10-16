@@ -51,6 +51,11 @@ public class PoiRow extends Node implements Area, Styleable {
         this.row = row;
     }
 
+    public PoiRow(int rowCount, int columnCount, String value) {
+        this(rowCount);
+        addCell(new D8Cell(value).setCel(columnCount));
+    }
+
     public PoiRow(int row, String... values) {
         this(row);
         for (String value : values) {
