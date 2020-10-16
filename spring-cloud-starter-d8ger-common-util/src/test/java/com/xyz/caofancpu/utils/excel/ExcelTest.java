@@ -143,7 +143,7 @@ public class ExcelTest {
             addColumn1(ByteDanceAnalysisResp.ByteDanceResult::getTeacherName, "带头大哥").setDefaultValue("--");
         }}).setTitleStyle(centerPoiStyle).setStyle(centerPoiStyle);
         String excelSaveFullPath = baseDirFullPath + File.separator + poiBook.getFileName();
-        FileUtil.saveExcelFile(excelSaveFullPath, poiBook.getWorkbook());
+        FileUtil.saveExcelFile(excelSaveFullPath, poiBook.buildWorkbook());
     }
 
     @Test
@@ -160,13 +160,13 @@ public class ExcelTest {
         // 测试: 绿字
         PoiStyle greenFont = PoiUtil.getGreenCenterPoiStyle();
         // 测试: 数字绿涨红跌, 平均分avgScore
-        PoiStyle numberRefer65 = PoiUtil.getDefaultNumberArrowCenterPoiStyle();
+        PoiStyle numberRefer65 = PoiUtil.getNumberArrowCenterPoiStyle();
         // 测试: 数字红涨绿跌, 难度系数difficulty
-        PoiStyle reverseNumberRefer = PoiUtil.getDefaultNumberArrowCenterPoiStyle();
+        PoiStyle reverseNumberRefer = PoiUtil.getNumberArrowCenterPoiStyle();
         // 测试: 数字百分比红涨绿跌, 优秀率excellentRate
-        PoiStyle numberPercentRefer1 = PoiUtil.getNumberPercentDynamicArrowCenterPoiStyle(2);
+        PoiStyle numberPercentRefer1 = PoiUtil.getNumberPercentArrowCenterPoiStyle(2);
         // 测试: 数字百分比红涨绿跌, 良好率goodRate
-        PoiStyle reverseNumberPercentRefer20 = PoiUtil.getNumberPercentDynamicArrowCenterPoiStyle(2, true);
+        PoiStyle reverseNumberPercentRefer20 = PoiUtil.getNumberPercentArrowCenterPoiStyle(2, true);
         PoiSheet poiSheet = poiBook.addSheet(new PoiSheet("帝八哥"));
         // 设置打印样式
         poiSheet.setPrintSetupScale((short) 93);
@@ -211,8 +211,10 @@ public class ExcelTest {
         poiSheet.addWhiteRowSplit(5);
         //写一行数据, 该行区域指定 3个单元行*10个单元列
         poiSheet.addRow(3, 10, "帝八哥在这里").setStyle(yellowBgRedFt);
+        // 合并指定区域的单元格
+        PoiUtil.mergedRegion(poiBook, poiSheet, 17, 1, 20, 4, "合并后的单元格", greenFont);
         String excelSaveFullPath = baseDirFullPath + File.separator + poiBook.getFileName();
-        FileUtil.saveExcelFile(excelSaveFullPath, poiBook.getWorkbook());
+        FileUtil.saveExcelFile(excelSaveFullPath, poiBook.buildWorkbook());
     }
 
 }

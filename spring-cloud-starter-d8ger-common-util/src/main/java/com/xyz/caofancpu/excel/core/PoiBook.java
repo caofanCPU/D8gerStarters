@@ -18,29 +18,38 @@
 
 package com.xyz.caofancpu.excel.core;
 
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.Getter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
 
 public class PoiBook extends Node {
-    private static final String XLS_SUFFIX = ".xls";
-    private static final String XLSX_SUFFIX = ".xlsx";
-
-    final Supplier<Workbook> createFunction;
+    /**
+     * excel文件名, 不带后缀
+     */
     private final String name;
     /**
-     * 支持多线程添加的PoiSheet,每个sheet还是要去单线程
+     * 支持多线程添加的PoiSheet,每个sheet还是要走单线程
      */
     @Getter
-    private final List<PoiSheet> sheets = new CopyOnWriteArrayList<>();
-    private Workbook workbook;
+    private final List<PoiSheet> poiSheetList = new CopyOnWriteArrayList<>();
+    /**
+     * PoiSheet与Sheet的对应关系缓存表
+     */
+    private final Map<String, Sheet> cacheMap = new ConcurrentHashMap<>();
+    @Getter
+    private final Workbook workbook;
 
     /**
      * @param name           excel名称,自动添加后缀
@@ -48,7 +57,8 @@ public class PoiBook extends Node {
      */
     public PoiBook(String name, Supplier<Workbook> createFunction) {
         this.name = name;
-        this.createFunction = createFunction;
+        // 初始化时就创建
+        workbook = createFunction.get();
     }
 
     /**
@@ -97,36 +107,47 @@ public class PoiBook extends Node {
         return new PoiBook(name, HSSFWorkbook::new);
     }
 
-    public synchronized PoiSheet addSheet(PoiSheet sheet) {
-        sheet.parent(this);
-        sheets.add(sheet);
-        return sheet;
-    }
-
-    public synchronized Workbook getWorkbook() {
-        if (workbook == null) {
-            workbook = PoiBuilder.build(this, createFunction.get());
+    public synchronized PoiSheet addSheet(PoiSheet poiSheet) {
+        poiSheet.parent(this);
+        if (Objects.isNull(cacheMap.get(poiSheet.getNameKey()))) {
+            poiSheetList.add(poiSheet);
+            cacheMap.putIfAbsent(poiSheet.getNameKey(), getWorkbook().createSheet(poiSheet.getNameKey()));
         }
-        return workbook;
+        return poiSheet;
     }
 
+    /**
+     * 如果未创建过Sheet则返回null
+     *
+     * @param poiSheet
+     * @return
+     */
+    public Sheet getSheet(PoiSheet poiSheet) {
+        return cacheMap.get(poiSheet.getNameKey());
+    }
+
+    /**
+     * 构建填充Excel各个Sheet页数据
+     *
+     * @return
+     */
+    public Workbook buildWorkbook() {
+        return PoiBuilder.build(this);
+    }
+
+    /**
+     * Excel的文件全名
+     *
+     * @return
+     */
     public String getFileName() {
-        if (name.endsWith(XLS_SUFFIX) || name.endsWith(XLSX_SUFFIX)) {
+        if (name.endsWith(SymbolConstantUtil.OLD_XLS_SUFFIX) || name.endsWith(SymbolConstantUtil.NEW_XLSX_SUFFIX)) {
             return name;
         }
-        Class<? extends Workbook> clazz = workbook != null ? workbook.getClass() : createFunction.get().getClass();
+        Class<? extends Workbook> clazz = workbook.getClass();
         if (XSSFWorkbook.class.isAssignableFrom(clazz) || SXSSFWorkbook.class.isAssignableFrom(clazz)) {
-            return name + XLSX_SUFFIX;
+            return name + SymbolConstantUtil.NEW_XLSX_SUFFIX;
         }
-        return name + XLS_SUFFIX;
-    }
-
-    public Boolean isExitSheet(String sheetName) {
-        for (PoiSheet sheet : sheets) {
-            if (sheet.getName().equals(sheetName)) {
-                return true;
-            }
-        }
-        return false;
+        return name + SymbolConstantUtil.OLD_XLS_SUFFIX;
     }
 }

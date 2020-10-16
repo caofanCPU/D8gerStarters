@@ -74,10 +74,11 @@ public class Align extends Node implements Area {
     /**
      * 添加空白列, 需保证表格是水平方向排列的
      *
-     * @param count 空白行数
+     * @param count 空白列数
      * @return
      */
     public Split addWhiteColumnSplit(Integer count) {
+        PoiAssert.isTrue(align == ListAlign.RIGHT);
         return addSplit(count);
     }
 

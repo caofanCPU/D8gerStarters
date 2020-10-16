@@ -37,7 +37,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,21 +57,17 @@ public class PoiBuilder {
     private final Map<String, CellStyle> cellStyleMap = new HashMap<>();
     private CellStyle defaultStyle;
 
-    private PoiBuilder(PoiBook poiBook, Workbook wb) {
+    private PoiBuilder(PoiBook poiBook) {
         this.poiBook = poiBook;
-        this.wb = wb;
-    }
-
-    public static Workbook build(PoiBook poiBook, Workbook wb) {
-        return new PoiBuilder(poiBook, wb).build();
+        this.wb = poiBook.getWorkbook();
     }
 
     public static Workbook build(PoiBook poiBook) {
-        return build(poiBook, new SXSSFWorkbook());
+        return new PoiBuilder(poiBook).build();
     }
 
     private Workbook build() {
-        for (PoiSheet poiSheet : poiBook.getSheets()) {
+        for (PoiSheet poiSheet : poiBook.getPoiSheetList()) {
             buildSheet(poiSheet);
         }
         return wb;
@@ -80,7 +75,7 @@ public class PoiBuilder {
 
     private void buildSheet(PoiSheet poiSheet) {
         AreaIndex areaIndex = new AreaIndex(poiSheet.getAlign());
-        Sheet sheet = wb.createSheet(poiSheet.getName());
+        Sheet sheet = poiBook.getSheet(poiSheet);
         buildSheetPrintSetup(sheet, poiSheet);
         buildSheet(sheet, poiSheet.getAreas(), areaIndex);
     }

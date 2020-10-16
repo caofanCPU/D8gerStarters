@@ -35,7 +35,11 @@ import java.util.List;
 @Accessors(chain = true)
 public class PoiSheet extends Node {
 
-    private final String name;
+    /**
+     * Sheet名称, 作为在同一个Workbook中的唯一Key
+     * 也就是说, 创建多个同名sheet时, 只有第一个生效, 后续的都会被忽略
+     */
+    private final String nameKey;
     private final List<Area> areas = new ArrayList<>();
     /**
      * sheet样式: 边距
@@ -67,12 +71,12 @@ public class PoiSheet extends Node {
     @Setter
     private Short printSetupPaperSize;
 
-    public PoiSheet(String name) {
-        this.name = name;
+    public PoiSheet(String nameKey) {
+        this.nameKey = nameKey;
     }
 
-    public PoiSheet(String name, ListAlign align) {
-        this.name = name;
+    public PoiSheet(String nameKey, ListAlign align) {
+        this.nameKey = nameKey;
         if (align != null) {
             this.align = align;
         }
@@ -157,8 +161,7 @@ public class PoiSheet extends Node {
      *
      * @param columnIndex
      * @param width
-     * @return
-     * @see PoiUtil#getColumnWidth(java.lang.Integer)
+     * @see PoiUtil#getColumnWidth(Number)
      */
     public PoiSheet addSpecialColumnWidth(int columnIndex, int width) {
         this.columnWidths.add(new Tmp<>(columnIndex, width));

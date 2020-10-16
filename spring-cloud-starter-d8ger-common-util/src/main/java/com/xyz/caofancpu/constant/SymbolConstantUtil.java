@@ -170,5 +170,14 @@ public class SymbolConstantUtil {
      */
     public static final String ELLIPSES = "...";
 
+    /**
+     * 旧版Excel文件后缀
+     */
+    public static final String OLD_XLS_SUFFIX = ".xls";
+
+    /**
+     * 新版Excel文件后缀
+     */
+    public static final String NEW_XLSX_SUFFIX = ".xlsx";
 
 }
