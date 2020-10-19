@@ -23,6 +23,9 @@ import lombok.Getter;
 
 /**
  * 一个单元格
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Getter
 public class CellRegion implements Comparable<CellRegion> {

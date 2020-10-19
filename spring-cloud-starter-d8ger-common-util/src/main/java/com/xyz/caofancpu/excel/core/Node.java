@@ -18,6 +18,12 @@
 
 package com.xyz.caofancpu.excel.core;
 
+/**
+ * 节点根, 所有Excel都可看做是其子类
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 public abstract class Node {
     /**
      * 父节点

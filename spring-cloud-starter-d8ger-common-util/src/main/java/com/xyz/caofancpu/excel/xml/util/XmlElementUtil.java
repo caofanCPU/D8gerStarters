@@ -31,6 +31,9 @@ import java.io.InputStream;
 
 /**
  * xml读取工具
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class XmlElementUtil {
 

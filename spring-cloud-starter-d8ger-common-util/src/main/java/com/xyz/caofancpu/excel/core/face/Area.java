@@ -20,6 +20,9 @@ package com.xyz.caofancpu.excel.core.face;
 
 /**
  * 表格区域
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public interface Area {
 }

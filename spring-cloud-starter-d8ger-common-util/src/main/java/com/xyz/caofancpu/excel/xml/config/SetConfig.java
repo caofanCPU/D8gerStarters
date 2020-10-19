@@ -19,11 +19,16 @@
 package com.xyz.caofancpu.excel.xml.config;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Excel定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class SetConfig implements IAreaConfig {
     private String name;
 

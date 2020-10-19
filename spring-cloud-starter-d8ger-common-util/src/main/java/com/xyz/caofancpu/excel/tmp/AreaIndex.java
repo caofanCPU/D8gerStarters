@@ -23,6 +23,9 @@ import lombok.Getter;
 
 /**
  * excel行列坐标信息
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Getter
 public class AreaIndex {

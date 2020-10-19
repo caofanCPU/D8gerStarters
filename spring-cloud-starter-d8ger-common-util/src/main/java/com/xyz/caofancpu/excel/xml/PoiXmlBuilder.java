@@ -56,6 +56,9 @@ import static com.xyz.caofancpu.excel.util.PoiUtil.getColumnWidth;
 
 /**
  * Excel 生成器
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class PoiXmlBuilder {
     private final WorkbookConfig config;

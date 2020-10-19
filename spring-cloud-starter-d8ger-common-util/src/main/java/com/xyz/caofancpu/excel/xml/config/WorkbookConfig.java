@@ -19,14 +19,19 @@
 package com.xyz.caofancpu.excel.xml.config;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Excel定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class WorkbookConfig {
     private String templateId;
     private String templateName;

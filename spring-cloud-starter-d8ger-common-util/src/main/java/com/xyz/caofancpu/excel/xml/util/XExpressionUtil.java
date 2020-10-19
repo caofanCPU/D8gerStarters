@@ -24,6 +24,9 @@ import java.math.BigDecimal;
 
 /**
  * 表达式工具类
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class XExpressionUtil {
 

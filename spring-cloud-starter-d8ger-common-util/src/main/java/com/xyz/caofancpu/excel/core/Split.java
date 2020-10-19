@@ -23,6 +23,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+/**
+ * 分隔符对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

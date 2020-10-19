@@ -20,6 +20,7 @@ package com.xyz.caofancpu.excel.xml.config;
 
 import com.xyz.caofancpu.excel.xml.ExpressionParser;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -31,8 +32,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * 样式
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class PoiStyleConfig {
     /**
      * cell字体

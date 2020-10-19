@@ -22,6 +22,9 @@ import lombok.Getter;
 
 /**
  * 键值对对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Getter
 public class Tmp<K, V> {

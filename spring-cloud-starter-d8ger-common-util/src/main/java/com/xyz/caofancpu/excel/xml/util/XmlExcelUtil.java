@@ -47,6 +47,9 @@ import java.util.stream.Collectors;
 
 /**
  * excel工具类
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class XmlExcelUtil {
     public static Object ifNull(Object ifNull, Object object1, Object object2) {

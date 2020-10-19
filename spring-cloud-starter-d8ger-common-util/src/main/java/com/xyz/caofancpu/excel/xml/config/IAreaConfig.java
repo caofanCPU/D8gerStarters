@@ -19,7 +19,10 @@
 package com.xyz.caofancpu.excel.xml.config;
 
 /**
+ * 区域配置接口
  *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public interface IAreaConfig {
 }

@@ -18,9 +18,11 @@
 
 package com.xyz.caofancpu.excel.core;
 
-
 /**
+ * 获取值函数
  *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @FunctionalInterface
 public interface ValueFunction<T, R> extends ItemFunction<T, R> {

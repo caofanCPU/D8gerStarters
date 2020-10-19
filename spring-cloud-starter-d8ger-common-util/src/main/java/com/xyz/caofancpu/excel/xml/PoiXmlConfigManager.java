@@ -53,6 +53,9 @@ import java.util.Map;
 
 /**
  * Excel XML定义读取注册
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class PoiXmlConfigManager {
 

@@ -29,6 +29,12 @@ import lombok.experimental.Accessors;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+/**
+ * Excel的列映射对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

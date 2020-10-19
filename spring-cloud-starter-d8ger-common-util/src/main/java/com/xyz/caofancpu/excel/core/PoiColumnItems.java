@@ -29,6 +29,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Excel多列
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

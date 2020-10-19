@@ -20,14 +20,19 @@ package com.xyz.caofancpu.excel.xml.config;
 
 import com.xyz.caofancpu.excel.enums.ListAlign;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Excel定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class ListConfig implements IAreaConfig {
     private String data;
     private String item;

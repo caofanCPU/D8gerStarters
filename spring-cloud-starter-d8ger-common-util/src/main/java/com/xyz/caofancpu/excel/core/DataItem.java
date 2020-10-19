@@ -25,6 +25,9 @@ import java.util.function.Function;
 
 /**
  * 临时对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class DataItem<T> {
     private final int total;

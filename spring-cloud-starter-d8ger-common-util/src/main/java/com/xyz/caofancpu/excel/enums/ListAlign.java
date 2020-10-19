@@ -20,6 +20,9 @@ package com.xyz.caofancpu.excel.enums;
 
 /**
  * 对齐
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public enum ListAlign {
     /**

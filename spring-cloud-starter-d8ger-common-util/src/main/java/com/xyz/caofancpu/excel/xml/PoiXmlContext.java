@@ -30,6 +30,9 @@ import java.util.Stack;
 
 /**
  * 对象管理
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class PoiXmlContext extends ExpressionParser implements Map<String, Object> {
 

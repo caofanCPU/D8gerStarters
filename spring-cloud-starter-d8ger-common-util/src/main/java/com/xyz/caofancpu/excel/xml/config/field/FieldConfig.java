@@ -20,14 +20,19 @@ package com.xyz.caofancpu.excel.xml.config.field;
 
 import com.xyz.caofancpu.excel.xml.config.PoiStyleConfig;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
 /**
  * Excel字段定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class FieldConfig implements IFieldConfig {
 
     /**

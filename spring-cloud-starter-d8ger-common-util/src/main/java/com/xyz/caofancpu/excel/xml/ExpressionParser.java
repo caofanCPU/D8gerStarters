@@ -38,6 +38,9 @@ import java.util.regex.Pattern;
 /**
  * 表达式解析器
  * 加减乘除没有优先级,请加括号
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class ExpressionParser implements ISymbolParser {
 

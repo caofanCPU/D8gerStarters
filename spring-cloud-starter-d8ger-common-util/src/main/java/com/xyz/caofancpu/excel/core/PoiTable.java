@@ -35,7 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 表格列
+ * 表格
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Getter()

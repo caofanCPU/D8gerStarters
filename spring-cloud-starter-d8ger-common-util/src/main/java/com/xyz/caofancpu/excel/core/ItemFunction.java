@@ -20,7 +20,10 @@ package com.xyz.caofancpu.excel.core;
 
 
 /**
+ * 函数
  *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @FunctionalInterface
 public interface ItemFunction<T, R> {

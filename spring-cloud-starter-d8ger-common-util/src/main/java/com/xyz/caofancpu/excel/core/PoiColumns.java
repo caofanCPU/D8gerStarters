@@ -22,7 +22,10 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * @author guan
+ * Excel多列
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class PoiColumns<T, V> extends PoiColumnItems<T, V> {
 

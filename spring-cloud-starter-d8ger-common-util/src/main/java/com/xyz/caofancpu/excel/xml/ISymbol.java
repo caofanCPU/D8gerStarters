@@ -22,6 +22,9 @@ import com.xyz.caofancpu.excel.exception.ExcelException;
 
 /**
  * 运算符解析算法
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public interface ISymbol {
     /**

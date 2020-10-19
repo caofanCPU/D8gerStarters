@@ -29,6 +29,9 @@ import java.util.List;
 
 /**
  * Excel定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @SuppressWarnings("rawtypes")
 @EqualsAndHashCode(callSuper = true)

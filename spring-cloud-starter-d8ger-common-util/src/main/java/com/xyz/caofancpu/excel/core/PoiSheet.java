@@ -31,6 +31,12 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Excel的Sheet页映射对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @Getter
 @Accessors(chain = true)
 public class PoiSheet extends Node {

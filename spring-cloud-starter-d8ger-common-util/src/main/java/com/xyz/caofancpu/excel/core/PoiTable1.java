@@ -26,6 +26,12 @@ import lombok.experimental.Accessors;
 import java.util.Collection;
 import java.util.function.Function;
 
+/**
+ * 单层表格
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Getter
 @Accessors(chain = true)

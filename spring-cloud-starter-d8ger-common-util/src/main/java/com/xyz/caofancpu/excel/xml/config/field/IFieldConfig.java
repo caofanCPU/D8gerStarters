@@ -20,6 +20,9 @@ package com.xyz.caofancpu.excel.xml.config.field;
 
 /**
  * Excel字段定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public interface IFieldConfig {
 

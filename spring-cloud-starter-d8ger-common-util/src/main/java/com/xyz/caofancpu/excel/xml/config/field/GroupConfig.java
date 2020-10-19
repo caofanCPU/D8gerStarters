@@ -19,14 +19,19 @@
 package com.xyz.caofancpu.excel.xml.config.field;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Excel字段定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class GroupConfig implements IFieldConfig {
     private String data;
     private String item;

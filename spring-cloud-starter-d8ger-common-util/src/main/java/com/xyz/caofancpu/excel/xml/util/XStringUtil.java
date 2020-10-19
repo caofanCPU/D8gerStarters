@@ -26,6 +26,9 @@ import java.util.Stack;
 
 /**
  * 字符串处理
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class XStringUtil {
     /**

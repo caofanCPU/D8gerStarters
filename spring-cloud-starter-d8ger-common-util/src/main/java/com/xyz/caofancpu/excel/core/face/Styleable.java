@@ -23,6 +23,9 @@ import com.xyz.caofancpu.excel.core.PoiStyle;
 
 /**
  * 有样式的
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public interface Styleable {
     PoiStyle getStyle();

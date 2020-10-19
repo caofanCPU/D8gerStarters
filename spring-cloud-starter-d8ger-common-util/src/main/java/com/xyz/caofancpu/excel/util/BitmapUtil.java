@@ -22,6 +22,9 @@ import lombok.Getter;
 
 /**
  * 位图合并工具类
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class BitmapUtil {
 

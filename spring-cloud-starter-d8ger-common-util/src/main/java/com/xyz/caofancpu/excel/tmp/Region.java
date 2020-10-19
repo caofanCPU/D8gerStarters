@@ -24,6 +24,9 @@ import lombok.Setter;
 
 /**
  * 临时对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Getter
 @Setter

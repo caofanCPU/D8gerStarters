@@ -29,6 +29,12 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Excel的行映射对象
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

@@ -27,6 +27,9 @@ import java.util.Map;
 
 /**
  * Excel 生成器
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class PoiXmlManager {
     protected PoiXmlConfigManager configManager;

@@ -23,6 +23,9 @@ import com.xyz.caofancpu.excel.core.PoiStyle;
 
 /**
  * 有标题的
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public interface Titleable {
     PoiStyle getTitleStyle();

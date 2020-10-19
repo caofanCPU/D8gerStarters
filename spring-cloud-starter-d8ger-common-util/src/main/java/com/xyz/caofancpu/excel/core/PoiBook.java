@@ -34,6 +34,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
 
+/**
+ * Apache的workbook的封装
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 public class PoiBook extends Node {
     /**
      * excel文件名, 不带后缀

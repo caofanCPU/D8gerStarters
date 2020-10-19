@@ -30,6 +30,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
 
+/**
+ * 两层嵌套表格
+ *
+ * @author D8GER
+ * @author guanxiaochen
+ */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Getter
 @Accessors(chain = true)

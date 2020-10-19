@@ -25,7 +25,10 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import java.util.function.Function;
 
 /**
- * 样式
+ * 动态样式
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Setter
 @Accessors(chain = true)

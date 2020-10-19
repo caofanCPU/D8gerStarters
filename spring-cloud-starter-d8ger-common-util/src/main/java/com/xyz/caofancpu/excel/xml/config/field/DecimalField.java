@@ -19,14 +19,19 @@
 package com.xyz.caofancpu.excel.xml.config.field;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
  * Excel字段定义
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 @Data
+@Accessors(chain = true)
 public class DecimalField extends FieldConfig {
     /**
      * DecimalFormat pattern 只对Number类型有效

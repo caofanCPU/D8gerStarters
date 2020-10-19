@@ -26,6 +26,9 @@ import com.xyz.caofancpu.excel.xml.util.XStringUtil;
 
 /**
  * xml运算符解析
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public enum Symbol implements ISymbol {
 

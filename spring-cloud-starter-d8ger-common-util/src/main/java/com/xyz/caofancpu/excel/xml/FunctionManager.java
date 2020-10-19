@@ -24,6 +24,9 @@ import java.util.function.Function;
 
 /**
  * 对象管理
+ *
+ * @author D8GER
+ * @author guanxiaochen
  */
 public class FunctionManager {
     static final Map<String, Function> FUNCTION_MAP = new HashMap<>();
