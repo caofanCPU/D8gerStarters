@@ -15,6 +15,7 @@
 . 提醒标识, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/annotation/AttentionDoc.java[AttentionDoc]
 . 重要标识, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/annotation/ImportDoc.java[ImportDoc]
 . 警告标识, link:/spring-cloud-starter-d8ger-common-util/src/main/java/com/xyz/caofancpu/annotation/WarnDoc.java[WarnDoc]
+* 复杂Excel生成黑科技, link:/spring-cloud-starter-d8ger-common-util/src/test/java/com/xyz/caofancpu/utils/excel/ExcelTest.java[PoiTable]
 - 算法工具
 * 罗伯特•塔扬(Robert•Tarjan)-强连通算法, TarjanSSC, 鉴环算法, link:/spring-cloud-starter-d8ger-common-util/src/test/java/com/xyz/caofancpu/StrategyRuleTest.java[StrategyRuleTest]
 

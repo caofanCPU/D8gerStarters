@@ -69,14 +69,10 @@ public class ExcelTest {
         PoiBook poiBook = PoiBook.newSXSSFBook("LOL三层嵌套表格");
         // 常规居中样式, 用户表格全局样式
         PoiStyle center = PoiUtil.getCenterPoiStyle();
-        // 测试: 黄底红字
         PoiStyle yellowBgRedFt = PoiUtil.getRedFrontAndYellowBgCenterPoiStyle();
-        // 测试: 绿字
         PoiStyle greenFont = PoiUtil.getGreenCenterPoiStyle();
         PoiStyle redFont = PoiUtil.getRedCenterPoiStyle();
-        // 测试: 数字绿涨红跌
         PoiStyle numberRefer = PoiUtil.getNumberArrowCenterPoiStyle();
-        // 测试: 数字百分比红涨绿跌
         PoiStyle numberPercent = PoiUtil.getNumberPercentArrowCenterPoiStyle(2);
         PoiSheet poiSheet = poiBook.addSheet(new PoiSheet("帝八哥"));
         // 设置打印样式
@@ -84,15 +80,8 @@ public class ExcelTest {
         poiSheet.addTable(new PoiTable3<LOLAnalysisResp.GameArea, LOLAnalysisResp.Team, LOLAnalysisResp.Player>(analysisResp.getGameAreaList(), LOLAnalysisResp.GameArea::getTeamList, LOLAnalysisResp.Team::getPlayerList) {{
             // 两列数据, 多级列标题形式
             // 取第一层数据, 1对应PoiTable3的第一个构造参数
-            addColumn1(LOLAnalysisResp.GameArea::getId, "赛区信息", "编码")
-                    .setDefaultValue("--")
-                    // 该列标题为黄底红字
-                    .setTitleStyle(yellowBgRedFt)
-                    // 该列除标题行的数据列为绿色字体样式
-                    .setStyle(greenFont);
+            addColumn1(LOLAnalysisResp.GameArea::getId, "赛区信息", "编码").setDefaultValue("--").setTitleStyle(yellowBgRedFt).setStyle(greenFont);
             addColumn1(LOLAnalysisResp.GameArea::getName, "赛区信息", "名称").setDefaultValue("--");
-
-            // 两列数据, 一般形式
             // 取第二层数据, 2对应PoiTable3的第二个构造参数
             addColumn2(LOLAnalysisResp.Team::getId, "战队信息", "ID").setDefaultValue("--");
             addColumn2(LOLAnalysisResp.Team::getName, "战队信息", "名称").setDefaultValue("--");
