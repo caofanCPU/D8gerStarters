@@ -18,6 +18,8 @@
 
 package com.xyz.caofancpu.utils.excel;
 
+import com.google.common.collect.Lists;
+import com.xyz.caofancpu.core.CollectionUtil;
 import com.xyz.caofancpu.core.FileUtil;
 import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.excel.core.PoiBook;
@@ -32,6 +34,8 @@ import com.xyz.caofancpu.utils.excel.domain.ByteDanceAnalysisResp;
 import com.xyz.caofancpu.utils.excel.domain.FakerAnalysisResp;
 import com.xyz.caofancpu.utils.excel.domain.QPSAnalysisResp;
 import com.xyz.caofancpu.utils.excel.domain.ThreeLevelAnalysisResp;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.commons.lang3.BooleanUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -40,6 +44,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
+import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Excel样例
@@ -215,6 +223,119 @@ public class ExcelTest {
         PoiUtil.mergedRegion(poiBook, poiSheet, 17, 1, 20, 4, "合并后的单元格", greenFont);
         String excelSaveFullPath = baseDirFullPath + File.separator + poiBook.getFileName();
         FileUtil.saveExcelFile(excelSaveFullPath, poiBook.buildWorkbook());
+    }
+
+
+    /**
+     * 1.支持标题自动合并
+     * 2.只需要DataMo, 无任何侵入, 根据简易的lambda表达式指定数据填充行为, 即可完成数据渲染
+     * 3.样式支持
+     * 4.指定区域单元格合并
+     */
+    @Test
+    public void lambdaExcel() {
+        List<GameArea> sourceData = initData();
+        NormalUseForTestUtil.out(JSONUtil.formatStandardJSON(sourceData));
+    }
+
+    public List<GameArea> initData() {
+        return Lists.newArrayList(new GameArea().setId(1004321).setName("G2.VS.TES").setTeamList(initGroupA()),
+                new GameArea().setId(2334567).setName("SN.VS.DWG").setTeamList(initGroupB()),
+                new GameArea().setId(2334567).setName("SSSSSS").setTeamList(initGroupC())
+
+        );
+    }
+
+    public List<Team> initGroupA() {
+        return Lists.newArrayList(new Team().setId(998).setName("火箭班").setAvgScore(733.2F).setPlayerList(initStudent(2020, 2024)),
+                new Team().setId(369).setName("平行班").setAvgScore(487.0F).setPlayerList(initStudent(455, 459))
+        );
+    }
+
+    public List<Team> initGroupB() {
+        return Lists.newArrayList(new Team().setId(108).setName("高三2班").setAvgScore(434.0F).setPlayerList(initStudent(777, 781)));
+    }
+
+    public List<Team> initGroupC() {
+        return Lists.newArrayList(new Team().setId(202).setName("高三1班").setAvgScore(233.2F).setPlayerList(initStudent(1688, 1692)));
+    }
+
+    public List<Player> initStudent(int a, int b) {
+        int mid = (a + b) / 2;
+        return CollectionUtil.transToList(IntStream.rangeClosed(a, b).boxed().collect(Collectors.toList()),
+                id -> new Player().setId(id).setName("学生" + id).setAge(id - a).setTeamId(id + a).setKillsPerGame(id - mid).setPercentScoreKDA((id - mid) / 1.0f)
+        );
+    }
+
+    @Data
+    @Accessors(chain = true)
+    public static class GameArea implements Serializable {
+        /**
+         * 赛区ID
+         */
+        private Integer id;
+        /**
+         * 赛区名称
+         */
+        private String name;
+        /**
+         * 战队列表
+         */
+        private List<Team> teamList = Lists.newArrayList();
+    }
+
+    @Data
+    @Accessors(chain = true)
+    public static class Team implements Serializable {
+        /**
+         * 战队ID
+         */
+        private Integer id;
+        /**
+         * 战队名称
+         */
+        private String name;
+        /**
+         * 所属赛区ID
+         */
+        private Integer gameAreaId;
+        /**
+         * 战队人均KDA
+         */
+        private Float avgScore;
+        /**
+         * 选手列表
+         */
+        private List<Player> playerList = Lists.newArrayList();
+    }
+
+    @Data
+    @Accessors(chain = true)
+    public static class Player implements Serializable {
+        /**
+         * 选手ID
+         */
+        private Integer id;
+        /**
+         * 选手姓名
+         */
+        private String name;
+        /**
+         * 选手年龄
+         */
+        private Integer age;
+        /**
+         * 选手所属战队ID
+         */
+        private Integer teamId;
+        /**
+         * 参考上赛季, 场均击杀, 示例值, 10, 0, -3
+         */
+        private Integer killsPerGame;
+        /**
+         * 参考上赛季, KDA成长比例, 百分比小数表示, 示例值, 0.88, 0, -0.32
+         */
+        private Float percentScoreKDA;
     }
 
 }
