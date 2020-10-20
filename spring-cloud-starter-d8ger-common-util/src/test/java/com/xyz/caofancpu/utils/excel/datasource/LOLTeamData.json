@@ -1,0 +1,550 @@
+{
+    "gameAreaList": [
+        {
+            "teamList": [
+                {
+                    "avgScore": 8.9,
+                    "id": 996,
+                    "name": "TES",
+                    "playerList": [
+                        {
+                            "age": 21,
+                            "id": 2020,
+                            "killsPerGame": 0,
+                            "name": "369",
+                            "percentScoreKDA": 45.3,
+                            "teamId": 996,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 14.9,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 14.8,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 15.2,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 22,
+                            "id": 2021,
+                            "killsPerGame": 4,
+                            "name": "卡萨",
+                            "percentScoreKDA": 28.0,
+                            "teamId": 996,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 12.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 12.6,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 15.9,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 19,
+                            "id": 2022,
+                            "killsPerGame": 1,
+                            "name": "左手",
+                            "percentScoreKDA": 0.0,
+                            "teamId": 996,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 12.9,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 14.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 15.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 17,
+                            "id": 2023,
+                            "killsPerGame": 4,
+                            "name": "杰克",
+                            "percentScoreKDA": 10.0,
+                            "teamId": 996,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 16.9,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 18.8,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 15.2,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 22,
+                            "id": 2024,
+                            "killsPerGame": -4,
+                            "name": "预言家",
+                            "percentScoreKDA": -41.3,
+                            "teamId": 996,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 10.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 11.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 9.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "avgScore": 7.8,
+                    "id": 669,
+                    "name": "SN",
+                    "playerList": [
+                        {
+                            "age": 17,
+                            "id": 455,
+                            "killsPerGame": 4,
+                            "name": "宾",
+                            "percentScoreKDA": 80.4,
+                            "teamId": 669,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 16.0,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 16.0,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 16.0,
+                                    "hasWin": false
+                                }
+                            ]
+                        },
+                        {
+                            "age": 22,
+                            "id": 456,
+                            "killsPerGame": 3,
+                            "name": "骚愤",
+                            "percentScoreKDA": -2.3,
+                            "teamId": 669,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 12.0,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 10.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 9.8,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 20,
+                            "id": 457,
+                            "killsPerGame": 0,
+                            "name": "恩吉儿",
+                            "percentScoreKDA": 0.0,
+                            "teamId": 669,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 4.0,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 8.0,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 9.0,
+                                    "hasWin": false
+                                }
+                            ]
+                        },
+                        {
+                            "age": 19,
+                            "id": 458,
+                            "killsPerGame": 6,
+                            "name": "焕峰",
+                            "percentScoreKDA": 30.1,
+                            "teamId": 669,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 5.9,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 6.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 14.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 23,
+                            "id": 459,
+                            "killsPerGame": -5,
+                            "name": "瑟瑟",
+                            "percentScoreKDA": -12.2,
+                            "teamId": 669,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 7.8,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 6.9,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 9.1,
+                                    "hasWin": true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "id": 9999999,
+            "name": "LPL"
+        },
+        {
+            "teamList": [
+                {
+                    "avgScore": 8.8,
+                    "id": 33,
+                    "name": "DWG",
+                    "playerList": [
+                        {
+                            "age": 17,
+                            "id": 777,
+                            "killsPerGame": 3,
+                            "name": "牛宝",
+                            "percentScoreKDA": 68.4,
+                            "teamId": 33,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 13.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 14.1,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 16.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 20,
+                            "id": 778,
+                            "killsPerGame": 4,
+                            "name": "砍幽",
+                            "percentScoreKDA": 0.0,
+                            "teamId": 33,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 16.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 16.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 16.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 16,
+                            "id": 779,
+                            "killsPerGame": 0,
+                            "name": "秀儿",
+                            "percentScoreKDA": 10.0,
+                            "teamId": 33,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 10.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 9.1,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 13.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 19,
+                            "id": 780,
+                            "killsPerGame": -2,
+                            "name": "鬼皇",
+                            "percentScoreKDA": -2.0,
+                            "teamId": 33,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 13.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 14.1,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 16.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 15,
+                            "id": 781,
+                            "killsPerGame": -3,
+                            "name": "巴瑞亚",
+                            "percentScoreKDA": -6.4,
+                            "teamId": 33,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 10.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 8.1,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 6.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "id": 3333333,
+            "name": "LCK"
+        },
+        {
+            "teamList": [
+                {
+                    "avgScore": 7.4,
+                    "id": 66,
+                    "name": "G2",
+                    "playerList": [
+                        {
+                            "age": 23,
+                            "id": 1688,
+                            "killsPerGame": 0,
+                            "name": "鼻哇破",
+                            "percentScoreKDA": -8.9,
+                            "teamId": 66,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 5.4,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 4.4,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 8.4,
+                                    "hasWin": false
+                                }
+                            ]
+                        },
+                        {
+                            "age": 25,
+                            "id": 1689,
+                            "killsPerGame": -5,
+                            "name": "羊扣丝",
+                            "percentScoreKDA": -32.8,
+                            "teamId": 66,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 9.8,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 4.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 5.2,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 20,
+                            "id": 1690,
+                            "killsPerGame": 8,
+                            "name": "帽皇",
+                            "percentScoreKDA": 50.0,
+                            "teamId": 66,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 12.3,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 14.8,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 16.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 24,
+                            "id": 1691,
+                            "killsPerGame": 3,
+                            "name": "阿P",
+                            "percentScoreKDA": 14.3,
+                            "teamId": 66,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 6.1,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 7.7,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 8.0,
+                                    "hasWin": true
+                                }
+                            ]
+                        },
+                        {
+                            "age": 18,
+                            "id": 1692,
+                            "killsPerGame": -7,
+                            "name": "米Key",
+                            "percentScoreKDA": 0.0,
+                            "teamId": 66,
+                            "latest3List": [
+                                {
+                                    "index": 1,
+                                    "kda": 6.0,
+                                    "hasWin": true
+                                },
+                                {
+                                    "index": 2,
+                                    "kda": 5.3,
+                                    "hasWin": false
+                                },
+                                {
+                                    "index": 3,
+                                    "kda": 3.0,
+                                    "hasWin": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "id": 6666666,
+            "name": "G2"
+        }
+    ]
+}
