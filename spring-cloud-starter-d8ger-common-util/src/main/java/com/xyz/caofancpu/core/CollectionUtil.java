@@ -102,7 +102,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T, E> List<T> filterTopK(@NonNull Collection<E> coll, Function<? super E, ? extends T> mapper, Comparator<T> comparator, int k) {
         if (k <= 0) {
-            return new ArrayList<>();
+            return emptyList();
         }
         List<T> tList = transToList(coll, mapper);
         if (k > coll.size()) {
@@ -124,7 +124,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T, E> List<T> removeTopK(@NonNull Collection<E> coll, Function<? super E, ? extends T> mapper, Comparator<T> comparator, int k) {
         if (k > coll.size()) {
-            return new ArrayList<>();
+            return emptyList();
         }
         List<T> tList = transToList(coll, mapper);
         if (k <= 0) {
@@ -291,7 +291,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T, F> Set<F> probeRepeatValueSet(Collection<T> coll, Function<? super T, ? extends F> mapper) {
         if (isEmpty(coll)) {
-            return Collections.emptySet();
+            return emptySet();
         }
         List<F> elementList = transToList(coll, mapper);
         List<F> withoutNullElementList = transToList(elementList, Function.identity());
@@ -355,7 +355,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, R> Set<R> transToSet(Collection<E> source, Function<? super E, ? extends R> mapper) {
         if (isEmpty(source)) {
-            return Collections.emptySet();
+            return emptySet();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toSet());
     }
@@ -369,7 +369,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, R> List<R> transToList(Collection<E> source, Function<? super E, ? extends R> mapper) {
         if (isEmpty(source)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toList());
     }
@@ -399,7 +399,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, R> List<R> transToListWithFlatMap(Collection<E> source, Function<? super E, ? extends List<R>> mapper) {
         if (isEmpty(source)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).flatMap(List::stream).collect(Collectors.toList());
     }
@@ -414,7 +414,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, R> Set<R> transToSetWithFlatMap(Collection<E> source, Function<? super E, ? extends List<R>> mapper) {
         if (isEmpty(source)) {
-            return Collections.emptySet();
+            return emptySet();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).flatMap(List::stream).collect(Collectors.toSet());
     }
@@ -463,7 +463,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <F, T> Set<F> filterAndTransSet(Collection<T> coll, Predicate<? super T> predicate, Function<? super T, ? extends F> mapper) {
         if (isEmpty(coll)) {
-            return Collections.emptySet();
+            return emptySet();
         }
         return coll.stream().filter(Objects::nonNull).filter(predicate).map(mapper).collect(Collectors.toSet());
     }
@@ -479,7 +479,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <F, T> Set<F> removeAndTransSet(Collection<T> coll, Predicate<? super T> removePredicate, Function<? super T, ? extends F> mapper) {
         if (isEmpty(coll)) {
-            return Collections.emptySet();
+            return emptySet();
         }
         return coll.stream().filter(Objects::nonNull).filter(item -> !removePredicate.test(item)).map(mapper).collect(Collectors.toSet());
     }
@@ -494,7 +494,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <F, T> List<F> filterAndTransList(Collection<T> coll, Predicate<? super T> predicate, Function<? super T, ? extends F> mapper) {
         if (isEmpty(coll)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return coll.stream().filter(Objects::nonNull).filter(predicate).map(mapper).collect(Collectors.toList());
     }
@@ -510,7 +510,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <F, T> List<F> removeAndTransList(Collection<T> coll, Predicate<? super T> removePredicate, Function<? super T, ? extends F> mapper) {
         if (isEmpty(coll)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return coll.stream().filter(Objects::nonNull).filter(item -> !removePredicate.test(item)).map(mapper).collect(Collectors.toList());
     }
@@ -591,7 +591,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, R> List<R> distinctList(Collection<E> source, Function<? super E, ? extends R> mapper) {
         if (isEmpty(source)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).distinct().collect(Collectors.toList());
     }
@@ -605,7 +605,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T> List<T> distinctListByField(Collection<T> coll, Comparator<T> distinctComparator) {
         if (isEmpty(coll)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return coll.stream()
                 .filter(Objects::nonNull)
@@ -630,7 +630,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K> Map<K, List<E>> groupIndexToMap(Collection<E> source, Function<? super E, ? extends K> kFunction) {
         if (isEmpty(source)) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
         return source.stream().filter(Objects::nonNull).collect(Collectors.groupingBy(kFunction));
     }
@@ -645,7 +645,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K, V> Map<K, List<V>> groupIndexToMap(Collection<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
         if (isEmpty(source)) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
         return source.stream().filter(Objects::nonNull).collect(Collectors.groupingBy(kFunction, HashMap::new, Collectors.mapping(vFunction, Collectors.toList())));
     }
@@ -665,11 +665,11 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K, V> Map<K, List<V>> groupIndexToMap(Collection<E> source, Set<K> adjustmentReferKeys, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
         if (isEmpty(source)) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
         Map<K, List<V>> resultMap = source.stream().filter(Objects::nonNull).collect(Collectors.groupingBy(kFunction, HashMap::new, Collectors.mapping(vFunction, Collectors.toList())));
         if (isNotEmpty(adjustmentReferKeys)) {
-            adjustmentReferKeys.forEach(k -> resultMap.putIfAbsent(k, Collections.emptyList()));
+            adjustmentReferKeys.forEach(k -> resultMap.putIfAbsent(k, emptyList()));
         }
         return resultMap;
     }
@@ -759,7 +759,7 @@ public class CollectionUtil extends CollectionUtils {
     @Deprecated
     public static <E, K> Map<K, E> transToMap(Iterable<E> values, Function<? super E, ? extends K> kFunction) {
         if (Objects.isNull(values)) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
         return StreamSupport.stream(values.spliterator(), Boolean.FALSE)
                 .filter(Objects::nonNull)
@@ -775,7 +775,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K> Map<K, E> transToMap(Collection<E> source, Function<? super E, ? extends K> kFunction) {
         if (isEmpty(source)) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
         return source.stream().filter(Objects::nonNull).collect(Collectors.toMap(kFunction, Function.identity()));
     }
@@ -822,7 +822,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K, V> Map<K, V> transToMap(Collection<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
         if (isEmpty(source)) {
-            return Collections.emptyMap();
+            return emptyMap();
         }
         return source.stream().filter(Objects::nonNull).collect(Collectors.toMap(kFunction, vFunction));
     }
@@ -1056,7 +1056,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T, F> List<T> findAll(Collection<T> coll, Function<? super T, ? extends F> function, @NonNull F value) {
         if (isEmpty(coll)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return coll.stream()
                 .filter(Objects::nonNull)
@@ -1073,7 +1073,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T> List<T> findAll(Collection<T> coll, Predicate<? super T> predicate) {
         if (isEmpty(coll)) {
-            return Collections.emptyList();
+            return emptyList();
         }
         return coll.stream().filter(Objects::nonNull).filter(predicate).collect(Collectors.toList());
     }
@@ -1260,7 +1260,7 @@ public class CollectionUtil extends CollectionUtils {
         if (isEmpty(paramsMap) || isEmpty(clazzArray)) {
             return paramsMap;
         }
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = emptyMap();
         // 将流导入Supplier工厂, 需要时即取出来, 取出来时就会构造流, 即新的实例
         Supplier<Stream<Class>> clazzStreamSupplier = () -> Arrays.stream(clazzArray);
         paramsMap.entrySet().stream()
@@ -1488,6 +1488,30 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     // =====================数组判空===================== //
+
+    public static <E> List<E> emptyList() {
+        return new ArrayList<>();
+    }
+
+    public static <E> List<E> immutableEmptyList() {
+        return Collections.emptyList();
+    }
+
+    public static <E> Set<E> emptySet() {
+        return new HashSet<>();
+    }
+
+    public static <E> Set<E> immutableEmptySet() {
+        return Collections.emptySet();
+    }
+
+    public static <K, V> Map<K, V> emptyMap() {
+        return new HashMap<>();
+    }
+
+    public static <K, V> Map<K, V> immutableEmptyMap() {
+        return Collections.emptyMap();
+    }
 
     /**
      * Returns a merge function, suitable for use in
