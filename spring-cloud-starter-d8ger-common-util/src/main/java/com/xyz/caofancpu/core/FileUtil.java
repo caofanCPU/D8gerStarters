@@ -19,6 +19,7 @@
 package com.xyz.caofancpu.core;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -64,6 +65,26 @@ public class FileUtil {
             throws IOException {
         byte[] buffer = FileUtils.readFileToByteArray(new File(path));
         return Base64.encodeBase64String(buffer);
+    }
+
+    public static String svgContext(String fileFullPath)
+            throws IOException {
+        String content = FileUtil.encodeBase64(fileFullPath);
+        String[] tmp = fileFullPath.split(File.separator);
+        String[] fileNameTmp = tmp[tmp.length - 1].split("\\.");
+        String name = fileNameTmp[0];
+        String suffix = fileNameTmp[1];
+        StringBuilder sb = new StringBuilder();
+        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>").append(SymbolConstantUtil.NEXT_LINE)
+                .append("<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"36px\" height=\"36px\" viewBox=\"0 0 36 36\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">").append(SymbolConstantUtil.NEXT_LINE)
+                .append(SymbolConstantUtil.TAB).append("<!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->").append(SymbolConstantUtil.NEXT_LINE)
+                .append(SymbolConstantUtil.TAB).append("<title>").append(name).append("</title>").append(SymbolConstantUtil.NEXT_LINE)
+                .append(SymbolConstantUtil.TAB).append("<desc>Created By Tina.</desc>").append(SymbolConstantUtil.NEXT_LINE)
+                .append(SymbolConstantUtil.TAB).append("<g id=\"Tina-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\">").append(SymbolConstantUtil.NEXT_LINE)
+                .append(SymbolConstantUtil.DOUBLE_TAB).append("<image id=\"").append(name).append("\" x=\"0\" y=\"0\" width=\"36\" height=\"36\" xlink:href=\"data:image/").append(suffix).append(";base64,").append(content).append("\"></image>").append(SymbolConstantUtil.NEXT_LINE)
+                .append(SymbolConstantUtil.TAB).append("</g>").append(SymbolConstantUtil.NEXT_LINE)
+                .append("</svg>").append(SymbolConstantUtil.NEXT_LINE);
+        return sb.toString();
     }
 
     /**

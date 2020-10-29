@@ -76,6 +76,25 @@ public class SymbolConstantUtil {
     public static final String ORIGIN_TAB = "\t";
 
     /**
+     * Double Tabs
+     */
+    public static final String DOUBLE_TAB = TAB + TAB;
+
+    /**
+     * Triple Tabs
+     */
+    public static final String TRIPLE_TAB = DOUBLE_TAB + TAB;
+
+    /**
+     * Quaternary Tabs
+     */
+    public static final String QUATERNARY_TAB = TRIPLE_TAB + TAB;
+
+    /**
+     * Penta Tabs
+     */
+    public static final String PENTA_TAB = QUATERNARY_TAB + TAB;
+    /**
      * 填空占位符: 两条短横线
      */
     public static final String FILL_EMPTY_PLACE_HOLDER = "--";
