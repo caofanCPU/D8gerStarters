@@ -19,12 +19,14 @@
 package com.xyz.caofancpu.core;
 
 
+import com.google.common.collect.Lists;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.NonNull;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -1545,6 +1547,36 @@ public class CollectionUtil extends CollectionUtils {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
+    /**
+     * 根据样本计算排名
+     *
+     * @param coll
+     * @param valueFunction
+     */
+    public static <T, F extends Comparable<F>> List<Pair<Integer, T>> calculateRank(@NonNull Collection<T> coll, Function<? super T, ? extends F> valueFunction) {
+        List<T> source = Lists.newArrayList(coll);
+        // 对数据源按照值降序排列
+        source.sort(CollectionUtil.getDescComparator(valueFunction));
+        List<Pair<Integer, T>> resultList = new ArrayList<>();
+        // 排名
+        int rank = 1;
+        int prevRank = 1;
+        T prevValue = null;
+        for (T currValue : source) {
+            int currRank;
+            if (Objects.equals(prevValue, currValue)) {
+                // 跟上一个元素等值
+                currRank = prevRank;
+            } else {
+                currRank = rank;
+                prevRank = rank;
+                prevValue = currValue;
+            }
+            resultList.add(Pair.of(currRank, currValue));
+            rank++;
+        }
+        return resultList;
+    }
 
     /**
      * 升序排序, null值放到最后

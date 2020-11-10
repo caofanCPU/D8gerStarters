@@ -25,6 +25,7 @@ import com.xyz.caofancpu.extra.NormalUseForTestUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -280,6 +281,13 @@ public class CollectionUtilTest {
         System.out.println(CollectionUtil.show(numbers));
         numbers.sort(CollectionUtil.getDescComparator(Function.identity()));
         System.out.println(CollectionUtil.show(numbers));
+    }
+
+    @Test
+    public void testCalculateRank() {
+        List<Float> list = Lists.newArrayList(null, 127.0f, 122.0f, 117.0f, 116.0f, 110.0f, 108.0f, null, 105.0f, 104.0f, 103.0f, 101.0f, 100.0f, 97.0f, 96.0f, 91.0f, 87.0f, 87.0f, 85.0f, 84.0f, 80.0f, 79.0f, 78.0f, 76.0f, 74.0f, 74.0f, 72.0f, 71.0f, 70.0f, 70.0f, 66.0f, 65.0f, 57.0f, 49.0f, 34.0f, 23.0f, 0.0f, null);
+        List<Pair<Integer, Float>> pairList = CollectionUtil.calculateRank(list, Function.identity());
+        NormalUseForTestUtil.out(CollectionUtil.show(pairList));
     }
 
     @Test
