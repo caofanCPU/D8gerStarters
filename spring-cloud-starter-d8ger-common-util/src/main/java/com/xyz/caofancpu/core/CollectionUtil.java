@@ -1553,7 +1553,7 @@ public class CollectionUtil extends CollectionUtils {
      * @param coll
      * @param valueFunction
      */
-    public static <T, F extends Comparable<F>> List<Pair<Integer, T>> calculateRank(@NonNull Collection<T> coll, Function<? super T, ? extends F> valueFunction) {
+    public static <T, F extends Comparable<? super F>> List<Pair<Integer, T>> calculateRank(@NonNull Collection<T> coll, Function<? super T, ? extends F> valueFunction) {
         List<T> source = Lists.newArrayList(coll);
         // 对数据源按照值降序排列
         source.sort(CollectionUtil.getDescComparator(valueFunction));
@@ -1616,6 +1616,31 @@ public class CollectionUtil extends CollectionUtils {
             }
             return u2.compareTo(u1);
         };
+    }
+
+    /**
+     * 指定排序比较器, 获取排序后的列表
+     *
+     * @param source
+     * @param mapper
+     * @param customComparator
+     * @return
+     */
+    public static <T, U extends Comparable<? super U>> List<T> customSortAndTransList(Collection<T> source, Function<? super T, ? extends U> mapper, Comparator<U> customComparator) {
+        return source.stream()
+                .sorted(useCustomFieldComparator(mapper, customComparator))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 自定义比较器, 用对象字段作为比较依据
+     *
+     * @param mapper
+     * @param comparator
+     * @return
+     */
+    public static <T, U extends Comparable<? super U>> Comparator<T> useCustomFieldComparator(Function<? super T, ? extends U> mapper, Comparator<U> comparator) {
+        return (Comparator<T> & Serializable) (c1, c2) -> comparator.compare(mapper.apply(c1), mapper.apply(c2));
     }
 
     /**
