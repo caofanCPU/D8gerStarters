@@ -33,7 +33,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 
@@ -394,7 +393,7 @@ public class DateUtil {
             return dateTimeStr;
         }
         String originWord = dateTimeStr.replaceAll(DATE_TIME_REGEX.pattern(), SymbolConstantUtil.SPACE);
-        LocalDateTime parse = null;
+        LocalDateTime parse;
         try {
             parse = LocalDateTime.parse(originWord, DateTimeFormatter.ofPattern(DATETIME_FORMAT_SIMPLE));
         } catch (Exception e) {
@@ -408,7 +407,7 @@ public class DateUtil {
                 }
             }
         }
-        return Objects.nonNull(parse) ? String.valueOf(parse.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli()) : dateTimeStr;
+        return String.valueOf(parse.toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli());
     }
 
     /**

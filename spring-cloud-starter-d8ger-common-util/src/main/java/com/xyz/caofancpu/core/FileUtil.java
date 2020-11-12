@@ -177,7 +177,7 @@ public class FileUtil {
         } catch (IOException e) {
             // ignore
         } catch (ClassNotFoundException e) {
-            log.error("反序列化文件出错, 原因: {}", e);
+            log.error("反序列化文件出错, 原因: ", e);
             throw new IOException("反序列化的目的类不存在!");
         } finally {
             IOUtils.closeQuietly(ois);

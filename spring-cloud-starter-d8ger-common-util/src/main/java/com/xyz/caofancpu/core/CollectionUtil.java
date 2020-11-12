@@ -20,6 +20,7 @@ package com.xyz.caofancpu.core;
 
 
 import com.google.common.collect.Lists;
+import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.NonNull;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -63,6 +64,12 @@ public class CollectionUtil extends CollectionUtils {
 
     /**
      * 从集合中截取前面的子集合
+     * .          take from head and convert to
+     * . +--------------------------------------------------------+
+     * . |                                                        v
+     * +--------+  contains   +---+  convert   +---+  collect   +---+
+     * | source | ----------> | T | ---------> | F | ---------> | R |
+     * +--------+             +---+            +---+            +---+
      *
      * @param resultColl 结果收集容器
      * @param source     数据源
@@ -79,6 +86,12 @@ public class CollectionUtil extends CollectionUtils {
 
     /**
      * 从集合中截取后面的子集合
+     * .          take from tail and convert to
+     * . +--------------------------------------------------------+
+     * . |                                                        v
+     * +--------+  contains   +---+  convert   +---+  collect   +---+
+     * | source | ----------> | T | ---------> | F | ---------> | R |
+     * +--------+             +---+            +---+            +---+
      *
      * @param resultColl 结果收集容器
      * @param source     数据源
@@ -236,6 +249,123 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
+     * 将集合元素依次以指定方式合并, 返回最终结果
+     * 常见的行为就是求和
+     *
+     * @param coll   数据源
+     * @param merger 数据合并行为
+     * @return
+     */
+    public static <E> E reduce(@NonNull Collection<E> coll, BinaryOperator<E> merger) {
+        if (CollectionUtil.isEmpty(coll)) {
+            return null;
+        }
+        return coll.stream().filter(Objects::nonNull).reduce(merger).orElse(null);
+    }
+
+    /**
+     * 按照集合元素的某个字段依次以指定方式合并, 返回最终结果
+     * 常见的行为就是求和
+     *
+     * @param coll        数据源
+     * @param fieldMapper 元素字段函数
+     * @param merger      数据合并行为
+     * @return
+     */
+    public static <E, T> T reduceByField(@NonNull Collection<E> coll, Function<? super E, ? extends T> fieldMapper, BinaryOperator<T> merger) {
+        if (CollectionUtil.isEmpty(coll)) {
+            return null;
+        }
+        // reduce方法的第3个参数用于并行时结果合并, 对于单向流, 不需要合并故而写作 (a, b) -> null
+        // 并且当使用并行流时, 一定要注意, 初始值initValue会参与每个并行的计算, 所以并行流下initValue必须为0或者null之类的
+        // 故本方法进行数据聚合时初始值为null
+        return coll.stream().filter(Objects::nonNull)
+                .reduce(null,
+                        (a, b) -> Objects.isNull(a) ? fieldMapper.apply(b) : merger.apply(a, fieldMapper.apply(b)),
+                        (parallelResultA, parallelResultB) -> null
+                );
+    }
+
+    /**
+     * 根据合并key及合并方式数据进行汇聚
+     * .           convert
+     * +---------------------------------------------------------------------------------------------+
+     * |                                                                                             v
+     * +--------+  contains   +---------+  mergeKey   +---+  with T   +-----------------+  collect   +-------------------+
+     * | source | ----------> |    E    | ----------> | K | --------> | Map.Entry<K, T> | ---------> | Result: Map<K, T> |
+     * +--------+             +---------+             +---+           +-----------------+            +-------------------+
+     * .                        |                                       ^
+     * .                        | merger                                |
+     * .                        v                                       |
+     * .                      +---------+  with K                       |
+     * .                      |    T    | ------------------------------+
+     * .                      +---------+
+     *
+     * @param mapColl  结果容器
+     * @param coll     数据源
+     * @param mergeKey 合并数据的key, 也是元素的字段函数, 相同key的元素执行mergeHandler合并运算
+     * @param merger   数据合并行为
+     * @param <T>      元素类型
+     * @param <K>      元素的字段Key类型
+     * @param <M>      结果容器类型
+     * @return
+     */
+    public static <T, K, M extends Map<K, T>> M reduceToMap(Supplier<M> mapColl, Collection<T> coll, Function<? super T, ? extends K> mergeKey, BinaryOperator<T> merger) {
+        M result = mapColl.get();
+        if (CollectionUtil.isEmpty(coll)) {
+            return result;
+        }
+        return coll.stream().filter(Objects::nonNull)
+                .reduce(result,
+                        (preResult, e) -> {
+                            K key = mergeKey.apply(e);
+                            T old = preResult.get(key);
+                            if (Objects.nonNull(old)) {
+                                result.put(key, merger.apply(old, e));
+                            }
+                            return result;
+                        },
+                        (parallelResultA, parallelResultB) -> null
+                );
+    }
+
+    /**
+     * 先根据分类key字段对数据源分组, 再根据合并key及合并方式分别对每组数据进行汇聚
+     * .                                                                                                                         convert to
+     * .                                                                          +--------------------------------------------------------------+
+     * .                                                                          |                                                              v
+     * +--------+  classifyKeyMapper   +--------------------------+  1CK with   +---------+  contains   +---+  mergeKey   +----+  with T       +------------+
+     * | source | -------------------> |     Map<CK, List<T>>     | ----------> | List<T> | ----------> | T | ----------> | MK | ------------> | Map<MK, T> |
+     * +--------+                      +--------------------------+             +---------+             +---+             +----+               +------------+
+     * .                                 |                                                                |                      with MK         ^
+     * .                                 | all CK convert to                                              +--------------------------------------+
+     * .                                 v
+     * .                               +--------------------------+
+     * .                               | Map<CK, Map<MK, List<T>> |
+     * .                               +--------------------------+
+     *
+     * @param resultMapColl      结果容器
+     * @param mergeResultMapColl 数据合并的结果
+     * @param coll               数据源
+     * @param classifyKeyMapper  分组key计算函数
+     * @param mergeKeyMapper     数据合并key计算函数, 相同key的数据按照合并方式进行汇聚
+     * @param merger             数据合并方式
+     * @param <T>                元素类型
+     * @param <CK>               分类key的类型
+     * @param <MK>               合并key的类型
+     * @return
+     */
+    public static <T, CK, MK, R extends Map<CK, Map<MK, T>>, G extends Map<MK, T>> Map<CK, Map<MK, T>> classifyAndReduceToNestedMap(Supplier<R> resultMapColl, Supplier<G> mergeResultMapColl, Collection<T> coll, Function<T, CK> classifyKeyMapper, Function<T, MK> mergeKeyMapper, BinaryOperator<T> merger) {
+        Map<CK, List<T>> classifiedMap = CollectionUtil.groupIndexToMap(coll, classifyKeyMapper);
+        return CollectionUtil.transToMapEnhance(
+                resultMapColl,
+                classifiedMap.entrySet(),
+                Map.Entry::getKey,
+                entry -> CollectionUtil.reduceToMap(mergeResultMapColl, entry.getValue(), mergeKeyMapper, merger)
+        );
+    }
+
+    /**
      * 对列表元素指定函数(字段为数字类型)求平均
      *
      * @param coll                数据源
@@ -319,11 +449,11 @@ public class CollectionUtil extends CollectionUtils {
      * @param sourceMap 数据源
      * @return boolean 判断结果
      */
-    public static boolean isEmpty(Map sourceMap) {
+    public static <K, V> boolean isEmpty(Map<K, V> sourceMap) {
         return Objects.isNull(sourceMap) || sourceMap.isEmpty();
     }
 
-    public static boolean isNotEmpty(Map sourceMap) {
+    public static <K, V> boolean isNotEmpty(Map<K, V> sourceMap) {
         return !isEmpty(sourceMap);
     }
 
@@ -453,6 +583,34 @@ public class CollectionUtil extends CollectionUtils {
             return resultColl.get();
         }
         return source.stream().filter(Objects::nonNull).map(flatMapper).flatMap(Collection::stream).map(convertMapper).collect(Collectors.toCollection(resultColl));
+    }
+
+    /**
+     * Collection<Map<K, V>折叠平铺到指定收集容器, 支持常用集合
+     * <p>
+     * .           convert
+     * +--------------------------------------------------------+
+     * |                                                        v
+     * +--------+  contains   +---+  mapper   +-----+  reduce   +-----------+  convert   +-----------------+  flatmap   +-------------+
+     * | source | ----------> | E | --------> | Map | --------> | List[Map] | ---------> | List[Map.Entry] | ---------> | Result: Map |
+     * +--------+             +---+           +-----+           +-----------+            +-----------------+            +-------------+
+     *
+     * @param mapColl 结果收集容器
+     * @param source  数据源
+     * @param mapper  元素转换为Map的函数
+     * @param <E>     数据源元数类型
+     * @param <K>     Map中Key的类型
+     * @param <V>     Map中Value的类型
+     * @param <MS>    元素转换为Map的类型
+     * @param <MR>    最终平铺收集容器Map的类型
+     * @return
+     */
+    public static <E, K, V, MS extends Map<K, V>, MR extends Map<K, V>> MR transToMapWithFlatMap(Supplier<MR> mapColl, Collection<E> source, Function<? super E, MS> mapper) {
+        if (isEmpty(source)) {
+            return mapColl.get();
+        }
+        List<Map.Entry<K, V>> tmpEntryList = transToCollWithFlatMap(ArrayList::new, transToList(source, mapper), Map::entrySet);
+        return transToMapEnhance(mapColl, tmpEntryList, Map.Entry::getKey, Map.Entry::getValue);
     }
 
     /**
@@ -615,15 +773,6 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 为避免数据丢失，Steam API底层对Collectors.toMap做了较为硬性的要求
-     * 1.toMap首先不允许key重复， 因而分组时需要注意使用KEY字段
-     * 2.value不允许为null
-     *
-     * 因而，以下*ToMap方法在使用时请注意以上两条，而*ToMapEnhance允许key重复，并启用新值替换旧值的机制
-     *
-     */
-
-    /**
      * 分组转换为Map<K, List<V>>，底层默认HashMap<K, ArrayList<V>>
      *
      * @param source    数据源
@@ -750,6 +899,13 @@ public class CollectionUtil extends CollectionUtils {
         return resultMap;
     }
 
+    // ====================================================================================================
+    // 为避免数据丢失，Steam API底层对Collectors.toMap做了较为硬性的要求
+    // 1.toMap首先不允许key重复， 因而分组时需要注意使用KEY字段
+    // 2.value不允许为null
+    // 因而，以下*ToMap方法在使用时请注意以上两条，而*ToMapEnhance允许key重复，并启用新值替换旧值的机制
+    // ====================================================================================================
+
     /**
      * 转换为Map-Value
      * {@link #transToMap}
@@ -811,6 +967,24 @@ public class CollectionUtil extends CollectionUtils {
             return mapColl.get();
         }
         return source.stream().filter(Objects::nonNull).collect(Collectors.toMap(kFunction, Function.identity(), enableNewOnDuplicateKey(), mapColl));
+    }
+
+    /**
+     * 转换为Map-Value, 重复KEY时新值覆盖旧值
+     *
+     * @param mapColl   支持返回LinkedHashMap/HashMap
+     * @param source
+     * @param kFunction
+     * @param vFunction
+     * @return
+     */
+    public static <E, K, V, M extends Map<K, V>> M transToMapEnhance(Supplier<M> mapColl, Iterable<E> source, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
+        if (Objects.isNull(source)) {
+            return mapColl.get();
+        }
+        return StreamSupport.stream(source.spliterator(), Boolean.FALSE)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(kFunction, vFunction, (oldValue, newValue) -> newValue, mapColl));
     }
 
 
@@ -1019,6 +1193,17 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
+     * 获取集合元首(第一个元素), 避免get(0)
+     *
+     * @param source
+     * @param <T>
+     */
+    @AttentionDoc("推荐使用, 替代x.get(0)的写法")
+    public static <T> T getHeadMan(Collection<T> source) {
+        return isEmpty(source) ? null : source.iterator().next();
+    }
+
+    /**
      * 在List中根据自定字段(函数)查找元素，返回找到的第一个元素，找不到就返回null
      *
      * @param coll     数据源
@@ -1122,6 +1307,28 @@ public class CollectionUtil extends CollectionUtils {
         }
         T existFirstOne = coll.stream().filter(predicate).findFirst().orElse(null);
         return Objects.nonNull(existFirstOne);
+    }
+
+    /**
+     * 集合只有一个元素
+     *
+     * @param coll
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean onlyExistOne(Collection<T> coll) {
+        return isNotEmpty(coll) && coll.size() == 1;
+    }
+
+    /**
+     * 集合最多只有一个元素
+     *
+     * @param coll
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean mostExistOne(Collection<T> coll) {
+        return isNotEmpty(coll) || coll.size() == 1;
     }
 
     /**
@@ -1243,7 +1450,7 @@ public class CollectionUtil extends CollectionUtils {
         if (isEmpty(paramsMap)) {
             return paramsMap;
         }
-        /** 一般请求参数不会太多，故而使用单向顺序流即可 */
+        // 一般请求参数不会太多，故而使用单向顺序流即可
         // 1.首先构建流，剔除值为空的元素
         Stream<Entry<String, Object>> tempStream = paramsMap.entrySet().stream()
                 .filter((entry) -> entry.getValue() != null);
@@ -1556,7 +1763,7 @@ public class CollectionUtil extends CollectionUtils {
     public static <T, F extends Comparable<? super F>> List<Pair<Integer, T>> calculateRank(@NonNull Collection<T> coll, Function<? super T, ? extends F> valueFunction) {
         List<T> source = Lists.newArrayList(coll);
         // 对数据源按照值降序排列
-        source.sort(CollectionUtil.getDescComparator(valueFunction));
+        source.sort(getDescComparator(valueFunction));
         List<Pair<Integer, T>> resultList = new ArrayList<>();
         // 排名
         int rank = 1;

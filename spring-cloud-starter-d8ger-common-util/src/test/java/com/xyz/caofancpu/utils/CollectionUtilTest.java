@@ -177,6 +177,13 @@ public class CollectionUtilTest {
     }
 
     @Test
+    public void testReduceByField() {
+        List<TestExamData> testExamDataList = loadTestExamStudentDatas();
+        NormalUseForTestUtil.out(CollectionUtil.show(CollectionUtil.transToList(testExamDataList, TestExamData::getId)));
+        NormalUseForTestUtil.out(CollectionUtil.reduceByField(testExamDataList, TestExamData::getId, Integer::sum));
+    }
+
+    @Test
     public void testListToCollection() {
         List<TestExamData> sourceList = loadTestExamDatas();
         // 转List
