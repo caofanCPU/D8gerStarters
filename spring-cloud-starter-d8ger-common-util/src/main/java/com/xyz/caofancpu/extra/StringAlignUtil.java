@@ -253,13 +253,7 @@ public class StringAlignUtil {
         ;
 
         public static Alignment fromName(String name) {
-            Alignment[] values = Alignment.values();
-            for (int i = 0; i < values.length; i++) {
-                if (values[i].name().equalsIgnoreCase(name)) {
-                    return values[i];
-                }
-            }
-            return null;
+            return CollectionUtil.findAnyInArrays(Alignment.values(), Alignment::name, item -> item.equalsIgnoreCase(name));
         }
     }
 }

@@ -94,6 +94,7 @@ public class SymbolConstantUtil {
      * Penta Tabs
      */
     public static final String PENTA_TAB = QUATERNARY_TAB + TAB;
+
     /**
      * 填空占位符: 两条短横线
      */
@@ -173,6 +174,16 @@ public class SymbolConstantUtil {
      * 小于号
      */
     public static final String LESS_THEN = "<";
+
+    /**
+     * 英文左中括号
+     */
+    public static final String ENGLISH_MID_LEFT_BRACKET = "[";
+
+    /**
+     * 英文右中括号
+     */
+    public static final String ENGLISH_MID_RIGHT_BRACKET = "]";
 
     /**
      * 展示null

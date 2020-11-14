@@ -18,7 +18,6 @@
 
 package com.xyz.caofancpu.core;
 
-
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
@@ -108,6 +107,9 @@ public class CollectionUtil extends CollectionUtils {
 
     /**
      * 对列表元素字段执行指定函数后, 按照comparator排列, 取前k个子列表
+     * <p>
+     * [coll]-- contains -->[E]-- convert -->[T]
+     * [coll]-- convert -->[List\[T\]]-- sort and take top K -->[Result: List\[T\]]
      *
      * @param coll       数据源
      * @param mapper     元素转换函数
@@ -504,6 +506,24 @@ public class CollectionUtil extends CollectionUtils {
             return emptyList();
         }
         return source.stream().filter(Objects::nonNull).map(mapper).collect(Collectors.toList());
+    }
+
+    /**
+     * 对数组元素进行转换, 支持结果容器类型, 常用Set/List，HashSet/ArrayList，LinkedSet/LinkedList
+     *
+     * @param resultColl
+     * @param source
+     * @param mapper
+     * @param <T>
+     * @param <F>
+     * @param <C>
+     * @return
+     */
+    public static <T, F, C extends Collection<F>> C transFromArray(Supplier<C> resultColl, T[] source, Function<? super T, ? extends F> mapper) {
+        if (isEmpty(source)) {
+            return resultColl.get();
+        }
+        return transToCollection(resultColl, Arrays.asList(source), mapper);
     }
 
     /**
@@ -1165,6 +1185,36 @@ public class CollectionUtil extends CollectionUtils {
     /**
      * Find a value in a array, normally used in Enum class
      *
+     * @param source    数组数据源
+     * @param function  元素计算值函数
+     * @param predicate 目标值条件
+     * @return
+     */
+    public static <T, F> F findAnyMappedResultArrays(T[] source, Function<? super T, ? extends F> function, Predicate<? super F> predicate) {
+        if (isEmpty(source)) {
+            return null;
+        }
+        return findAnyMappedResult(Arrays.asList(source), function, predicate);
+    }
+
+    /**
+     * Find a value in a array, normally used in Enum class
+     *
+     * @param source    数组数据源
+     * @param function  元素计算值函数
+     * @param predicate 目标值条件
+     * @return
+     */
+    public static <T, F> T findAnyInArrays(T[] source, Function<? super T, ? extends F> function, Predicate<? super F> predicate) {
+        if (isEmpty(source)) {
+            return null;
+        }
+        return findAny(Arrays.asList(source), function, predicate);
+    }
+
+    /**
+     * Find a value in a array, normally used in Enum class
+     *
      * @param source   数组数据源
      * @param function 元素计算值函数
      * @param value    目标值
@@ -1178,7 +1228,41 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 在List中根据指定字段(函数)查找元素，找到任意一个就返回，找不到就返回null
+     * 在coll中依次执行指定字段(函数)mapper, 再根据predicate进行匹配, 匹配任意一个就返回经mapper后的结果, 找不到就返回null
+     *
+     * @param coll
+     * @param mapper
+     * @param predicate
+     * @param <T>
+     * @param <F>
+     * @return
+     */
+    public static <T, F> F findAnyMappedResult(Collection<T> coll, Function<? super T, ? extends F> mapper, Predicate<? super F> predicate) {
+        if (isEmpty(coll)) {
+            return null;
+        }
+        return coll.stream().filter(Objects::nonNull).map(mapper).filter(predicate).findAny().orElse(null);
+    }
+
+    /**
+     * 在coll中依次执行指定字段(函数)mapper, 再根据predicate进行匹配, 匹配任意一个就返回原始元素, 找不到就返回null
+     *
+     * @param coll
+     * @param mapper
+     * @param predicate
+     * @param <T>
+     * @param <F>
+     * @return
+     */
+    public static <T, F> T findAny(Collection<T> coll, Function<? super T, ? extends F> mapper, Predicate<? super F> predicate) {
+        if (isEmpty(coll)) {
+            return null;
+        }
+        return coll.stream().filter(Objects::nonNull).filter(item -> predicate.test(mapper.apply(item))).findAny().orElse(null);
+    }
+
+    /**
+     * 在coll中根据指定字段(函数)查找元素, 找到任意一个就返回, 找不到就返回null
      *
      * @param coll     数据源
      * @param function 元素计算值函数
