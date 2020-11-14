@@ -40,7 +40,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
@@ -1007,7 +1006,6 @@ public class CollectionUtil extends CollectionUtils {
                 .collect(Collectors.toMap(kFunction, vFunction, (oldValue, newValue) -> newValue, mapColl));
     }
 
-
     /**
      * 转换为Map-Value
      *
@@ -1022,7 +1020,6 @@ public class CollectionUtil extends CollectionUtils {
         }
         return source.stream().filter(Objects::nonNull).collect(Collectors.toMap(kFunction, vFunction));
     }
-
 
     /**
      * 转换为Map-Value, 重复KEY将抛出异常
@@ -1157,7 +1154,7 @@ public class CollectionUtil extends CollectionUtils {
         if (isEmpty(sourceMap)) {
             return new LinkedHashMap<>(2, 0.5f, Boolean.FALSE);
         }
-        Comparator<Entry<K, V>> comparingByKey = Map.Entry.comparingByKey();
+        Comparator<Map.Entry<K, V>> comparingByKey = Map.Entry.comparingByKey();
         if (isNotEmpty(reverse) && reverse[0]) {
             comparingByKey = comparingByKey.reversed();
         }
@@ -1175,7 +1172,7 @@ public class CollectionUtil extends CollectionUtils {
         if (isEmpty(sourceMap)) {
             return new LinkedHashMap<>(2, 0.5f, Boolean.FALSE);
         }
-        Comparator<Entry<K, V>> comparingByValue = Map.Entry.comparingByValue();
+        Comparator<Map.Entry<K, V>> comparingByValue = Map.Entry.comparingByValue();
         if (isNotEmpty(reverse) && reverse[0]) {
             comparingByValue = comparingByValue.reversed();
         }
@@ -1184,13 +1181,20 @@ public class CollectionUtil extends CollectionUtils {
 
     /**
      * Find a value in a array, normally used in Enum class
+     * <p>
+     * .                                                                         no matching then return null
+     * .                                                                 +-----------------------------------------+
+     * .                                                                 |                                         v
+     * .+--------+  foreach   +---+  mapper   +---+  check predicate   +-------+  if match return immediately    +-----------+
+     * .| source | ---------> | T | --------> | F | -----------------> | JUDGE | ------------------------------> | Result: F |
+     * .+--------+            +---+           +---+                    +-------+                                 +-----------+
      *
      * @param source    数组数据源
      * @param function  元素计算值函数
      * @param predicate 目标值条件
      * @return
      */
-    public static <T, F> F findAnyMappedResultArrays(T[] source, Function<? super T, ? extends F> function, Predicate<? super F> predicate) {
+    public static <T, F> F findAnyMappedResultInArrays(T[] source, Function<? super T, ? extends F> function, Predicate<? super F> predicate) {
         if (isEmpty(source)) {
             return null;
         }
@@ -1229,6 +1233,12 @@ public class CollectionUtil extends CollectionUtils {
 
     /**
      * 在coll中依次执行指定字段(函数)mapper, 再根据predicate进行匹配, 匹配任意一个就返回经mapper后的结果, 找不到就返回null
+     * .                                                                       no matching return null
+     * .                                                               +--------------------------------------------+
+     * .                                                               |                                            v
+     * .+------+  foreach   +---+  mapper   +---+  check predicate   +-------+  matched then return immediately   +--------+
+     * .| coll | ---------> | T | --------> | F | -----------------> | JUDGE | ---------------------------------> | Result |
+     * .+------+            +---+           +---+                    +-------+                                    +--------+
      *
      * @param coll
      * @param mapper
@@ -1417,10 +1427,14 @@ public class CollectionUtil extends CollectionUtils {
 
     /**
      * Map键值对反转
-     * 示例，
+     * 示例,
      * { examA : [stu1, stu2, stu3], examB: [stu1, stu2] }
      * ⬇
      * {stu1 : [examA, examB], stu2 : [examA, examB], stu3 : [examA]}
+     *
+     * .+--------------------------+  KV reverse   +--------------------------+
+     * .| Map<Exam, List<Student>> | ------------> | Map<Student, List<Exam>> |
+     * .+--------------------------+               +--------------------------+
      *
      * @param sourceMap Map数据源
      * @param kFunction 针对Map数据源key的计算函数
@@ -1474,7 +1488,7 @@ public class CollectionUtil extends CollectionUtils {
      * @param value     目标值
      * @return
      */
-    public static <K, V, T> List<Entry<K, V>> findInMap(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
+    public static <K, V, T> List<Map.Entry<K, V>> findInMap(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
         if (isEmpty(sourceMap)) {
             return null;
         }
@@ -1499,7 +1513,7 @@ public class CollectionUtil extends CollectionUtils {
      * @param value     目标值
      * @return
      */
-    public static <K, V, T> Entry<K, V> findOneInMap(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
+    public static <K, V, T> Map.Entry<K, V> findOneInMap(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
         if (isEmpty(sourceMap)) {
             return null;
         }
@@ -1520,7 +1534,7 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static <K, V, T> V findOneValue(Map<K, V> sourceMap, Function<? super K, ? extends T> kFunction, @NonNull T value) {
-        Entry<K, V> resultEntry = findOneInMap(sourceMap, kFunction, value);
+        Map.Entry<K, V> resultEntry = findOneInMap(sourceMap, kFunction, value);
         return Objects.isNull(resultEntry) ? null : resultEntry.getValue();
     }
 
@@ -1536,10 +1550,10 @@ public class CollectionUtil extends CollectionUtils {
         }
         // 一般请求参数不会太多，故而使用单向顺序流即可
         // 1.首先构建流，剔除值为空的元素
-        Stream<Entry<String, Object>> tempStream = paramsMap.entrySet().stream()
+        Stream<Map.Entry<String, Object>> tempStream = paramsMap.entrySet().stream()
                 .filter((entry) -> entry.getValue() != null);
         // 2.从流中恢复map
-        return tempStream.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+        return tempStream.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**
@@ -1832,7 +1846,7 @@ public class CollectionUtil extends CollectionUtils {
      * @param comparator 比较器
      * @return
      */
-    private static <K, V> LinkedHashMap<K, V> sortMap(Map<K, V> sourceMap, Comparator<Entry<K, V>> comparator) {
+    private static <K, V> LinkedHashMap<K, V> sortMap(Map<K, V> sourceMap, Comparator<Map.Entry<K, V>> comparator) {
         return sourceMap.entrySet().stream()
                 .sorted(comparator)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
