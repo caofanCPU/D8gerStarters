@@ -20,6 +20,7 @@ package com.xyz.caofancpu.core;
 
 import com.google.common.collect.Lists;
 import com.xyz.caofancpu.annotation.AttentionDoc;
+import com.xyz.caofancpu.annotation.ImportDoc;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
 import lombok.NonNull;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -860,6 +861,25 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
+     * 分组转换为指定的Map<K, List<V>>， 例如TreeMap<K, List<V>>/LinkedHashMap<K, List<V>>
+     * 并且支持List按照指定字段排序
+     *
+     * @param mapColl      结果收集容器
+     * @param source       数据源
+     * @param sortFunction 排序函数
+     * @param kFunction    key执行函数
+     * @param vFunction    value执行函数
+     * @return
+     */
+    @ImportDoc("数据源分组排序利器, 推荐使用")
+    public static <E, K, S extends Comparable<? super S>, V, M extends Map<K, List<V>>> M groupIndexAndSortToMap(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends S> sortFunction, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
+        if (isEmpty(source)) {
+            return mapColl.get();
+        }
+        return source.stream().filter(Objects::nonNull).sorted(useCustomFieldComparator(sortFunction, Comparator.comparing(Function.identity()))).collect(Collectors.groupingBy(kFunction, mapColl, Collectors.mapping(vFunction, Collectors.toList())));
+    }
+
+    /**
      * 分组转换为指定Map<K, 指定的List<V>>，例如TreeMap<K, LinkedList<V>>/LinkedHashMap<K, LinkedList<V>>
      *
      * @param mapColl   结果收集容器
@@ -889,8 +909,7 @@ public class CollectionUtil extends CollectionUtils {
         if (isEmpty(source)) {
             return mapColl.get();
         }
-        return source.stream().filter(Objects::nonNull).collect(
-                Collectors.groupingBy(kGroupFunction, mapColl, Collectors.mapping(vFunction, Collectors.toCollection(vColl))));
+        return source.stream().filter(Objects::nonNull).collect(Collectors.groupingBy(kGroupFunction, mapColl, Collectors.mapping(vFunction, Collectors.toCollection(vColl))));
     }
 
     /**
@@ -1431,7 +1450,7 @@ public class CollectionUtil extends CollectionUtils {
      * { examA : [stu1, stu2, stu3], examB: [stu1, stu2] }
      * ⬇
      * {stu1 : [examA, examB], stu2 : [examA, examB], stu3 : [examA]}
-     *
+     * <p>
      * .+--------------------------+  KV reverse   +--------------------------+
      * .| Map<Exam, List<Student>> | ------------> | Map<Student, List<Exam>> |
      * .+--------------------------+               +--------------------------+
