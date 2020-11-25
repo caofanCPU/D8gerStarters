@@ -864,19 +864,19 @@ public class CollectionUtil extends CollectionUtils {
      * 分组转换为指定的Map<K, List<V>>， 例如TreeMap<K, List<V>>/LinkedHashMap<K, List<V>>
      * 并且支持List按照指定字段排序
      *
-     * @param mapColl      结果收集容器
-     * @param source       数据源
-     * @param sortFunction 排序函数
-     * @param kFunction    key执行函数
-     * @param vFunction    value执行函数
+     * @param mapColl        结果收集容器
+     * @param source         数据源
+     * @param kGroupFunction key分组执行函数
+     * @param sortFunction   排序函数
+     * @param vFunction      value执行函数
      * @return
      */
     @ImportDoc("数据源分组排序利器, 推荐使用")
-    public static <E, K, S extends Comparable<? super S>, V, M extends Map<K, List<V>>> M groupIndexAndSortToMap(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends S> sortFunction, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
+    public static <E, K, S extends Comparable<? super S>, V, M extends Map<K, List<V>>> M groupIndexAndSortToMap(Supplier<M> mapColl, Collection<E> source, Function<? super E, ? extends K> kGroupFunction, Function<? super E, ? extends S> sortFunction, Function<? super E, ? extends V> vFunction) {
         if (isEmpty(source)) {
             return mapColl.get();
         }
-        return source.stream().filter(Objects::nonNull).sorted(useCustomFieldComparator(sortFunction, Comparator.comparing(Function.identity()))).collect(Collectors.groupingBy(kFunction, mapColl, Collectors.mapping(vFunction, Collectors.toList())));
+        return source.stream().filter(Objects::nonNull).sorted(useCustomFieldComparator(sortFunction, Comparator.comparing(Function.identity()))).collect(Collectors.groupingBy(kGroupFunction, mapColl, Collectors.mapping(vFunction, Collectors.toList())));
     }
 
     /**
