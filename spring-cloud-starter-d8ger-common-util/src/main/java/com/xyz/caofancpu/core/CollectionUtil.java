@@ -1924,17 +1924,35 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
-     * 指定排序比较器, 获取排序后的列表
+     * 根据指定排序器对数据源排序, 返回原始数据类型
+     * 默认排序行为: 根据排序字段的compareTo()方法
      *
-     * @param source
-     * @param mapper
-     * @param customComparator
+     * @param coll            数据源
+     * @param sortFieldMapper 排序字段函数
+     * @param resultMapper    结果元素转换函数
+     * @param <T>             原始元素类型
+     * @param <F>             排序字段类型
+     * @param <R>             结果元素类型
      * @return
      */
-    public static <T, U extends Comparable<? super U>> List<T> customSortAndTransList(Collection<T> source, Function<? super T, ? extends U> mapper, Comparator<U> customComparator) {
-        return source.stream()
-                .sorted(useCustomFieldComparator(mapper, customComparator))
-                .collect(Collectors.toList());
+    public static <T, F extends Comparable<? super F>, R> List<R> customSortAndTransList(Collection<T> coll, Function<? super T, ? extends F> sortFieldMapper, Function<? super T, ? extends R> resultMapper) {
+        return customSortAndTransList(coll, sortFieldMapper, Comparator.comparing(Function.identity()), resultMapper);
+    }
+
+    /**
+     * 根据指定排序器对数据源排序, 返回原始数据类型
+     *
+     * @param coll            数据源
+     * @param sortFieldMapper 排序字段函数
+     * @param sortAction      排序行为
+     * @param resultMapper    结果元素转换函数
+     * @param <T>             原始元素类型
+     * @param <F>             排序字段类型
+     * @param <R>             结果元素类型
+     * @return
+     */
+    public static <T, F extends Comparable<? super F>, R> List<R> customSortAndTransList(Collection<T> coll, Function<? super T, ? extends F> sortFieldMapper, Comparator<F> sortAction, Function<? super T, ? extends R> resultMapper) {
+        return coll.stream().sorted(useCustomFieldComparator(sortFieldMapper, sortAction)).map(resultMapper).collect(Collectors.toList());
     }
 
     /**
