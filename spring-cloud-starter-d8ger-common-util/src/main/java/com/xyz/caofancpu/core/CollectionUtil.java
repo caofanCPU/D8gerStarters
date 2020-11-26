@@ -322,9 +322,7 @@ public class CollectionUtil extends CollectionUtils {
                         (preResult, e) -> {
                             K key = mergeKey.apply(e);
                             T old = preResult.get(key);
-                            if (Objects.nonNull(old)) {
-                                result.put(key, merger.apply(old, e));
-                            }
+                            result.put(key, Objects.isNull(old) ? e : merger.apply(old, e));
                             return result;
                         },
                         (parallelResultA, parallelResultB) -> null

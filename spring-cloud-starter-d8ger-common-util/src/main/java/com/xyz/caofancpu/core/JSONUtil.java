@@ -68,7 +68,7 @@ public class JSONUtil {
      * @return
      */
     public static String formatStandardJSON(@NonNull String source) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().serializeNulls().serializeSpecialFloatingPointValues().setPrettyPrinting().create();
         JsonElement element = JsonParser.parseString(source);
         return gson.toJson(element);
     }
