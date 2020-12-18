@@ -834,7 +834,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K, V> Map<K, List<V>> groupIndexToMap(Collection<E> source, Set<K> adjustmentReferKeys, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends V> vFunction) {
         if (isEmpty(source)) {
-            return emptyMap();
+            return isEmpty(adjustmentReferKeys) ? emptyMap() : transToMap(HashMap::new, adjustmentReferKeys, Function.identity(), item -> new ArrayList<>());
         }
         Map<K, List<V>> resultMap = source.stream().filter(Objects::nonNull).collect(Collectors.groupingBy(kFunction, HashMap::new, Collectors.mapping(vFunction, Collectors.toList())));
         if (isNotEmpty(adjustmentReferKeys)) {
@@ -925,7 +925,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K, V, M extends Map<K, C>, C extends Collection<V>> M groupIndexToMap(Supplier<M> mapColl, Supplier<C> vColl, Collection<E> source, Set<K> adjustmentReferKeys, Function<? super E, ? extends K> kGroupFunction, Function<? super E, ? extends V> vFunction) {
         if (isEmpty(source)) {
-            return mapColl.get();
+            return isEmpty(adjustmentReferKeys) ? mapColl.get() : transToMap(mapColl, adjustmentReferKeys, Function.identity(), item -> vColl.get());
         }
         M resultMap = source.stream().filter(Objects::nonNull).collect(
                 Collectors.groupingBy(kGroupFunction, mapColl, Collectors.mapping(vFunction, Collectors.toCollection(vColl))));
@@ -1069,7 +1069,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <E, K, V, C extends Collection<V>, M extends Map<K, C>> M transToMap(Supplier<M> mapColl, Supplier<C> vColl, Collection<E> source, Set<K> adjustmentReferKeys, Function<? super E, ? extends K> kFunction, Function<? super E, ? extends C> vFunction) {
         if (isEmpty(source)) {
-            return mapColl.get();
+            return isEmpty(adjustmentReferKeys) ? mapColl.get() : transToMap(mapColl, adjustmentReferKeys, Function.identity(), item -> vColl.get());
         }
         M resultMap = source.stream().filter(Objects::nonNull).collect(Collectors.toMap(kFunction, vFunction, nonDuplicateKey(), mapColl));
         if (isNotEmpty(adjustmentReferKeys)) {
