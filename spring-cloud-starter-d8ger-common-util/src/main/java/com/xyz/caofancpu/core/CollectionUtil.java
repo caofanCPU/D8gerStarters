@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 the original author
+ * Copyright 2016-2021 the original author
  *
  * @D8GER(https://github.com/caofanCPU).
  *
@@ -1935,6 +1935,46 @@ public class CollectionUtil extends CollectionUtils {
             U u1 = keyExtractor.apply(c1);
             if (Objects.isNull(u1)) {
                 return 1;
+            }
+            return u2.compareTo(u1);
+        };
+    }
+
+    /**
+     * 升序排序, null值放到最前面
+     *
+     * @param keyExtractor 排序字段
+     * @return 比较器
+     */
+    public static <T, U extends Comparable<? super U>> Comparator<T> getAscComparatorWithNullFirst(Function<? super T, ? extends U> keyExtractor) {
+        return (Comparator<T> & Serializable) (c1, c2) -> {
+            U u2 = keyExtractor.apply(c2);
+            if (Objects.isNull(u2)) {
+                return 1;
+            }
+            U u1 = keyExtractor.apply(c1);
+            if (Objects.isNull(u1)) {
+                return -1;
+            }
+            return u1.compareTo(u2);
+        };
+    }
+
+    /**
+     * 降序排序, null值放到最前面
+     *
+     * @param keyExtractor 排序字段
+     * @return 比较器
+     */
+    public static <T, U extends Comparable<? super U>> Comparator<T> getDescComparatorWithNullFirst(Function<? super T, ? extends U> keyExtractor) {
+        return (Comparator<T> & Serializable) (c1, c2) -> {
+            U u2 = keyExtractor.apply(c2);
+            if (Objects.isNull(u2)) {
+                return 1;
+            }
+            U u1 = keyExtractor.apply(c1);
+            if (Objects.isNull(u1)) {
+                return -1;
             }
             return u2.compareTo(u1);
         };
