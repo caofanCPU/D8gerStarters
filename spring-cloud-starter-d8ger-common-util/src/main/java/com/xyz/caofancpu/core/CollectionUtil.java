@@ -444,6 +444,70 @@ public class CollectionUtil extends CollectionUtils {
     }
 
     /**
+     * 指定每组数量切割集合, 对于Map, 可转化后再操作
+     *
+     * @param resultColl  结果集合容器
+     * @param source      数据源
+     * @param itemMaxSize 拆分的每组元素数量
+     * @param <T>
+     * @param <C>
+     * @return
+     */
+    public static <T, C extends Collection<T>> List<C> splitByItemSize(Supplier<C> resultColl, @NonNull Collection<T> source, int itemMaxSize) {
+        if (isEmpty(source)) {
+            return new ArrayList<>();
+        }
+        if (itemMaxSize < 1) {
+            itemMaxSize = 1;
+        }
+        int splitGroupSize = (source.size() - 1) / (itemMaxSize - 1);
+        return doSplit(resultColl, source, splitGroupSize, itemMaxSize);
+    }
+
+    /**
+     * 指定分割组数切割集合, 对于Map, 可转化后再操作
+     *
+     * @param resultColl     结果集合容器
+     * @param source         数据源
+     * @param splitGroupSize 要拆分的组数
+     * @param <T>
+     * @param <C>
+     * @return
+     */
+    public static <T, C extends Collection<T>> List<C> splitByGroupNumber(Supplier<C> resultColl, @NonNull Collection<T> source, int splitGroupSize) {
+        if (isEmpty(source)) {
+            return new ArrayList<>();
+        }
+        if (splitGroupSize < 1) {
+            splitGroupSize = 1;
+        }
+        int itemMaxSize = (source.size() + splitGroupSize - 1) / splitGroupSize;
+        return doSplit(resultColl, source, splitGroupSize, itemMaxSize);
+    }
+
+    /**
+     * 对于集合, 按照分组数, 及每组元素数量, 切割集合
+     * splitGroupSize * itemMaxSize >= source.size
+     * 对于Map, 可转化后再操作
+     *
+     * @param resultColl     结果集合容器
+     * @param source         数据源
+     * @param splitGroupSize 要拆分的组数
+     * @param itemMaxSize    拆分的每组元素数量
+     * @param <T>
+     * @param <C>
+     * @return
+     */
+    private static <T, C extends Collection<T>> List<C> doSplit(Supplier<C> resultColl, @NonNull Collection<T> source, int splitGroupSize, int itemMaxSize) {
+        return Stream.iterate(0, n -> n + 1)
+                .limit(splitGroupSize)
+                .parallel()
+                .map(a -> source.parallelStream().skip((long) a * itemMaxSize).limit(itemMaxSize).collect(Collectors.toCollection(resultColl)))
+                .filter(CollectionUtil::isNotEmpty)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Map判空
      *
      * @param sourceMap 数据源
