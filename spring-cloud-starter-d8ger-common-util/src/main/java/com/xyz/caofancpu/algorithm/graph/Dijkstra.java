@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.xyz.caofancpu.algorithm.graph;
 
 import lombok.AllArgsConstructor;
@@ -37,29 +36,34 @@ public class Dijkstra {
 
     public static void main(String[] args) {
         Graph graph = initGraph();
-        Map<Integer, Integer> distanceMap = nbDijkstra(graph, 0);
-        distanceMap.forEach((k, v) -> System.out.println("距离顶点下标[" + k + "]的距离为: " + v));
+        Map<Integer, String> showVertexMap = graph.getVertexMap();
+        showVertexMap.forEach((startVertexIndex, startPoint) -> {
+            System.out.println("--------------------------");
+            Map<Integer, Integer> distanceMap = nbDijkstra(graph, startVertexIndex);
+            distanceMap.forEach((k, v) -> System.out.println(startPoint + "->" + showVertexMap.get(k) + " with Distance: " + (Objects.equals(v, Integer.MAX_VALUE) ? "+∞" : v)));
+        });
+
     }
 
     private static Map<Integer, Integer> nbDijkstra(Graph graph, int startVertexIndex) {
         int vertexSize = graph.getVertices().length;
         // save startVertexIndex to antherVertexIndex distance
         Map<Integer, Integer> distanceMap = new HashMap<>(vertexSize);
-        Set<Integer> alreadyAccessedVertexIndexSet = new HashSet<>(vertexSize);
+        Set<Integer> accessedVertexIndexSet = new HashSet<>(vertexSize);
         // init distanceMap, default ﹢∞
         for (int i = 0; i < vertexSize; i++) {
             distanceMap.put(i, Integer.MAX_VALUE);
         }
         // traverse startPoint and refresh
-        alreadyAccessedVertexIndexSet.add(0);
+        accessedVertexIndexSet.add(startVertexIndex);
         LinkedList<Edge> edgesFromStart = graph.getAdjacencyMatrix()[startVertexIndex];
-        edgesFromStart.forEach(edge -> distanceMap.put(edge.index, edge.weight));
+        edgesFromStart.forEach(edge -> distanceMap.put(edge.getIndex(), edge.getWeight()));
         // main circle, repeat traverse
-        for (int i = 1; i < vertexSize; i++) {
+        for (int i = 0; i < vertexSize; i++) {
             int minDistanceFromStart = Integer.MAX_VALUE;
             int minDistanceIndex = -1;
             for (int j = 1; j < vertexSize; j++) {
-                if (!alreadyAccessedVertexIndexSet.contains(j) && distanceMap.get(j) < minDistanceIndex) {
+                if (!accessedVertexIndexSet.contains(j) && distanceMap.get(j) < minDistanceFromStart) {
                     minDistanceFromStart = distanceMap.get(j);
                     minDistanceIndex = j;
                 }
@@ -69,9 +73,9 @@ public class Dijkstra {
             }
 
             //
-            alreadyAccessedVertexIndexSet.add(minDistanceIndex);
+            accessedVertexIndexSet.add(minDistanceIndex);
             for (Edge edge : graph.getAdjacencyMatrix()[minDistanceIndex]) {
-                if (alreadyAccessedVertexIndexSet.contains(edge.getIndex())) {
+                if (accessedVertexIndexSet.contains(edge.getIndex())) {
                     continue;
                 }
                 Integer weight = edge.getWeight();
@@ -81,6 +85,8 @@ public class Dijkstra {
                 }
             }
         }
+        // self distance should be zero
+        distanceMap.put(startVertexIndex, 0);
         return distanceMap;
     }
 
@@ -93,6 +99,8 @@ public class Dijkstra {
         graph.getVertices()[4] = new Vertex("E");
         graph.getVertices()[5] = new Vertex("F");
         graph.getVertices()[6] = new Vertex("G");
+
+        graph.initShowVertexMap();
         // A
         graph.getAdjacencyMatrix()[0].add(new Edge(1, 5));
         graph.getAdjacencyMatrix()[0].add(new Edge(2, 2));
@@ -124,6 +132,9 @@ public class Dijkstra {
         return graph;
     }
 
+    /**
+     * 顶点
+     */
     @Data
     @Accessors(chain = true)
     @NoArgsConstructor
@@ -132,6 +143,9 @@ public class Dijkstra {
         private String data;
     }
 
+    /**
+     * 边
+     */
     @Data
     @Accessors(chain = true)
     @NoArgsConstructor
@@ -141,21 +155,39 @@ public class Dijkstra {
         private Integer weight;
     }
 
+    /**
+     * 图
+     */
     @Data
     @Accessors(chain = true)
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Graph {
+        /**
+         * 顶点:数组
+         * .o   o    o
+         */
         private Vertex[] vertices;
+        /**
+         * 顶点的边:邻接矩阵
+         * .A<--o-->B
+         */
         private LinkedList<Edge>[] adjacencyMatrix;
+        private Map<Integer, String> vertexMap = new HashMap<>();
 
         public Graph(int size) {
             // init vertex and matrix edge
             this.vertices = new Vertex[size];
             //noinspection unchecked
             this.adjacencyMatrix = new LinkedList[size];
-            for (int i = 0; i < this.adjacencyMatrix.length; i++) {
+            for (int i = 0; i < size; i++) {
                 this.adjacencyMatrix[i] = new LinkedList<>();
+            }
+        }
+
+        private void initShowVertexMap() {
+            for (int i = 0; i < vertices.length; i++) {
+                vertexMap.put(i, vertices[i].getData());
             }
         }
     }
