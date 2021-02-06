@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 the original author
+ * Copyright 2016-2021 the original author
  *
  * @D8GER(https://github.com/caofanCPU).
  *
@@ -65,7 +65,7 @@ public class QRCodeUtil {
 
     public static BufferedImage createImage(String content, String logoPath, boolean needCompress)
             throws Exception {
-        Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+        Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hints.put(EncodeHintType.CHARACTER_SET, CHARSET);
         hints.put(EncodeHintType.MARGIN, 1);

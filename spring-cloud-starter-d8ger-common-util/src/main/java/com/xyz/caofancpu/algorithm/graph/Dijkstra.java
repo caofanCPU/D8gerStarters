@@ -17,28 +17,65 @@
  */
 package com.xyz.caofancpu.algorithm.graph;
 
+import com.xyz.caofancpu.core.CollectionUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- *
+ * A.5.B.6.E.7.G
+ * A.2.C.8.F.3.G
+ * B.1.D
+ * C.6.D
+ * D.2.F
+ * D.1.E
+ * ====
+ * .
+ * .   +----------------------------+
+ * .   |                            |
+ * .   |                            |   6
+ * .   |                 +----------+----------+
+ * .   |                 |          |          v
+ * .   |   +----+  5   +---+  1   +---+  1   +---+  7   +---+
+ * .   |   | A  | ---> | B | ---> | D | ---> | E | ---> | G |
+ * .   |   +----+      +---+      +---+      +---+      +---+
+ * .   |     |                      ^                     ^
+ * .   | 2   | 2                    |                     |
+ * .   |     v                      |                     |
+ * .   |   +----+  6                |                     |
+ * .   |   | C  | ------------------+                     |
+ * .   |   +----+                                         |
+ * .   |     |                                            |
+ * .   |     | 8                                          |
+ * .   |     v                                            |
+ * .   |   +----+  3                                      |
+ * .   +-> | F  | ----------------------------------------+
+ * .       +----+
+ * .
  */
 public class Dijkstra {
 
     public static void main(String[] args) {
-        Graph graph = initGraph();
+        String[] vertexNames = new String[]{"A", "B", "C", "D", "E", "F", "G"};
+        String[] edgeInfos = new String[]{
+                "AB5", "AC2",
+                "BD1", "BE6",
+                "CD6", "CF8",
+                "DE1", "DF2",
+                "EG7",
+                "FG3"
+        };
+        Graph graph = buildGraph(vertexNames, edgeInfos);
         Map<Integer, String> showVertexMap = graph.getVertexMap();
         showVertexMap.forEach((startVertexIndex, startPoint) -> {
-            System.out.println("--------------------------");
+            System.out.println("------------------------");
             Map<Integer, Integer> distanceMap = nbDijkstra(graph, startVertexIndex);
             distanceMap.forEach((k, v) -> System.out.println(startPoint + "->" + showVertexMap.get(k) + " with Distance: " + (Objects.equals(v, Integer.MAX_VALUE) ? "+∞" : v)));
         });
@@ -49,21 +86,21 @@ public class Dijkstra {
         int vertexSize = graph.getVertices().length;
         // save startVertexIndex to antherVertexIndex distance
         Map<Integer, Integer> distanceMap = new HashMap<>(vertexSize);
-        Set<Integer> accessedVertexIndexSet = new HashSet<>(vertexSize);
+        Map<Integer, Integer> accessedVertexIndexMap = new HashMap<>(vertexSize);
         // init distanceMap, default ﹢∞
         for (int i = 0; i < vertexSize; i++) {
             distanceMap.put(i, Integer.MAX_VALUE);
         }
         // traverse startPoint and refresh
-        accessedVertexIndexSet.add(startVertexIndex);
+        accessedVertexIndexMap.put(startVertexIndex, startVertexIndex);
         LinkedList<Edge> edgesFromStart = graph.getAdjacencyMatrix()[startVertexIndex];
         edgesFromStart.forEach(edge -> distanceMap.put(edge.getIndex(), edge.getWeight()));
         // main circle, repeat traverse
         for (int i = 0; i < vertexSize; i++) {
             int minDistanceFromStart = Integer.MAX_VALUE;
             int minDistanceIndex = -1;
-            for (int j = 1; j < vertexSize; j++) {
-                if (!accessedVertexIndexSet.contains(j) && distanceMap.get(j) < minDistanceFromStart) {
+            for (int j = 0; j < vertexSize; j++) {
+                if (!accessedVertexIndexMap.containsKey(j) && distanceMap.get(j) < minDistanceFromStart) {
                     minDistanceFromStart = distanceMap.get(j);
                     minDistanceIndex = j;
                 }
@@ -72,10 +109,9 @@ public class Dijkstra {
                 break;
             }
 
-            //
-            accessedVertexIndexSet.add(minDistanceIndex);
+            accessedVertexIndexMap.put(minDistanceIndex, minDistanceIndex);
             for (Edge edge : graph.getAdjacencyMatrix()[minDistanceIndex]) {
-                if (accessedVertexIndexSet.contains(edge.getIndex())) {
+                if (accessedVertexIndexMap.containsKey(edge.getIndex())) {
                     continue;
                 }
                 Integer weight = edge.getWeight();
@@ -90,50 +126,48 @@ public class Dijkstra {
         return distanceMap;
     }
 
-    private static Graph initGraph() {
-        Graph graph = new Graph(7);
-        graph.getVertices()[0] = new Vertex("A");
-        graph.getVertices()[1] = new Vertex("B");
-        graph.getVertices()[2] = new Vertex("C");
-        graph.getVertices()[3] = new Vertex("D");
-        graph.getVertices()[4] = new Vertex("E");
-        graph.getVertices()[5] = new Vertex("F");
-        graph.getVertices()[6] = new Vertex("G");
-
-        graph.initShowVertexMap();
-        // A
-        graph.getAdjacencyMatrix()[0].add(new Edge(1, 5));
-        graph.getAdjacencyMatrix()[0].add(new Edge(2, 2));
-        // B
-        graph.getAdjacencyMatrix()[1].add(new Edge(0, 5));
-        graph.getAdjacencyMatrix()[1].add(new Edge(3, 1));
-        graph.getAdjacencyMatrix()[1].add(new Edge(4, 6));
-        // C
-        graph.getAdjacencyMatrix()[2].add(new Edge(0, 2));
-        graph.getAdjacencyMatrix()[2].add(new Edge(3, 6));
-        graph.getAdjacencyMatrix()[2].add(new Edge(5, 8));
-        // D
-        graph.getAdjacencyMatrix()[3].add(new Edge(1, 1));
-        graph.getAdjacencyMatrix()[3].add(new Edge(2, 6));
-        graph.getAdjacencyMatrix()[3].add(new Edge(4, 1));
-        graph.getAdjacencyMatrix()[3].add(new Edge(5, 2));
-        // E
-        graph.getAdjacencyMatrix()[4].add(new Edge(1, 6));
-        graph.getAdjacencyMatrix()[4].add(new Edge(3, 1));
-        graph.getAdjacencyMatrix()[4].add(new Edge(6, 7));
-        // F
-        graph.getAdjacencyMatrix()[5].add(new Edge(2, 8));
-        graph.getAdjacencyMatrix()[5].add(new Edge(3, 2));
-        graph.getAdjacencyMatrix()[5].add(new Edge(6, 3));
-        // G
-        graph.getAdjacencyMatrix()[6].add(new Edge(4, 7));
-        graph.getAdjacencyMatrix()[6].add(new Edge(5, 3));
-
+    /**
+     * Refer vertices, the edge will be ignored(removed) which pointed the vertex not exist
+     *
+     * @param vertexNames
+     * @param edgeInfos
+     * @return
+     */
+    public static Graph buildGraph(String[] vertexNames, String[] edgeInfos) {
+        // vertex and it's index relationship
+        Map<String, Integer> vertexMap = new HashMap<>(vertexNames.length);
+        for (int i = 0; i < vertexNames.length; i++) {
+            vertexMap.put(vertexNames[i], i);
+        }
+        // edge relationship and distance between two vertices
+        Map<Pair<String, String>, Integer> edgeInfoMap = new HashMap<>(edgeInfos.length);
+        for (String edgeInfo : edgeInfos) {
+            char[] itemChars = edgeInfo.toCharArray();
+            String startVertex = String.valueOf(itemChars[0]);
+            String endVertex = String.valueOf(itemChars[1]);
+            if (vertexMap.containsKey(startVertex) && vertexMap.containsKey(endVertex)) {
+                // only the vertex exist
+                Integer distance = Integer.valueOf(String.valueOf(itemChars[2]));
+                edgeInfoMap.put(Pair.of(startVertex, endVertex), distance);
+                edgeInfoMap.put(Pair.of(endVertex, startVertex), distance);
+            }
+        }
+        // build graph
+        Graph graph = new Graph(vertexMap.size());
+        // 1.build vertex
+        vertexMap.forEach((name, index) -> graph.getVertices()[index] = new Vertex(name));
+        graph.setVertexMap(CollectionUtil.transToMap(vertexMap.entrySet(), Map.Entry::getValue, Map.Entry::getKey));
+        // 2.build edge
+        edgeInfoMap.forEach((vertexPair, distance) -> {
+            String leftVertex = vertexPair.getLeft();
+            String rightVertex = vertexPair.getRight();
+            graph.getAdjacencyMatrix()[vertexMap.get(leftVertex)].add(new Edge(vertexMap.get(rightVertex), distance));
+        });
         return graph;
     }
 
     /**
-     * 顶点
+     *
      */
     @Data
     @Accessors(chain = true)
@@ -144,7 +178,7 @@ public class Dijkstra {
     }
 
     /**
-     * 边
+     *
      */
     @Data
     @Accessors(chain = true)
@@ -156,7 +190,7 @@ public class Dijkstra {
     }
 
     /**
-     * 图
+     *
      */
     @Data
     @Accessors(chain = true)
@@ -173,7 +207,7 @@ public class Dijkstra {
          * .A<--o-->B
          */
         private LinkedList<Edge>[] adjacencyMatrix;
-        private Map<Integer, String> vertexMap = new HashMap<>();
+        private Map<Integer, String> vertexMap;
 
         public Graph(int size) {
             // init vertex and matrix edge
@@ -182,12 +216,6 @@ public class Dijkstra {
             this.adjacencyMatrix = new LinkedList[size];
             for (int i = 0; i < size; i++) {
                 this.adjacencyMatrix[i] = new LinkedList<>();
-            }
-        }
-
-        private void initShowVertexMap() {
-            for (int i = 0; i < vertices.length; i++) {
-                vertexMap.put(i, vertices[i].getData());
             }
         }
     }

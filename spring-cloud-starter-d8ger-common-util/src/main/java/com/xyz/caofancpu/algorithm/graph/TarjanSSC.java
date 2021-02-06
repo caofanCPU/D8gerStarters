@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 the original author
+ * Copyright 2016-2021 the original author
  *
  * @D8GER(https://github.com/caofanCPU).
  *
@@ -28,6 +28,24 @@ import java.util.Stack;
 
 /**
  * Robert•Tarjan强连通分量算法
+ * <p>
+ * A..B..C..D..B
+ * B..E..F
+ * C..F
+ * D..F
+ * ====
+ * .           +---+
+ * .           | E | -------------------------------+
+ * .           +---+                                |
+ * .             ^                                  |
+ * .             |         +-------------------+    |
+ * .             |         |                   v    |
+ * . +---+     +---+     +---+     +---+     +---+  |
+ * . | A | --> | B | --> | C | --> | D | --> | F | <+
+ * . +---+     +---+     +---+     +---+     +---+
+ * .             ^                   |
+ * .             +-------------------+
+ * .
  */
 public class TarjanSSC<T> {
     /**
