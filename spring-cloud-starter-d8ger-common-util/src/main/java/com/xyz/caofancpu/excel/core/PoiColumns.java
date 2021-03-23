@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 the original author
+ * Copyright 2016-2021 the original author
  *
  * @D8GER(https://github.com/caofanCPU).
  *
@@ -19,6 +19,7 @@
 package com.xyz.caofancpu.excel.core;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -47,6 +48,19 @@ public class PoiColumns<T, V> extends PoiColumnItems<T, V> {
 
     public <V2> PoiColumn<V> addColumn(ValueFunction<V, V2> valueFunction, Function<V, String> titles) {
         return addColumn(new PoiColumn<>(valueFunction, item -> new String[]{titles.apply(item.value())}));
+    }
+
+    public <V2> PoiColumn<V> addColumn(ValueFunction<V, V2> valueFunction, Function<V, String>... titles) {
+        return addColumn(new PoiColumn<>(valueFunction, item -> {
+            if (Objects.isNull(titles) || titles.length == 0) {
+                return new String[]{};
+            }
+            String[] resultTitles = new String[titles.length];
+            for (int i = 0; i < titles.length; i++) {
+                resultTitles[i] = titles[i].apply(item.value());
+            }
+            return resultTitles;
+        }));
     }
 
     public <V2> PoiColumn<V> addColumn(ValueFunction<V, V2> valueFunction, String... titles) {
