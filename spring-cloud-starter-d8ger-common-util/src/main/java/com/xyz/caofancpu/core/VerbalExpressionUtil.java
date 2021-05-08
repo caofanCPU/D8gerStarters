@@ -26,6 +26,7 @@ import ru.lanwen.verbalregex.VerbalExpression;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,9 +34,19 @@ import java.util.regex.Pattern;
  * 正则处理工具类
  * VerbalExpression.regex().startOfLine().capt().find("a").oneOrMore().then("X").endCapt().endOfLine().build()  -->  ^((?:a)+(?:X))$
  *
+ * Tips: https://github.com/VerbalExpressions/JavaVerbalExpressions
+ * 1. DO NOT USE or(), take oneOf() | add(Regex string) place of it
+ * 2. USE multi segment capt()+endCapt() for easy reading
+ * 3. add() is very powerful, some times it's easy to express OR logic
+ *
  * @author D8GER
  */
 public class VerbalExpressionUtil {
+    /**
+     * Judge current system is WINDOWS, by the way, WINDOWS is real ***...
+     */
+    public static boolean CURRENT_OS_IS_WINDOWS = Objects.equals(System.getProperty("os.name").toLowerCase(), "windows");
+
     /**
      * Uppercase regular expression
      */
@@ -101,6 +112,21 @@ public class VerbalExpressionUtil {
      * Password validate regex, rule for C4_3 | C4_4
      */
     public static Pattern PWD_REGEX = Pattern.compile("^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\\W_]+$)(?![a-z0-9]+$)(?![a-z\\W_]+$)(?![0-9\\W_]+$)[a-zA-Z0-9\\W_]{8,30}$");
+
+    /**
+     * Java file as source code, which prefix path
+     */
+    public static Pattern PREFIX_JAVA_SOURCE_FILE_PATH = Pattern.compile("^(?:.*)(?:[/\\\\]*)(?:src)(?:[/\\\\]+)(?:main)(?:[/\\\\]+)(?:java)(?:[/\\\\]+)");
+
+    /**
+     * File path split symbol
+     */
+    public static Pattern FILE_PATH_SPLIT_SYMBOL = Pattern.compile("(?:[/\\\\]+)");
+
+    /**
+     * File path prefix split in Windows OS
+     */
+    public static Pattern WINDOWS_PREFIX_JAVA_SOURCE_FILE_PATH = Pattern.compile("(?:[a-zA-Z]*:\\.*)");
 
     /**
      * Swagger field | interface position order regular replacement
@@ -207,30 +233,89 @@ public class VerbalExpressionUtil {
     }
 
     /**
+     * url path correction, remove rare '/' to keep just one '/' and begin with it
+     * compatible windows file path
+     *
+     * @param property
+     * @return
+     */
+    public static String correctUrl(String property) {
+        String resultPrefix = File.separator;
+        try {
+            if (CURRENT_OS_IS_WINDOWS) {
+                String[] splits = property.split(SymbolConstantUtil.ENGLISH_COLON);
+                resultPrefix = splits[0] + SymbolConstantUtil.ENGLISH_COLON;
+                if (splits.length == 1 || StringUtils.isBlank(splits[1])) {
+                    return resultPrefix + "/";
+                }
+                property = splits[1];
+            } else {
+                property = resultPrefix + property;
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException("Illegal file path, please check carefully!");
+        }
+        VerbalExpression regex = VerbalExpression.regex()
+                .capt()
+                .find("\\").oneOrMore()
+                .or("/").oneOrMore()
+                .endCapt()
+                .build();
+        String tempResult = executePatternRex(regex, property, "/");
+        return CURRENT_OS_IS_WINDOWS ? resultPrefix + tempResult : tempResult;
+    }
+
+    public static void main(String[] args) {
+        VerbalExpression regex1 = VerbalExpression.regex()
+                .startOfLine().anything()
+                .capt().oneOf("/", "\\\\").zeroOrMore().endCapt()
+                .capt().find("src").oneOf("/", "\\\\").oneOrMore().endCapt()
+                .capt().find("main").oneOf("/", "\\\\").oneOrMore().endCapt()
+                .capt().find("java").oneOf("/", "\\\\").oneOrMore().endCapt()
+                .build();
+
+
+        VerbalExpression regex = VerbalExpression.regex()
+                .capt().digit().oneOrMore().endCapture()                           // 3
+                .capt().digit().oneOrMore().endCapture()                           // 4
+                .capt().range("0", "1").count(1).endCapture()                      // 1 (or 0)
+                .capt().find("http://localhost:20").digit().count(3).endCapture()  // http://localhost:20001
+                .capt().range("0", "1").count(1).endCapture()                      // again 1 (or 0)
+                .capt().digit().oneOrMore().endCapture()                           // 63528800 (lots of digits)
+                .capt().range("0", "1").count(1).endCapture()                      // again 1 (or 0)
+                .capt().digit().oneOrMore().endCapture()                           // again lots of digit
+                .capt().digit().oneOrMore().endCapture()                           // ... and again
+                .capt().range("0", "1").count(1).endCapture()                      // 1 (or 0)
+                .capt().digit().oneOrMore().endCapture()                           // ... and again
+                .capt().find("STR").range("0", "2").count(1).endCapture()          // at last STR1
+                .build();
+        System.out.println(regex.toString());
+        System.out.println(regex1.toString());
+        System.out.println(PREFIX_JAVA_SOURCE_FILE_PATH.pattern());
+    }
+
+    /**
      * Convert path string to package,
-     * for example: src/main/java/com/xyz/caofancpu/d8ger/test --> com.xyz.caofancpu.d8ger.test
+     * for example: /ModuleName//src/main/java/com/xyz/caofancpu/d8ger/test --> com.xyz.caofancpu.d8ger.test
+     * Compatible with WINDOWS: D:/ModuleName//src\main\\java/com/xyz/caofancpu/d8ger/test --> com.xyz.caofancpu.d8ger.test
      *
      * @param originPath
      * @return
      */
     public static String convertPathToPackage(String originPath) {
-        VerbalExpression regex1 = VerbalExpression.regex()
-                .capt()
-                .startOfLine()
-                .anything()
-                .find(File.separator).zeroOrMore()
-                .then("src").then(File.separator).zeroOrMore()
-                .then("main").then(File.separator).zeroOrMore()
-                .then("java")
-                .endCapt()
-                .build();
-        String first = executePatternRex(regex1, originPath, SymbolConstantUtil.EMPTY);
-        VerbalExpression regex2 = VerbalExpression.regex()
-                .startOfLine()
-                .then(File.separator).oneOrMore()
-                .build();
-        String second = executePatternRex(regex2, first, SymbolConstantUtil.EMPTY);
-        return second.replaceAll(File.separator, SymbolConstantUtil.ENGLISH_FULL_STOP);
+        String first = originPath.replaceAll(PREFIX_JAVA_SOURCE_FILE_PATH.pattern(), SymbolConstantUtil.EMPTY);
+        String second = first.replaceAll(FILE_PATH_SPLIT_SYMBOL.pattern(), SymbolConstantUtil.ENGLISH_FULL_STOP);
+        if (StringUtils.isBlank(second) || second.length() < 2) {
+            throw new RuntimeException("Illegal file path, please check carefully!");
+        }
+        if (CURRENT_OS_IS_WINDOWS) {
+            String winR = second.replaceAll(WINDOWS_PREFIX_JAVA_SOURCE_FILE_PATH.pattern(), SymbolConstantUtil.EMPTY);
+            if (StringUtils.isBlank(winR)) {
+                throw new RuntimeException("Illegal file path, please check carefully!");
+            }
+            return winR;
+        }
+        return Objects.equals(second.charAt(0), '.') ? second.substring(1) : second;
     }
 
     public static String executePatternRex(VerbalExpression regexExpression, String originText, String replacer) {
