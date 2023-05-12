@@ -24,7 +24,7 @@
 
     <groupId>com.xyz.caofanCPU</groupId>
     <artifactId>spring-cloud-d8ger-starters</artifactId>
-    <version>1.2.0</version>
+    <version>2023.5.1</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -716,25 +716,12 @@
     <distributionManagement>
         <repository>
             <id>rdc-releases</id>
-            <url>https://repo.rdc.aliyun.com/repository/130650-release-LLgOVG/</url>
+            <url>https://packages.aliyun.com/maven/repository/2375411-release-W7OnyK/</url>
         </repository>
         <snapshotRepository>
             <id>rdc-snapshots</id>
-            <url>https://repo.rdc.aliyun.com/repository/130650-snapshot-xdHOzb/</url>
+            <url>https://packages.aliyun.com/maven/repository/2375411-snapshot-oLzfOU/</url>
         </snapshotRepository>
     </distributionManagement>
 
-    <!--    &lt;!&ndash;  发布到Maven私有仓库  &ndash;&gt;-->
-    <!--    <distributionManagement>-->
-    <!--        <repository>-->
-    <!--            <id>huitongjy-releases</id>-->
-    <!--            <name>Nexus Release Repository</name>-->
-    <!--            <url>http://172.16.10.43:8081/nexus/content/repositories/releases/</url>-->
-    <!--        </repository>-->
-    <!--        <snapshotRepository>-->
-    <!--            <id>huitongjy-snapshots</id>-->
-    <!--            <name>Nexus Snapshot Repository</name>-->
-    <!--            <url>http://172.16.10.43:8081/nexus/content/repositories/snapshots/</url>-->
-    <!--        </snapshotRepository>-->
-    <!--    </distributionManagement>-->
 </project>
