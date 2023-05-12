@@ -21,7 +21,7 @@ package com.xyz.caofancpu.mvc.common;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.collect.Maps;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.result.GlobalErrorInfoRuntimeException;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +63,7 @@ public class HttpStaticHandleUtil {
      */
     public static Map<String, Object> getParameterMap(HttpServletRequest request) {
         Map<String, String[]> properties = request.getParameterMap();
-        return CollectionUtil.transToMap(properties.entrySet(),
+        return CollectionFunUtil.transToMap(properties.entrySet(),
                 Map.Entry::getKey,
                 entry -> Objects.isNull(entry.getValue()) ? SymbolConstantUtil.EMPTY : entry.getValue()[0]
         );
@@ -123,7 +123,7 @@ public class HttpStaticHandleUtil {
             });
         });
         // 对于文件类型字段, 直接移除, 交由后续流程特殊处理
-        return CollectionUtil.removeSpecifiedElement(resultMap, new Class[]{File.class, InputStreamSource.class});
+        return CollectionFunUtil.removeSpecifiedElement(resultMap, new Class[]{File.class, InputStreamSource.class});
     }
 
     /**

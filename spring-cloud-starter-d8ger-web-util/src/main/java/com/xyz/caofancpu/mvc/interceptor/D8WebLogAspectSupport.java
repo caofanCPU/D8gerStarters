@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.mvc.interceptor;
 
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.logger.D8Track;
 import com.xyz.caofancpu.logger.LogIpConfigUtil;
@@ -87,11 +87,11 @@ public class D8WebLogAspectSupport {
                 + joinPoint.getSignature().getName();
         // 入参为文件时, 不打印log
         Map<String, Object> originRequestParamMap = HttpStaticHandleUtil.getParameterMap(request);
-        Map<String, Object> filteredFileValueMap = CollectionUtil.removeSpecifiedElement(originRequestParamMap, new Class[]{MultipartFile.class, File.class});
+        Map<String, Object> filteredFileValueMap = CollectionFunUtil.removeSpecifiedElement(originRequestParamMap, new Class[]{MultipartFile.class, File.class});
         String requestParam = JSONUtil.formatStandardJSON(JSONUtil.toJSONStringWithDateFormat(filteredFileValueMap));
         // 入参为文件时, 不打印log
         Object[] originBodyParamArray = joinPoint.getArgs();
-        Object[] filteredFileValueArray = CollectionUtil.removeSpecifiedElement(originBodyParamArray, new Class[]{MultipartFile.class, File.class});
+        Object[] filteredFileValueArray = CollectionFunUtil.removeSpecifiedElement(originBodyParamArray, new Class[]{MultipartFile.class, File.class});
         String requestBody;
         try {
             requestBody = JSONUtil.formatStandardJSON(JSONUtil.toJSONStringWithDateFormat(filteredFileValueArray));

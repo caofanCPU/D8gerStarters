@@ -24,7 +24,7 @@
 
     <groupId>com.xyz.caofanCPU</groupId>
     <artifactId>spring-cloud-d8ger-starters</artifactId>
-    <version>2023.5.1</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -36,9 +36,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
+        <flatten-maven-plugin.version>1.1.0</flatten-maven-plugin.version>
 
         <java.version>1.8</java.version>
         <spring.version>5.2.4.RELEASE</spring.version>
@@ -84,6 +85,11 @@
         <knife4j-spring-boot-starter.version>1.9.6</knife4j-spring-boot-starter.version>
         <pagehelper.version>1.2.12</pagehelper.version>
         <junit.version>4.13</junit.version>
+
+        <spock-bom.version>2.1-M2-groovy-3.0</spock-bom.version>
+        <groovy.version>3.0.7</groovy.version>
+        <gmavenplus-plugin.version>1.13.1</gmavenplus-plugin.version>
+        <alibaba.testable.version>0.7.9</alibaba.testable.version>
 
     </properties>
 
@@ -220,16 +226,8 @@
                         <groupId>org.springframework.boot</groupId>
                     </exclusion>
                     <exclusion>
-                        <artifactId>spring-core</artifactId>
-                        <groupId>org.springframework</groupId>
-                    </exclusion>
-                    <exclusion>
                         <artifactId>spring-boot-starter</artifactId>
                         <groupId>org.springframework.boot</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>junit-jupiter-api</artifactId>
-                        <groupId>org.junit.jupiter</groupId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -654,6 +652,43 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-bom</artifactId>
+                <version>${spock-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-core</artifactId>
+                <version>${spock-bom.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.spockframework</groupId>
+                <artifactId>spock-spring</artifactId>
+                <version>${spock-bom.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.testable</groupId>
+                <artifactId>testable-all</artifactId>
+                <version>${alibaba.testable.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -661,15 +696,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -705,6 +731,71 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>-javaagent:${settings.localRepository}/com/alibaba/testable/testable-agent/${alibaba.testable.version}/testable-agent-${alibaba.testable.version}.jar
+                    </argLine>
+                    <useModulePath>false</useModulePath> <!-- https://issues.apache.org/jira/browse/SUREFIRE-1809 -->
+                    <useFile>false</useFile>
+                    <includes>
+                        <include>**/*Test</include>
+                        <include>**/*Spec</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus-plugin.version}</version>
+                <configuration>
+                    <testSources>
+                        <testSource>
+                            <directory>${project.basedir}/src/test/java</directory>
+                            <includes>
+                                <include>**/*.groovy</include>
+                            </includes>
+                        </testSource>
+                    </testSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten-maven-plugin.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
                         </goals>
                     </execution>
                 </executions>

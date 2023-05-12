@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.mvc.interceptor;
 
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import com.xyz.caofancpu.result.D8Response;
@@ -64,8 +64,8 @@ public class D8GlobalExceptionSupport<T> {
         } else if (ex instanceof ConstraintViolationException) {
             errorMsg = "请求参数不满足约束条件";
         } else if (ex instanceof MethodArgumentNotValidException) {
-            List<String> messageList = CollectionUtil.transToList(((MethodArgumentNotValidException) ex).getBindingResult().getFieldErrors(), FieldError::getDefaultMessage);
-            errorMsg = CollectionUtil.join(messageList, SymbolConstantUtil.ENGLISH_SEMICOLON);
+            List<String> messageList = CollectionFunUtil.transToList(((MethodArgumentNotValidException) ex).getBindingResult().getFieldErrors(), FieldError::getDefaultMessage);
+            errorMsg = CollectionFunUtil.join(messageList, SymbolConstantUtil.ENGLISH_SEMICOLON);
         }
         endTrace();
         return D8Response.fail(GlobalErrorInfoEnum.PARA_ERROR.getCode(), errorMsg);

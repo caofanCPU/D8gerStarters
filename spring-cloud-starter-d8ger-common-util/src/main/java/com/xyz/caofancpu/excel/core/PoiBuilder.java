@@ -20,7 +20,7 @@ package com.xyz.caofancpu.excel.core;
 
 
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.excel.core.face.Area;
 import com.xyz.caofancpu.excel.core.face.Column;
 import com.xyz.caofancpu.excel.enums.ListAlign;
@@ -299,10 +299,10 @@ public class PoiBuilder {
      * 合并标题
      */
     private List<StyleTitle> mergeList(List<StyleTitle> list1, List<StyleTitle> list2) {
-        if (CollectionUtil.isEmpty(list1)) {
+        if (CollectionFunUtil.isEmpty(list1)) {
             return list2;
         }
-        if (CollectionUtil.isEmpty(list2)) {
+        if (CollectionFunUtil.isEmpty(list2)) {
             return list1;
         }
 
@@ -585,9 +585,9 @@ public class PoiBuilder {
 
         private StyleTitle getEmptyTitle(int cel) {
             List<StyleTitle> styleTitles = celTitlesMap.get(cel - 1);
-            if (CollectionUtil.isEmpty(styleTitles)) {
+            if (CollectionFunUtil.isEmpty(styleTitles)) {
                 for (List<StyleTitle> value : celTitlesMap.values()) {
-                    if (CollectionUtil.isNotEmpty(value)) {
+                    if (CollectionFunUtil.isNotEmpty(value)) {
                         return new StyleTitle(SymbolConstantUtil.EMPTY, value.get(0).getPoiStyle());
                     }
                 }

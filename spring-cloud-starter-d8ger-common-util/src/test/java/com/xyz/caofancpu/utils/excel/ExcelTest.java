@@ -63,7 +63,7 @@ public class ExcelTest {
     @Test
     public void lambdaExcel()
             throws Exception {
-        String baseDirFullPath = "/Users/D8GER/Desktop/CAOFAN/spring-cloud-d8ger-starters/spring-cloud-starter-d8ger-common-util/src/test/java/com/xyz/caofancpu/utils/excel/datasource";
+        String baseDirFullPath = System.getProperty("user.dir") + "/src/test/java/com/xyz/caofancpu/utils/excel/datasource";
         String dataSourceFullPath = baseDirFullPath + File.separator + "LOLTeamData.json";
         LOLAnalysisResp analysisResp = JSONUtil.deserializeJSON(FileUtil.readFileToString(dataSourceFullPath), LOLAnalysisResp.class);
         PoiBook poiBook = PoiBook.newSXSSFBook("LOL三层嵌套表格");

@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-package com.xyz.caofancpu.utils;
+package com.xyz.caofancpu.core;
 
 import com.google.common.collect.Lists;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.core.NumberUtil;
 import junit.framework.TestCase;
 
@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * 常用数字运算工具类测试用例
  */
-public class NumberUtilTest extends TestCase {
+public class OriginNumberUtilTest extends TestCase {
 
     /**
      * 计算优惠价格分配值, 以[价格单位:分, 小数精度位数为0]为例
@@ -49,7 +49,7 @@ public class NumberUtilTest extends TestCase {
         System.out.print("\n------换算为元, 对比结果-------\n");
 
         // 下面将分首先转换为元, 用来结果对比
-        List<BigDecimal> priceYuanList = CollectionUtil.transToList(priceFenList, NumberUtil::convertPriceFromFenToYuan);
+        List<BigDecimal> priceYuanList = CollectionFunUtil.transToList(priceFenList, NumberUtil::convertPriceFromFenToYuan);
         BigDecimal reductionPriceYuan = reductionPriceFen.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP);
         Map<Integer, BigDecimal> resultYuanMap = NumberUtil.calculateDistributionValueByPercentage(priceYuanList, 2, reductionPriceYuan);
         resultYuanMap.forEach((index, value) -> System.out.println("价格[" + priceYuanList.get(index) + "元]对应的优惠价为: " + value + "元"));

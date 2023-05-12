@@ -46,15 +46,15 @@ import org.springframework.test.context.junit4.SpringRunner;
  *
  * @author D8GER
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {D8gerWebApplicationTest.TestConfig.class},
-        properties = {
-                "spring.cloud.d8ger.redis.ip=172.16.10.41",
-                "spring.cloud.d8ger.redis.port=6381",
-                "spring.cloud.d8ger.redis.pwd=redishtjy1",
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = {D8gerWebApplicationTest.TestConfig.class},
+//        properties = {
+//                "spring.cloud.d8ger.redis.ip=XX",
+//                "spring.cloud.d8ger.redis.port=XX",
+//                "spring.cloud.d8ger.redis.pwd=XXX",
+//        },
+//        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+//)
 public class D8gerWebApplicationTest {
 
 //    @Resource

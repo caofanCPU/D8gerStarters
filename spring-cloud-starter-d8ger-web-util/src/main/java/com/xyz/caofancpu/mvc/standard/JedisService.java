@@ -22,7 +22,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.annotation.WarnDoc;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -260,7 +260,7 @@ public class JedisService {
             }
             return true;
         } catch (Exception e) {
-            log.error("头部批量加入元素失败: key=[{}], value=[{}], 原因: {}", key, CollectionUtil.show(valueList), e);
+            log.error("头部批量加入元素失败: key=[{}], value=[{}], 原因: {}", key, CollectionFunUtil.show(valueList), e);
             throw e;
         }
     }
@@ -286,7 +286,7 @@ public class JedisService {
             }
             return true;
         } catch (Exception e) {
-            log.error("尾部批量加入元素失败: key=[{}], value=[{}], 原因: {}", key, CollectionUtil.show(valueList), e);
+            log.error("尾部批量加入元素失败: key=[{}], value=[{}], 原因: {}", key, CollectionFunUtil.show(valueList), e);
             throw e;
         }
     }
@@ -317,7 +317,7 @@ public class JedisService {
      * @return
      */
     public Boolean batchAdd(Map<String, String> kvMap) {
-        if (CollectionUtil.isEmpty(kvMap)) {
+        if (CollectionFunUtil.isEmpty(kvMap)) {
             return false;
         }
         preCheckPipelineCmdCount(kvMap.entrySet());
@@ -329,7 +329,7 @@ public class JedisService {
             pipeline.sync();
             return true;
         } catch (Exception e) {
-            log.error("批量设置字符串失败: map=[{}], 原因: {}", CollectionUtil.showMap(kvMap), e);
+            log.error("批量设置字符串失败: map=[{}], 原因: {}", CollectionFunUtil.showMap(kvMap), e);
             throw e;
         }
     }
@@ -342,7 +342,7 @@ public class JedisService {
      * @return
      */
     public boolean batchSetExpireTime(Set<String> keys, Integer expireTime) {
-        if (CollectionUtil.isEmpty(keys) || !validateExpireTime(expireTime)) {
+        if (CollectionFunUtil.isEmpty(keys) || !validateExpireTime(expireTime)) {
             return false;
         }
         preCheckPipelineCmdCount(keys);
@@ -354,7 +354,7 @@ public class JedisService {
             pipeline.sync();
             return true;
         } catch (Exception e) {
-            log.error("批量设置过期时间失败, keys=[{}], expireTime=[{}], 原因: {}", CollectionUtil.show(keys), expireTime, e);
+            log.error("批量设置过期时间失败, keys=[{}], expireTime=[{}], 原因: {}", CollectionFunUtil.show(keys), expireTime, e);
             throw e;
         }
     }
@@ -369,7 +369,7 @@ public class JedisService {
      */
     @AttentionDoc("如无必要, 请使用setEx代替")
     public boolean batchPersist(Set<String> keys) {
-        if (CollectionUtil.isEmpty(keys)) {
+        if (CollectionFunUtil.isEmpty(keys)) {
             return false;
         }
         preCheckPipelineCmdCount(keys);
@@ -381,7 +381,7 @@ public class JedisService {
             pipeline.sync();
             return true;
         } catch (Exception e) {
-            log.error("批量设置持久化KEY失败, keys=[{}], 原因: {}", CollectionUtil.show(keys), e);
+            log.error("批量设置持久化KEY失败, keys=[{}], 原因: {}", CollectionFunUtil.show(keys), e);
             throw e;
         }
     }
@@ -451,13 +451,13 @@ public class JedisService {
      * @return
      */
     public Long batchDeleteKey(Set<String> keys) {
-        if (CollectionUtil.isEmpty(keys)) {
+        if (CollectionFunUtil.isEmpty(keys)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.del(keys.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("删除字符串失败, key=[{}], 原因: {}", CollectionUtil.show(keys), e);
+            log.error("删除字符串失败, key=[{}], 原因: {}", CollectionFunUtil.show(keys), e);
             throw e;
         }
     }
@@ -512,20 +512,20 @@ public class JedisService {
      */
     @AttentionDoc("获取的过期时间比真实时间偏大")
     public Map<String, Long> getProbableExpireTime(Set<String> keys) {
-        if (CollectionUtil.isEmpty(keys)) {
+        if (CollectionFunUtil.isEmpty(keys)) {
             return Maps.newHashMap();
         }
         preCheckPipelineCmdCount(keys);
         try (Jedis jedis = getAndSelectRDB()) {
             Pipeline pipeline = jedis.pipelined();
             // 收集命令
-            Map<String, Response<Long>> cmdMap = CollectionUtil.transToMap(keys, Function.identity(), pipeline::ttl);
+            Map<String, Response<Long>> cmdMap = CollectionFunUtil.transToMap(keys, Function.identity(), pipeline::ttl);
             // 执行命令
             pipeline.sync();
             // 获取及解析结果
-            return CollectionUtil.transToMap(cmdMap.entrySet(), Map.Entry::getKey, entry -> entry.getValue().get());
+            return CollectionFunUtil.transToMap(cmdMap.entrySet(), Map.Entry::getKey, entry -> entry.getValue().get());
         } catch (Exception e) {
-            log.error("批量获取KEY的大致过期时间, keys=[{}] 原因: ", CollectionUtil.show(keys), e);
+            log.error("批量获取KEY的大致过期时间, keys=[{}] 原因: ", CollectionFunUtil.show(keys), e);
             throw e;
         }
     }
@@ -564,13 +564,13 @@ public class JedisService {
             do {
                 scanResult = jedis.scan(cursor, scanParams);
                 keys = scanResult.getResult();
-                if (CollectionUtil.isNotEmpty(keys)) {
-                    jedis.del(CollectionUtil.filterAndTransArray(keys, CollectionUtil::isNotEmpty, String::new, String[]::new));
+                if (CollectionFunUtil.isNotEmpty(keys)) {
+                    jedis.del(CollectionFunUtil.filterAndTransArray(keys, CollectionFunUtil::isNotEmpty, String::new, String[]::new));
                     keyTotalDel += keys.size();
                     log.debug("成功清除[{}]个key", keys.size());
                 }
                 cursor = scanResult.getCursorAsBytes();
-            } while (CollectionUtil.nonEqualsArray(CURSOR_FLAG, cursor));
+            } while (CollectionFunUtil.nonEqualsArray(CURSOR_FLAG, cursor));
 
             return keyTotalDel;
         } catch (Exception e) {
@@ -649,7 +649,7 @@ public class JedisService {
             }
             return true;
         } catch (Exception e) {
-            log.error("向hash中批量插入多条数据并设置过期时间失败, key=[{}], value=[{}], expireTime=[{}], 原因: {}", key, CollectionUtil.showMap(fvMap), expireTime, e);
+            log.error("向hash中批量插入多条数据并设置过期时间失败, key=[{}], value=[{}], expireTime=[{}], 原因: {}", key, CollectionFunUtil.showMap(fvMap), expireTime, e);
             throw e;
         }
     }
@@ -698,7 +698,7 @@ public class JedisService {
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.hmget(key, fields.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("获取hash中多个fields数据失败, key=[{}], fields=[{}], 原因: {}", key, CollectionUtil.show(fields), e);
+            log.error("获取hash中多个fields数据失败, key=[{}], fields=[{}], 原因: {}", key, CollectionFunUtil.show(fields), e);
             throw e;
         }
     }
@@ -726,13 +726,13 @@ public class JedisService {
      * @return
      */
     public Long hDel(String key, Set<String> fields) {
-        if (CollectionUtil.isEmpty(fields)) {
+        if (CollectionFunUtil.isEmpty(fields)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.hdel(key, fields.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("删除hash中的字段数据失败, key=[{}], fields=[{}], 原因: {}", key, CollectionUtil.show(fields), e);
+            log.error("删除hash中的字段数据失败, key=[{}], fields=[{}], 原因: {}", key, CollectionFunUtil.show(fields), e);
             throw e;
         }
     }
@@ -776,13 +776,13 @@ public class JedisService {
      * @param members
      */
     public Long sBatchAdd(String key, Set<String> members) {
-        if (CollectionUtil.isEmpty(members)) {
+        if (CollectionFunUtil.isEmpty(members)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.sadd(key, members.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("无序集合批量添加数据失败, key=[{}], members=[{}], 原因: {}", key, CollectionUtil.show(members), e);
+            log.error("无序集合批量添加数据失败, key=[{}], members=[{}], 原因: {}", key, CollectionFunUtil.show(members), e);
             throw e;
         }
     }
@@ -837,13 +837,13 @@ public class JedisService {
      * @return
      */
     public Long sBatchDelete(String key, Set<String> members) {
-        if (CollectionUtil.isEmpty(members)) {
+        if (CollectionFunUtil.isEmpty(members)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.srem(key, members.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("无序集合批量移除成员失败, key=[{}], members=[{}], 原因: {}", key, CollectionUtil.show(members), e);
+            log.error("无序集合批量移除成员失败, key=[{}], members=[{}], 原因: {}", key, CollectionFunUtil.show(members), e);
             throw e;
         }
     }
@@ -886,13 +886,13 @@ public class JedisService {
      * @return
      */
     public Long zBatchAdd(String key, Map<String, Double> memberScoreMap) {
-        if (CollectionUtil.isEmpty(memberScoreMap)) {
+        if (CollectionFunUtil.isEmpty(memberScoreMap)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.zadd(key, memberScoreMap);
         } catch (Exception e) {
-            log.error("批量添加成员及分值失败, key=[{}], memberScoreMap=[{}], 原因: {}", key, CollectionUtil.showMap(memberScoreMap), e);
+            log.error("批量添加成员及分值失败, key=[{}], memberScoreMap=[{}], 原因: {}", key, CollectionFunUtil.showMap(memberScoreMap), e);
             throw e;
         }
     }
@@ -1037,13 +1037,13 @@ public class JedisService {
      * @return
      */
     public Long zBatchDelete(String key, Set<String> members) {
-        if (CollectionUtil.isEmpty(members)) {
+        if (CollectionFunUtil.isEmpty(members)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.zrem(key, members.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("批量删除移除有序集合成员失败, key=[{}], members=[{}], 原因: {}", key, CollectionUtil.show(members), e);
+            log.error("批量删除移除有序集合成员失败, key=[{}], members=[{}], 原因: {}", key, CollectionFunUtil.show(members), e);
             throw e;
         }
     }
@@ -1056,13 +1056,13 @@ public class JedisService {
      * @return
      */
     public Long zDelete(String key, Set<String> members) {
-        if (CollectionUtil.isEmpty(members)) {
+        if (CollectionFunUtil.isEmpty(members)) {
             return 0L;
         }
         try (Jedis jedis = getAndSelectRDB()) {
             return jedis.zrem(key, members.toArray(new String[0]));
         } catch (Exception e) {
-            log.error("批量删除移除有序集合成员失败, key=[{}], members=[{}], 原因: {}", key, CollectionUtil.show(members), e);
+            log.error("批量删除移除有序集合成员失败, key=[{}], members=[{}], 原因: {}", key, CollectionFunUtil.show(members), e);
             throw e;
         }
     }
@@ -1128,7 +1128,7 @@ public class JedisService {
      * @param cmds
      */
     private void preCheckPipelineCmdCount(Collection<?> cmds) {
-        if (CollectionUtil.isNotEmpty(cmds) && cmds.size() > maxSinglePipelineCmdNum) {
+        if (CollectionFunUtil.isNotEmpty(cmds) && cmds.size() > maxSinglePipelineCmdNum) {
             throw new RuntimeException("超过单次Pipeline命令阈值!");
         }
     }

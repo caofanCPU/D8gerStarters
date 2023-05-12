@@ -20,7 +20,7 @@ package com.xyz.caofancpu.mvc.standard;
 
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.annotation.WarnDoc;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.logger.LoggerUtil;
 import com.xyz.caofancpu.property.MailProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ public class MailService {
      */
     @AttentionDoc("收件人邮箱地址、主题、正文均不允许为空")
     public void sendMail(Set<String> multiToEmailAddress, String title, String content) {
-        if (CollectionUtil.isEmpty(multiToEmailAddress) || StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
+        if (CollectionFunUtil.isEmpty(multiToEmailAddress) || StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
             return;
         }
         Session session = getSession();
@@ -84,7 +84,7 @@ public class MailService {
             // 发送消息
             Transport.send(message);
         } catch (MessagingException e) {
-            log.error("邮件发送失败, 接收人[{}], 主题[{}], 正文[{}]", CollectionUtil.show(multiToEmailAddress), title, LoggerUtil.shortenLogContent(content));
+            log.error("邮件发送失败, 接收人[{}], 主题[{}], 正文[{}]", CollectionFunUtil.show(multiToEmailAddress), title, LoggerUtil.shortenLogContent(content));
             e.printStackTrace();
         }
     }
@@ -125,7 +125,7 @@ public class MailService {
      */
     @WarnDoc("出现异常的收件人将被忽略")
     private Address[] buildRecipients(Collection<String> recipientEmails) {
-        Set<InternetAddress> recipients = CollectionUtil.transToSet(recipientEmails, itemTo -> {
+        Set<InternetAddress> recipients = CollectionFunUtil.transToSet(recipientEmails, itemTo -> {
             try {
                 return new InternetAddress(itemTo);
             } catch (Exception e) {
@@ -133,7 +133,7 @@ public class MailService {
                 return null;
             }
         });
-        return CollectionUtil.filterAndTransArray(recipients, Objects::nonNull, Function.identity(), Address[]::new);
+        return CollectionFunUtil.filterAndTransArray(recipients, Objects::nonNull, Function.identity(), Address[]::new);
     }
 
     /**

@@ -49,9 +49,9 @@ import java.io.Serializable;
  *
  * @author D8GER
  */
-@RunWith(SpringRunner.class)
-@SpringBootApplication
-@SpringBootTest(classes = {D8gerWebApplicationMQTest.TestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@RunWith(SpringRunner.class)
+//@SpringBootApplication
+//@SpringBootTest(classes = {D8gerWebApplicationMQTest.TestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class D8gerWebApplicationMQTest {
 
@@ -68,7 +68,7 @@ public class D8gerWebApplicationMQTest {
         NormalUseForTestUtil.out("---------测试后---------");
     }
 
-    @Test
+//    @Test
     public void testSendMQ() {
         @SuppressWarnings("unchecked")
         D8BaseMessage d8BaseMessage = new D8BaseMessage()

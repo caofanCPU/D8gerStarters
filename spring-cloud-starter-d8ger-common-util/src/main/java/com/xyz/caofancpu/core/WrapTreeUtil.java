@@ -59,7 +59,7 @@ public class WrapTreeUtil {
                 .filter(Objects::nonNull)
                 .map(currentElement -> {
                     // 当前元素为叶子节点, 无法对子集进行操作, 可以直接返回, 不需要复制对象
-                    if (CollectionUtil.isEmpty(childrenFunction.apply(currentElement))) {
+                    if (CollectionFunUtil.isEmpty(childrenFunction.apply(currentElement))) {
                         return currentElement;
                     }
                     // 深拷贝对象
@@ -121,13 +121,13 @@ public class WrapTreeUtil {
         List<S> nestedTreeElements = initOriginTreeByPid(nonNestedList, pidFunction, idFunction, setChildrenFunction, sortNoFunction);
         List<S> collector = new ArrayList<>();
         collectRelativeTreeLeafByDepth(collector, nestedTreeElements, depth, getChildrenFunction, depthFunction, Function.identity());
-        if (CollectionUtil.isEmpty(collector)) {
+        if (CollectionFunUtil.isEmpty(collector)) {
             return new ArrayList<>();
         }
         return collector.stream()
                 .filter(Objects::nonNull)
                 .map(item -> {
-                    if (CollectionUtil.isEmpty(getChildrenFunction.apply(item))) {
+                    if (CollectionFunUtil.isEmpty(getChildrenFunction.apply(item))) {
                         return mapper.apply(item);
                     }
                     // 深拷贝对象, 根据childrenFunction处理其子节点
@@ -217,7 +217,7 @@ public class WrapTreeUtil {
         // 将树平铺展开
         expandTree(nonNestedTreeElementList, nestedTreeElements, childrenFunction, Function.identity());
         // 搜寻
-        C first = CollectionUtil.findFirst(nonNestedTreeElementList, element -> targetRootId.equals(idFunction.apply(element)));
+        C first = CollectionFunUtil.findFirst(nonNestedTreeElementList, element -> targetRootId.equals(idFunction.apply(element)));
         return Objects.nonNull(first) ? first : null;
     }
 
@@ -234,7 +234,7 @@ public class WrapTreeUtil {
             List<C> nestedTreeElements,
             @NonNull Function<? super C, ? extends List<C>> childrenFunction,
             @NonNull Function<? super C, ? extends T> mapper) {
-        if (CollectionUtil.isEmpty(nestedTreeElements)) {
+        if (CollectionFunUtil.isEmpty(nestedTreeElements)) {
             return;
         }
         nestedTreeElements.stream()
@@ -242,7 +242,7 @@ public class WrapTreeUtil {
                 .forEach(currentElement -> {
                     collector.add(mapper.apply(currentElement));
                     List<C> children = childrenFunction.apply(currentElement);
-                    if (CollectionUtil.isNotEmpty(children)) {
+                    if (CollectionFunUtil.isNotEmpty(children)) {
                         expandTree(collector, children, childrenFunction, mapper);
                     }
                 });
@@ -346,7 +346,7 @@ public class WrapTreeUtil {
             @NonNull BiFunction<? super C, List<C>, ? super C> setChildrenFunction,
             Function<? super C, ? extends I> sortNoFunction) {
         List<C> currentList = pidMultiMap.get(pid);
-        if (CollectionUtil.isEmpty(currentList)) {
+        if (CollectionFunUtil.isEmpty(currentList)) {
             return Lists.newArrayList();
         }
         List<C> resultOriginTreeList = currentList.stream()
@@ -382,14 +382,14 @@ public class WrapTreeUtil {
             @NonNull Function<? super C, ? extends List<C>> childrenFunction,
             @NonNull Function<? super C, ? extends I> depthFunction,
             @NonNull Function<? super C, ? extends T> mapper) {
-        if (CollectionUtil.isEmpty(nestedTreeElements)) {
+        if (CollectionFunUtil.isEmpty(nestedTreeElements)) {
             return;
         }
         nestedTreeElements.stream()
                 .filter(Objects::nonNull)
                 .forEach(currentElement -> {
                     List<C> children = childrenFunction.apply(currentElement);
-                    if (CollectionUtil.isNotEmpty(children) && depthFunction.apply(currentElement).compareTo(depth) < 0) {
+                    if (CollectionFunUtil.isNotEmpty(children) && depthFunction.apply(currentElement).compareTo(depth) < 0) {
                         // 遍历时子节点时, 非叶子节点并且 节点深度小于 深度限制值, 则进行递归查找
                         collectRelativeTreeLeafByDepth(collector, children, depth, childrenFunction, depthFunction, mapper);
                     } else {
@@ -408,8 +408,8 @@ public class WrapTreeUtil {
     private static <I extends Comparable<I>, C> List<C> sort(List<C> currentOriginChildren, Function<? super C, ? extends I> sortNoFunction) {
         if (Objects.nonNull(sortNoFunction)) {
             // 子节点列表自然增序
-            List<I> currentChildrenSortNoList = CollectionUtil.filterAndTransList(currentOriginChildren, Objects::isNull, sortNoFunction);
-            if (CollectionUtil.isEmpty(currentChildrenSortNoList) && CollectionUtil.isNotEmpty(currentOriginChildren) && currentOriginChildren.size() > 1) {
+            List<I> currentChildrenSortNoList = CollectionFunUtil.filterAndTransList(currentOriginChildren, Objects::isNull, sortNoFunction);
+            if (CollectionFunUtil.isEmpty(currentChildrenSortNoList) && CollectionFunUtil.isNotEmpty(currentOriginChildren) && currentOriginChildren.size() > 1) {
                 currentOriginChildren.sort(Comparator.comparing(sortNoFunction));
             }
         }

@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.logger;
 
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -108,7 +108,7 @@ public class LoggerUtil {
      */
     private static StringBuilder formatLogMessage(Object... params) {
         StringBuilder sb = new StringBuilder();
-        if (CollectionUtil.isEmpty(params)) {
+        if (CollectionFunUtil.isEmpty(params)) {
             return sb;
         }
         for (int index = 0; index < params.length; index += 2) {

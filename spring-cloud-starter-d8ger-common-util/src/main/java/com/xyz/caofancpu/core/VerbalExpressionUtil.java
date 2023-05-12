@@ -224,7 +224,7 @@ public class VerbalExpressionUtil {
                 for (String word : words) {
                     resultItemWordList.add(StringUtils.capitalize(StringUtils.lowerCase(word)));
                 }
-                result = CollectionUtil.join(resultItemWordList, SymbolConstantUtil.EMPTY);
+                result = CollectionFunUtil.join(resultItemWordList, SymbolConstantUtil.EMPTY);
                 break;
             default:
                 break;

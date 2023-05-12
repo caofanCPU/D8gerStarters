@@ -21,8 +21,15 @@ package com.xyz.caofancpu.core;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
@@ -69,7 +76,7 @@ public class NumberUtil {
     private static final int DEFAULT_PRECISION = 2;
 
     /**
-     * 数字精度，默认值为2
+     * 数字精度，虚拟货币默认值为8
      */
     private static final int VIRTUAL_COIN_PRECISION = 8;
 
@@ -84,10 +91,44 @@ public class NumberUtil {
     private static final String CN_ZERO_FULL = "零元" + CN_FULL;
 
     /**
+     * 千分位, 保留原始数据精度
+     */
+    public static final String THOUSANDS_FORMAT_WITH_ORIGIN_PRECISION = generateFormat(3, 10);
+    /**
+     * 千分位, 整数
+     */
+    public static final String THOUSANDS_FORMAT_INTEGER_PRECISION = generateFormat(3, 0);
+    public static final int NORMAL_PRECISION = 2;
+    public static final int FOUR_PRECISION = 4;
+    /**
+     * 千分位, 固定1位小数
+     */
+    public static final String THOUSANDS_FORMAT_ONE_PRECISION = generateFormat(3, 1);
+    /**
+     * 千分位, 固定2位小数
+     */
+    public static final String THOUSANDS_FORMAT_NORMAL_PRECISION = generateFormat(3, 2);
+    /**
+     * 千分位, 固定3位小数
+     */
+    public static final String THOUSANDS_FORMAT_THREE_PRECISION = generateFormat(3, 3);
+    /**
+     * 千分位, 固定4位小数
+     */
+    public static final String THOUSANDS_FORMAT_FOUR_PRECISION = generateFormat(3, 4);
+    /**
+     * 千分位, 固定5位小数
+     */
+    public static final String THOUSANDS_FORMAT_FIVE_PRECISION = generateFormat(3, 5);
+    /**
+     * 千分位, 固定6位小数
+     */
+    public static final String THOUSANDS_FORMAT_SIX_PRECISION = generateFormat(3, 6);
+
+    /**
      * 获取指定位数的随机数
      *
      * @param digit
-     * @return
      */
     public static Integer getRandomInteger(int digit) {
         if (digit >= 32) {
@@ -170,7 +211,6 @@ public class NumberUtil {
      * 将数字字符串转换为中文大写金额
      *
      * @param str
-     * @return
      */
     public static String parseMoneyCN(String str) {
         BigDecimal numberOfMoney = new BigDecimal(str);
@@ -181,7 +221,6 @@ public class NumberUtil {
      * 虚拟货币对象转BigDecimal, 默认8位小数, 默认采用四舍五入保留2位小数
      *
      * @param price
-     * @return
      */
     public static BigDecimal convertVirtualCoinPrice(@NonNull Object price) {
         return convertToBigDecimal(price, VIRTUAL_COIN_PRECISION, BigDecimal.ROUND_HALF_UP);
@@ -192,7 +231,6 @@ public class NumberUtil {
      *
      * @param source
      * @param newScale
-     * @return
      */
     public static BigDecimal convertToBigDecimal(@NonNull Object source, int newScale) {
         if (newScale <= 0) {
@@ -207,7 +245,6 @@ public class NumberUtil {
      * @param source
      * @param newScale
      * @param roundingMode
-     * @return
      */
     public static BigDecimal convertToBigDecimal(@NonNull Object source, int newScale, int roundingMode) {
         if (newScale <= 0) {
@@ -223,7 +260,6 @@ public class NumberUtil {
      * 对象转BigDecimal, 默认采用四舍五入保留2位小数
      *
      * @param source
-     * @return
      */
     public static BigDecimal convertToDefaultBigDecimal(@NonNull Object source) {
         return convertToBigDecimal(source, DEFAULT_PRECISION, BigDecimal.ROUND_HALF_UP);
@@ -234,7 +270,6 @@ public class NumberUtil {
      *
      * @param value
      * @param referValue
-     * @return
      */
     public static String calculateViewPercent(@NonNull Long value, @NonNull Long referValue) {
         BigDecimal x = BigDecimal.valueOf(value);
@@ -254,7 +289,6 @@ public class NumberUtil {
      * @param source    原始数值列表
      * @param precision 百分数小数的位数, 0相当于求x%; 1相当于求x.y%; 2相当于求x.yy%
      * @param <T>
-     * @return
      */
     public static <T extends Number> Map<Integer, BigDecimal> calculateDefaultPercentage(List<T> source, int precision) {
         return calculateDistributionValueByPercentage(source, precision, BigDecimal.valueOf(ONE_HUNDRED));
@@ -291,7 +325,7 @@ public class NumberUtil {
      * @return Map<数字元素索引, 结果值>
      */
     public static <T extends Number> Map<Integer, BigDecimal> calculateDistributionValueByPercentage(List<T> source, int precision, BigDecimal referValue) {
-        if (CollectionUtil.isEmpty(source)) {
+        if (CollectionFunUtil.isEmpty(source)) {
             return Maps.newHashMap();
         }
         if (precision < 0) {
@@ -303,7 +337,7 @@ public class NumberUtil {
 
         // 根据精度要求需要扩大的倍数
         BigDecimal timesValue = BigDecimal.valueOf(Math.pow(10, precision));
-        BigDecimal originSum = CollectionUtil.sum(source, Number::doubleValue);
+        BigDecimal originSum = CollectionFunUtil.sum(source, Number::doubleValue);
         Map<Integer, BigDecimal> percentageMap = Maps.newHashMap();
         for (int i = 0; i < source.size(); i++) {
             T item = source.get(i);
@@ -316,13 +350,13 @@ public class NumberUtil {
         // 所有占比结果向下取整
         Map<Integer, BigDecimal> downPercentageMap = Maps.newHashMap();
         percentageMap.forEach((index, percentage) -> downPercentageMap.put(index, percentage.setScale(0, BigDecimal.ROUND_DOWN)));
-        int downPercentageSum = CollectionUtil.sum(downPercentageMap.values(), BigDecimal::doubleValue).intValue();
+        int downPercentageSum = CollectionFunUtil.sum(downPercentageMap.values(), BigDecimal::doubleValue).intValue();
         // 占比因向下取整得到的偏差
         int deltaPercentageSum = referValue.multiply(timesValue).intValue() - downPercentageSum;
         Map<Integer, BigDecimal> deltaPercentageMap = Maps.newHashMap();
         percentageMap.forEach((index, percentage) -> deltaPercentageMap.put(index, percentage.subtract(downPercentageMap.get(index))));
         // 按照偏差由大到小排序
-        LinkedHashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionUtil.sortByValue(deltaPercentageMap, true);
+        LinkedHashMap<Integer, BigDecimal> deltaPercentageSortedByValueMap = CollectionFunUtil.sortByValue(deltaPercentageMap, true);
         Map<Integer, BigDecimal> resultMap = Maps.newLinkedHashMap();
         for (Integer index : deltaPercentageSortedByValueMap.keySet()) {
             if (deltaPercentageSum > 0) {
@@ -340,7 +374,6 @@ public class NumberUtil {
      * 示例: 123456L ==> 1234.56元
      *
      * @param price
-     * @return
      */
     public static String convertViewPriceFromFenToYuan(@NonNull Long price) {
         return convertPriceFromFenToYuan(price).toString() + CN_UPPER_MONEY_UNIT[2];
@@ -368,7 +401,6 @@ public class NumberUtil {
      * @param value      分子
      * @param referValue 分母
      * @param precision  百分位小数的精度
-     * @return
      */
     public static <T extends Number> String calculateViewPercent(@NonNull T value, @NonNull T referValue, int precision) {
         if (precision < 0) {
@@ -387,7 +419,6 @@ public class NumberUtil {
      * @param minSelect
      * @param maxSelect
      * @param <T>
-     * @return
      */
     public static <T> Map<Boolean, List<List<T>>> calculateAndGroupCombNChooseK(@NonNull List<T> source, int minSelect, int maxSelect) {
         if (!(minSelect >= 0 && minSelect <= maxSelect && maxSelect <= source.size())) {
@@ -395,7 +426,7 @@ public class NumberUtil {
         }
         List<Integer> totalSelectNumList = IntStream.rangeClosed(0, source.size()).boxed().collect(Collectors.toList());
         List<Integer> okSelectNumList = IntStream.rangeClosed(minSelect, maxSelect).boxed().collect(Collectors.toList());
-        List<Integer> errorSelectNumList = CollectionUtil.subtract(ArrayList::new, totalSelectNumList, okSelectNumList);
+        List<Integer> errorSelectNumList = CollectionFunUtil.subtract(ArrayList::new, totalSelectNumList, okSelectNumList);
 
         Map<Boolean, List<List<T>>> resultMap = new HashMap<>(4, 0.5f);
         resultMap.put(Boolean.TRUE, calculateCombNChooseK(source, okSelectNumList));
@@ -409,7 +440,6 @@ public class NumberUtil {
      * @param source
      * @param kList
      * @param <T>
-     * @return
      */
     public static <T> List<List<T>> calculateCombNChooseK(@NonNull List<T> source, @NonNull List<Integer> kList) {
         List<List<T>> resultList = Lists.newArrayList();
@@ -423,7 +453,6 @@ public class NumberUtil {
      * @param source
      * @param k
      * @param <T>
-     * @return
      */
     public static <T> List<List<T>> calculateCombNChooseK(@NonNull List<T> source, int k) {
         List<List<T>> resultList = Lists.newArrayList();
@@ -446,10 +475,9 @@ public class NumberUtil {
      * 针对至少有2个元素的列表source, 计算任意两元素的关系组合情况
      *
      * @param source
-     * @return
      */
     public static <T> List<Pair<T, T>> calculateCombNChooseTwo(@NonNull List<T> source) {
-        if (CollectionUtil.isEmpty(source) || source.size() < 2) {
+        if (CollectionFunUtil.isEmpty(source) || source.size() < 2) {
             throw new RuntimeException("组合数计算至少需要两个元素");
         }
         List<Pair<T, T>> resultList = Lists.newArrayList();
@@ -473,7 +501,6 @@ public class NumberUtil {
      *
      * @param array
      * @param k
-     * @return
      */
     private static int[][] calculateCombNChooseK(int[] array, int k) {
         int n = array.length;
@@ -537,6 +564,235 @@ public class NumberUtil {
             }
         }
         return cnk;
+    }
+
+
+    /**
+     * 常规千分位固定两位展示, 去除无效小数0
+     *
+     * @param number
+     */
+    public static String formatThousandthsNormalView(BigDecimal number) {
+        return formatView(number, useCommonDf(THOUSANDS_FORMAT_NORMAL_PRECISION));
+    }
+
+    /**
+     * 常规千分位固定两位百分比展示, 保留精度0
+     *
+     * @param number
+     */
+    public static String formatNormalFilledWithZeroPercentView(BigDecimal number) {
+        return formatFilledWithZeroPercentView(number, 0, 2);
+    }
+
+    /**
+     * 常规千分位百分比, 保留精度0
+     *
+     * @param number
+     */
+    public static String formatFilledWithZeroPercentView(
+        BigDecimal number,
+        int integerSplitNum, int precisionNum) {
+        return formatFilledWithZeroView(number, integerSplitNum, precisionNum) + SymbolConstantUtil.PERCENT;
+    }
+
+    /**
+     * 常规千分位固定两位展示, 保留精度0
+     *
+     * @param number
+     */
+    public static String formatNormalFilledWithZeroView(BigDecimal number) {
+        return formatFilledWithZeroView(number, 0, 2);
+    }
+
+    /**
+     * 常规千分位, 保留精度0
+     *
+     * @param number
+     */
+    public static String formatFilledWithZeroView(BigDecimal number, int integerSplitNum, int precisionNum) {
+        return formatViewFillWithZero(number, integerSplitNum, precisionNum);
+    }
+
+    /**
+     * 金额精度展示处理, 去除无效小数0
+     *
+     * @param source
+     * @param decimalFormat
+     */
+    public static String formatView(BigDecimal source, @NonNull DecimalFormat decimalFormat) {
+        if (Objects.isNull(source) || BigDecimal.ZERO.compareTo(source) == 0) {
+            return BigDecimal.ZERO.toPlainString();
+        }
+        return decimalFormat.format(source);
+    }
+
+    /**
+     * 金额精度展示处理, 去除无效小数0
+     *
+     * @param source
+     * @param integerSplitNum
+     * @param precisionNum
+     */
+    public static String formatView(BigDecimal source, int integerSplitNum, int precisionNum) {
+        return formatView(source, new DecimalFormat(generateFormat(integerSplitNum, precisionNum)));
+    }
+
+    /**
+     * 金额精度展示处理, 支持指定精度0
+     *
+     * @param source
+     * @param integerSplitNum
+     * @param precisionNum
+     */
+    public static String formatViewFillWithZero(BigDecimal source, int integerSplitNum, int precisionNum) {
+        if (Objects.isNull(source)) {
+            source = BigDecimal.ZERO;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat(generateFormat(integerSplitNum, precisionNum, true));
+        return decimalFormat.format(source);
+    }
+
+    /**
+     * 金额精度展示处理, 去除无效小数0
+     *
+     * @param source
+     * @param integerSplitNum
+     * @param precisionNum
+     */
+    @Deprecated
+    public static String formatDoubleView(Double source, int integerSplitNum, int precisionNum) {
+        if (Objects.isNull(source)) {
+            source = 0D;
+        }
+        DecimalFormat df = new DecimalFormat(generateFormat(integerSplitNum, precisionNum));
+        return df.format(source);
+    }
+
+    /**
+     * 千分位原始精度展示, 保持原有精度, 0.00
+     *
+     * @param number
+     */
+    public static String formatOriginView(BigDecimal number) {
+        if (Objects.isNull(number)) {
+            return BigDecimal.ZERO.toPlainString();
+        }
+        return number.toPlainString();
+    }
+
+    /**
+     * 指定千分位格式, 去除无效小数0
+     *
+     * @param number
+     * @param format
+     */
+    public static String formatThousandthsView(BigDecimal number, String format) {
+        DecimalFormat customDf = useCommonDf(format);
+        return formatView(number, customDf);
+    }
+
+    /**
+     * 千分位原始精度展示, 去除无效小数0, 最大限度保持原有精度
+     *
+     * @param number
+     */
+    public static String formatThousandthsOriginView(BigDecimal number) {
+        if (Objects.isNull(number)) {
+            number = BigDecimal.ZERO;
+        }
+        return useCommonDf(THOUSANDS_FORMAT_WITH_ORIGIN_PRECISION).format(number);
+    }
+
+    /**
+     * 使用四舍五入的DecimalFormat对象
+     *
+     * @param format
+     */
+    public static DecimalFormat useCommonDf(String format) {
+        DecimalFormat df = new DecimalFormat(format);
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df;
+    }
+
+    /**
+     * 格式化
+     *
+     * @param e
+     * @param getter
+     * @param setter
+     * @param <E>
+     */
+    public static <E> void wrapStringFieldAmountValue(E e, Function<E, String> getter, BiConsumer<E, String> setter, int precision) {
+        if (precision < 0) {
+            precision = NORMAL_PRECISION;
+        }
+        if (Objects.nonNull(e) && Objects.nonNull(getter.apply(e))) {
+            String result = new BigDecimal(getter.apply(e))
+                .setScale(precision, RoundingMode.HALF_UP)
+                .toPlainString();
+            setter.accept(e, result);
+        }
+    }
+
+    public static <E> void wrapFieldAmountValue(E e, Function<E, BigDecimal> getter, BiConsumer<E, BigDecimal> setter, int precision) {
+        if (precision < 0) {
+            precision = NORMAL_PRECISION;
+        }
+        if (Objects.nonNull(e) && Objects.nonNull(getter.apply(e))) {
+            BigDecimal result = new BigDecimal(getter.apply(e)
+                .setScale(precision, RoundingMode.HALF_UP)
+                .toPlainString());
+            setter.accept(e, result);
+        }
+    }
+
+    /**
+     * 计算数据的格式化表达式
+     *
+     * @param integerSplitNum 整数部分分隔位数, 如果为0代表整数部分不进行分割, 维持原数
+     * @param precisionNum    小数部分精度位数, 如果为0代表取整, 可能会进位, eg: 99.9->100
+     * @param fillWithZero    不足部分是否用0填充
+     */
+    public static String generateFormat(int integerSplitNum, int precisionNum, boolean fillWithZero) {
+        if (integerSplitNum <= 0) {
+            integerSplitNum = 0;
+        }
+        if (precisionNum <= 0) {
+            precisionNum = 0;
+        }
+        String symbol = fillWithZero ? BigInteger.ZERO.toString() : SymbolConstantUtil.HASHTAG;
+        String integerPartFormat;
+        if (integerSplitNum == 0) {
+            // 0代表整数不分割, 那就留一个符号
+            integerPartFormat = symbol;
+        } else {
+            integerPartFormat = SymbolConstantUtil.ENGLISH_COMMA
+                + CollectionFunUtil.join(Collections.nCopies(integerSplitNum, symbol), SymbolConstantUtil.EMPTY);
+        }
+
+        String precisionPartFormat;
+        if (precisionNum == 0) {
+            precisionPartFormat = SymbolConstantUtil.EMPTY;
+        } else {
+            precisionPartFormat = SymbolConstantUtil.ENGLISH_FULL_STOP
+                + CollectionFunUtil.join(Collections.nCopies(precisionNum, symbol), SymbolConstantUtil.EMPTY);
+        }
+        String result = integerPartFormat + precisionPartFormat;
+        if (log.isDebugEnabled()) {
+            log.info("generateFormat result: {}", Objects.equals(result, SymbolConstantUtil.EMPTY) ? "EMPTY" : result);
+        }
+        return StringUtils.isNotBlank(result) ? result : symbol;
+    }
+
+    /**
+     * 计算数据的格式化表达式, 默认数据填充为常规格式, 省去无效零
+     *
+     * @param integerSplitNum 整数部分分隔位数
+     * @param precisionNum    小数部分精度位数
+     */
+    public static String generateFormat(int integerSplitNum, int precisionNum) {
+        return generateFormat(integerSplitNum, precisionNum, false);
     }
 
 }

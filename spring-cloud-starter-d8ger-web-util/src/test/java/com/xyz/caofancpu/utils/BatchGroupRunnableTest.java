@@ -18,7 +18,7 @@
 
 package com.xyz.caofancpu.utils;
 
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.core.FileUtil;
 import com.xyz.caofancpu.logger.trace.ThreadTraceUtil;
 import com.xyz.caofancpu.multithreadutils.batch.BatchGroupRunnable;
@@ -74,7 +74,7 @@ public class BatchGroupRunnableTest {
         currentBatchRunnable.onSuccess(() -> {
             List<String> contentLines = new ArrayList<>(concurrentLinkedDeque);
             try {
-                FileUtil.writeStringToFile(CollectionUtil.join(contentLines, "\n"), filePath);
+                FileUtil.writeStringToFile(CollectionFunUtil.join(contentLines, "\n"), filePath);
             } catch (IOException e) {
                 e.printStackTrace();
             }

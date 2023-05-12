@@ -18,7 +18,7 @@
 
 package com.xyz.caofancpu.constant;
 
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -68,7 +68,7 @@ public class SymbolConstantUtil {
     /**
      * EXCEL中汉字的缩进间距，设置为4个空格
      */
-    public static final String TAB = CollectionUtil.join(Collections.nCopies(4, SPACE), EMPTY);
+    public static final String TAB = CollectionFunUtil.join(Collections.nCopies(4, SPACE), EMPTY);
 
     /**
      * 原始Tab符号
@@ -209,5 +209,10 @@ public class SymbolConstantUtil {
      * 新版Excel文件后缀
      */
     public static final String NEW_XLSX_SUFFIX = ".xlsx";
+
+    /**
+     * 井号
+     */
+    public static final String HASHTAG = "#";
 
 }

@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.extra;
 
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.core.VerbalExpressionUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ public class StringAlignUtil {
                 .replaceAll(WHITE_CHAR_PATTERN.pattern(), SymbolConstantUtil.EMPTY)
                 .replaceAll(START_WITH_ENGLISH_COMMA_PATTERN.pattern(), SymbolConstantUtil.EMPTY);
         String splitSymbol = SymbolConstantUtil.ENGLISH_COMMA;
-        return CollectionUtil.splitDelimitedStringToList(legalText, splitSymbol, String::toString);
+        return CollectionFunUtil.splitDelimitedStringToList(legalText, splitSymbol, String::toString);
     }
 
     /**
@@ -81,16 +81,16 @@ public class StringAlignUtil {
      */
     public static String formatSQLColumn(@NonNull String originText, Alignment formatAlignment, @NonNull String prefix, @NonNull String suffix, boolean formatSQL, boolean formatAsCamel) {
         List<String> stringList = handleSplitMultiLines(originText);
-        List<String> completeFixList = CollectionUtil.transToList(stringList, item -> prefix + item + suffix);
-        int singleLineMaxChars = CollectionUtil.max(completeFixList, String::length).intValue();
+        List<String> completeFixList = CollectionFunUtil.transToList(stringList, item -> prefix + item + suffix);
+        int singleLineMaxChars = CollectionFunUtil.max(completeFixList, String::length).intValue();
         if (Objects.isNull(formatAlignment)) {
             formatAlignment = Alignment.LEFT;
         }
         List<String> formattedLineList = formatSQLColumn(singleLineMaxChars, formatAlignment, completeFixList);
         if (formatSQL && formatAsCamel) {
-            stringList = CollectionUtil.transToList(stringList, StringAlignUtil::cleanUnderLineForSQLAliasName);
+            stringList = CollectionFunUtil.transToList(stringList, StringAlignUtil::cleanUnderLineForSQLAliasName);
         }
-        Map<Integer, String> indexMap = CollectionUtil.transToMap(stringList, stringList::indexOf, Function.identity());
+        Map<Integer, String> indexMap = CollectionFunUtil.transToMap(stringList, stringList::indexOf, Function.identity());
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < formattedLineList.size(); i++) {
             String column = indexMap.get(i);
@@ -123,7 +123,7 @@ public class StringAlignUtil {
      * @return
      */
     public static String formatBySplitSymbol(String originText, String splitSymbol, Alignment currentAlignment) {
-        List<String> stringList = CollectionUtil.splitDelimitedStringToList(originText, splitSymbol, String::toString);
+        List<String> stringList = CollectionFunUtil.splitDelimitedStringToList(originText, splitSymbol, String::toString);
         return formatMultiLine(stringList, currentAlignment);
     }
 
@@ -135,7 +135,7 @@ public class StringAlignUtil {
      * @return
      */
     public static String formatMultiLine(List<String> stringList, Alignment currentAlignment) {
-        int singleLineMaxChars = CollectionUtil.max(stringList, String::length).intValue();
+        int singleLineMaxChars = CollectionFunUtil.max(stringList, String::length).intValue();
         return format(singleLineMaxChars, currentAlignment, stringList);
     }
 
@@ -182,7 +182,7 @@ public class StringAlignUtil {
      */
     public static List<String> formatSQLColumn(int singleLineMaxChars, Alignment currentAlignment, List<String> stringList) {
         String result = format(singleLineMaxChars, currentAlignment, stringList);
-        return CollectionUtil.splitDelimitedStringToList(result, SymbolConstantUtil.NEXT_LINE, String::toString);
+        return CollectionFunUtil.splitDelimitedStringToList(result, SymbolConstantUtil.NEXT_LINE, String::toString);
     }
 
     /**
@@ -253,7 +253,7 @@ public class StringAlignUtil {
         ;
 
         public static Alignment fromName(String name) {
-            return CollectionUtil.findAnyInArrays(Alignment.values(), Alignment::name, item -> item.equalsIgnoreCase(name));
+            return CollectionFunUtil.findAnyInArrays(Alignment.values(), Alignment::name, item -> item.equalsIgnoreCase(name));
         }
     }
 }

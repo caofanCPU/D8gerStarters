@@ -25,7 +25,7 @@ import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.constant.D8gerConstants;
 import com.xyz.caofancpu.constant.IEnum;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.property.SwaggerProperties;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -139,10 +139,10 @@ public class SwaggerConfiguration {
      * @return
      */
     private List<Parameter> setDefaultHeaderParameter() {
-        if (!swaggerProperties.isShowApi() || CollectionUtil.isEmpty(swaggerProperties.getHeaderParameters())) {
+        if (!swaggerProperties.isShowApi() || CollectionFunUtil.isEmpty(swaggerProperties.getHeaderParameters())) {
             return Lists.newArrayList();
         }
-        return CollectionUtil.transToList(swaggerProperties.getHeaderParameters(),
+        return CollectionFunUtil.transToList(swaggerProperties.getHeaderParameters(),
                 headerParameter -> new ParameterBuilder()
                         .name(headerParameter.getName())
                         .defaultValue(headerParameter.getDefaultValue())
@@ -190,7 +190,7 @@ public class SwaggerConfiguration {
             final Class<?> rawPrimaryType = context.getBeanPropertyDefinition().get().getRawPrimaryType();
             // 处理枚举类型
             if (annotation.isPresent() && IEnum.class.isAssignableFrom(rawPrimaryType)) {
-                List<String> displayValueList = CollectionUtil.transToList(Arrays.asList(rawPrimaryType.getEnumConstants()), item -> {
+                List<String> displayValueList = CollectionFunUtil.transToList(Arrays.asList(rawPrimaryType.getEnumConstants()), item -> {
                     IEnum iEnum = (IEnum) item;
                     return iEnum.getValue() + SymbolConstantUtil.ENGLISH_COLON + iEnum.getName();
                 });
@@ -263,7 +263,7 @@ public class SwaggerConfiguration {
                     validAnnotationMessageList.add(range.get().message());
                 }
             }
-            return CollectionUtil.join(validAnnotationMessageList, SymbolConstantUtil.ENGLISH_SEMICOLON + SymbolConstantUtil.SPACE);
+            return CollectionFunUtil.join(validAnnotationMessageList, SymbolConstantUtil.ENGLISH_SEMICOLON + SymbolConstantUtil.SPACE);
         }
 
         @Override

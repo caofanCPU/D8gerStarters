@@ -26,7 +26,7 @@ import com.alibaba.druid.sql.visitor.SQLASTOutputVisitor;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -58,7 +58,7 @@ public class StringTemplateUtil {
     }
 
     public static String processTemplate(String templateContent, Map<String, Object> paramMap) {
-        if (Objects.isNull(templateContent) || CollectionUtil.isEmpty(paramMap)) {
+        if (Objects.isNull(templateContent) || CollectionFunUtil.isEmpty(paramMap)) {
             return templateContent;
         }
         Set<Map.Entry<String, Object>> entrySet = paramMap.entrySet();

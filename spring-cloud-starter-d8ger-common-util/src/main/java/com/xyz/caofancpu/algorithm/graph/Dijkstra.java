@@ -17,7 +17,7 @@
  */
 package com.xyz.caofancpu.algorithm.graph;
 
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -156,7 +156,7 @@ public class Dijkstra {
         Graph graph = new Graph(vertexMap.size());
         // 1.build vertex
         vertexMap.forEach((name, index) -> graph.getVertices()[index] = new Vertex(name));
-        graph.setVertexMap(CollectionUtil.transToMap(vertexMap.entrySet(), Map.Entry::getValue, Map.Entry::getKey));
+        graph.setVertexMap(CollectionFunUtil.transToMap(vertexMap.entrySet(), Map.Entry::getValue, Map.Entry::getKey));
         // 2.build edge
         edgeInfoMap.forEach((vertexPair, distance) -> {
             String leftVertex = vertexPair.getLeft();

@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.remote;
 
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.mvc.common.HttpStaticHandleUtil;
 import com.xyz.caofancpu.result.GlobalErrorInfoEnum;
 import lombok.NonNull;
@@ -50,7 +50,7 @@ public interface IRestTemplateSupport {
 
     default String loadUrlEncodeRequestParam(@NonNull AbstractD8BasicRemoteRequest<?> req) {
         Map<String, Object> nonNullParamMap = HttpStaticHandleUtil.extractNonNullParam(req);
-        String originParamStr = CollectionUtil.join(CollectionUtil.transToList(nonNullParamMap.entrySet(), entry -> entry.getKey() + SymbolConstantUtil.EQUAL + entry.getValue()), SymbolConstantUtil.AND);
+        String originParamStr = CollectionFunUtil.join(CollectionFunUtil.transToList(nonNullParamMap.entrySet(), entry -> entry.getKey() + SymbolConstantUtil.EQUAL + entry.getValue()), SymbolConstantUtil.AND);
         try {
             return URLEncoder.encode(originParamStr, CharEncoding.UTF_8);
         } catch (UnsupportedEncodingException e) {

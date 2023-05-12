@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.mvc.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.core.JSONUtil;
 import com.xyz.caofancpu.extra.ReflectionUtil;
 import com.xyz.caofancpu.mvc.annotation.Check;
@@ -71,7 +71,7 @@ public class CheckParamAspect {
             return StringUtils.isNotBlank((String) value);
         }
         if (value instanceof Collection) {
-            return CollectionUtil.isNotEmpty((Collection<E>) value);
+            return CollectionFunUtil.isNotEmpty((Collection<E>) value);
         }
         return Objects.nonNull(value);
     }
@@ -363,7 +363,7 @@ public class CheckParamAspect {
      * @return 是否符合
      */
     private Boolean isCheck(Method method, Object[] arguments) {
-        return method.isAnnotationPresent(Check.class) && CollectionUtil.isNotEmpty(arguments);
+        return method.isAnnotationPresent(Check.class) && CollectionFunUtil.isNotEmpty(arguments);
     }
 
     /**

@@ -22,7 +22,7 @@ package com.xyz.caofancpu.excel.util;
 import com.xyz.caofancpu.annotation.AttentionDoc;
 import com.xyz.caofancpu.annotation.ImportDoc;
 import com.xyz.caofancpu.constant.SymbolConstantUtil;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.excel.core.ItemFunction;
 import com.xyz.caofancpu.excel.core.Node;
 import com.xyz.caofancpu.excel.core.PoiBook;
@@ -255,7 +255,7 @@ public class PoiUtil {
      * @param opposite 可选参数, 传true则为红涨绿跌
      */
     public static PoiStyle getNumberArrowCenterPoiStyle(boolean... opposite) {
-        boolean reverse = CollectionUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
+        boolean reverse = CollectionFunUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
         return getNumberDynamicArrowCenterPoiStyle(1, null, reverse);
     }
 
@@ -269,7 +269,7 @@ public class PoiUtil {
      * @param opposite     可选参数, 传true则为红涨绿跌
      */
     public static PoiStyle getNumberPercentArrowCenterPoiStyle(Integer decimalScale, boolean... opposite) {
-        boolean reverse = CollectionUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
+        boolean reverse = CollectionFunUtil.isNotEmpty(opposite) && BooleanUtils.isTrue(opposite[0]);
         return getNumberDynamicArrowCenterPoiStyle(decimalScale, SymbolConstantUtil.PERCENT, reverse);
     }
 

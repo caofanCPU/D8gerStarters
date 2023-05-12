@@ -20,7 +20,7 @@ package com.xyz.caofancpu.mvc.standard;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import com.xyz.caofancpu.logger.LoggerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -72,7 +72,7 @@ public class SpringRedisUtil {
     }
 
     public static Long deleteKeys(Collection<String> keys) {
-        if (CollectionUtil.isEmpty(keys)) {
+        if (CollectionFunUtil.isEmpty(keys)) {
             return 0L;
         }
         return getRedisTemplate().delete(keys);

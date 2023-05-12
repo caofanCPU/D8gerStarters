@@ -59,7 +59,7 @@ import java.util.stream.StreamSupport;
  *
  * @author D8GER
  */
-public class CollectionUtil extends CollectionUtils {
+public class CollectionFunUtil extends CollectionUtils {
 
     /**
      * 从集合中截取前面的子集合
@@ -259,7 +259,7 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static <E> E reduce(@NonNull Collection<E> coll, BinaryOperator<E> merger) {
-        if (CollectionUtil.isEmpty(coll)) {
+        if (CollectionFunUtil.isEmpty(coll)) {
             return null;
         }
         return coll.stream().filter(Objects::nonNull).reduce(merger).orElse(null);
@@ -275,7 +275,7 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static <E, T> T reduceByField(@NonNull Collection<E> coll, Function<? super E, ? extends T> fieldMapper, BinaryOperator<T> merger) {
-        if (CollectionUtil.isEmpty(coll)) {
+        if (CollectionFunUtil.isEmpty(coll)) {
             return null;
         }
         // reduce方法的第3个参数用于并行时结果合并, 对于单向流, 不需要合并故而写作 (a, b) -> null
@@ -314,7 +314,7 @@ public class CollectionUtil extends CollectionUtils {
      */
     public static <T, K, M extends Map<K, T>> M reduceToMap(Supplier<M> mapColl, Collection<T> coll, Function<? super T, ? extends K> mergeKey, BinaryOperator<T> merger) {
         M result = mapColl.get();
-        if (CollectionUtil.isEmpty(coll)) {
+        if (CollectionFunUtil.isEmpty(coll)) {
             return result;
         }
         return coll.stream().filter(Objects::nonNull)
@@ -356,12 +356,12 @@ public class CollectionUtil extends CollectionUtils {
      * @return
      */
     public static <T, CK, MK, R extends Map<CK, Map<MK, T>>, G extends Map<MK, T>> Map<CK, Map<MK, T>> classifyAndReduceToNestedMap(Supplier<R> resultMapColl, Supplier<G> mergeResultMapColl, Collection<T> coll, Function<T, CK> classifyKeyMapper, Function<T, MK> mergeKeyMapper, BinaryOperator<T> merger) {
-        Map<CK, List<T>> classifiedMap = CollectionUtil.groupIndexToMap(coll, classifyKeyMapper);
-        return CollectionUtil.transToMapEnhance(
+        Map<CK, List<T>> classifiedMap = CollectionFunUtil.groupIndexToMap(coll, classifyKeyMapper);
+        return CollectionFunUtil.transToMapEnhance(
                 resultMapColl,
                 classifiedMap.entrySet(),
                 Map.Entry::getKey,
-                entry -> CollectionUtil.reduceToMap(mergeResultMapColl, entry.getValue(), mergeKeyMapper, merger)
+                entry -> CollectionFunUtil.reduceToMap(mergeResultMapColl, entry.getValue(), mergeKeyMapper, merger)
         );
     }
 
@@ -503,7 +503,7 @@ public class CollectionUtil extends CollectionUtils {
                 .limit(splitGroupSize)
                 .parallel()
                 .map(a -> source.parallelStream().skip((long) a * itemMaxSize).limit(itemMaxSize).collect(Collectors.toCollection(resultColl)))
-                .filter(CollectionUtil::isNotEmpty)
+                .filter(CollectionFunUtil::isNotEmpty)
                 .collect(Collectors.toList());
     }
 

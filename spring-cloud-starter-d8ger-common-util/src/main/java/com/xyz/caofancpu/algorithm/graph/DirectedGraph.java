@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.algorithm.graph;
 
 import com.google.common.collect.Lists;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -93,7 +93,7 @@ public class DirectedGraph<T> {
      * 构建有向图
      */
     private void buildGraph() {
-        Set<T> vertexElements = CollectionUtil.transToSetWithFlatMap(this.getOriginRelationshipList(), pair -> {
+        Set<T> vertexElements = CollectionFunUtil.transToSetWithFlatMap(this.getOriginRelationshipList(), pair -> {
             List<T> elementList = new ArrayList<>();
             elementList.add(pair.getLeft());
             elementList.add(pair.getRight());
@@ -103,8 +103,8 @@ public class DirectedGraph<T> {
         List<T> vertexElementList = Lists.newArrayList(vertexElements);
         // 排序映射
         vertexElementList.sort(Comparator.comparing(Object::hashCode));
-        this.vertexElementAsKeyMap = CollectionUtil.transToMap(vertexElementList, Function.identity(), vertexElementList::indexOf);
-        this.vertexIndexAsKeyMap = CollectionUtil.transToMap(this.vertexElementAsKeyMap.entrySet(), Map.Entry::getValue, Map.Entry::getKey);
+        this.vertexElementAsKeyMap = CollectionFunUtil.transToMap(vertexElementList, Function.identity(), vertexElementList::indexOf);
+        this.vertexIndexAsKeyMap = CollectionFunUtil.transToMap(this.vertexElementAsKeyMap.entrySet(), Map.Entry::getValue, Map.Entry::getKey);
         this.buildVertexIndex();
     }
 
@@ -112,7 +112,7 @@ public class DirectedGraph<T> {
      * 构建有向图的索引
      */
     private void buildVertexIndex() {
-        if (CollectionUtil.isEmpty(this.getOriginRelationshipList()) || CollectionUtil.isEmpty(this.getVertexElementAsKeyMap())) {
+        if (CollectionFunUtil.isEmpty(this.getOriginRelationshipList()) || CollectionFunUtil.isEmpty(this.getVertexElementAsKeyMap())) {
             return;
         }
         // 初始化有向图

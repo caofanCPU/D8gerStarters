@@ -19,7 +19,7 @@
 package com.xyz.caofancpu.algorithm.graph;
 
 import com.google.common.collect.Lists;
-import com.xyz.caofancpu.core.CollectionUtil;
+import com.xyz.caofancpu.core.CollectionFunUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +98,7 @@ public class TarjanSSC<T> {
         for (int i = 0; i < resultIndexList.size(); i++) {
             ArrayList<Integer> itemList = resultIndexList.get(i);
             resultElementList.add(new ArrayList<>(itemList.size()));
-            resultElementList.get(i).addAll(CollectionUtil.transToList(itemList, index -> graph.getVertexIndexAsKeyMap().get(index)));
+            resultElementList.get(i).addAll(CollectionFunUtil.transToList(itemList, index -> graph.getVertexIndexAsKeyMap().get(index)));
         }
         return resultElementList;
     }
