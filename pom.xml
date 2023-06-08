@@ -46,7 +46,7 @@
         <springboot.version>2.2.5.RELEASE</springboot.version>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 
-        <mysql-connector-java.version>8.0.19</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <mybatis.version>3.5.2</mybatis.version>
         <mybatis-spring.version>2.0.2</mybatis-spring.version>
         <mybatis-typehandlers-jsr310.verson>1.0.2</mybatis-typehandlers-jsr310.verson>
